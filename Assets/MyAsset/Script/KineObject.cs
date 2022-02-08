@@ -15,7 +15,6 @@ public enum SPEEDTYPE
 public class KineObject : MonoBehaviour
 {
     //tmp
-    int i;
     Vector2 vec2;
     float f;
 
@@ -27,6 +26,8 @@ public class KineObject : MonoBehaviour
     public SPEEDTYPE speed;
     float GetSpeed { get { return (int)speed * 3f; } }
     public float jumpPower;
+    protected float jumpTime = 0;
+    public float jumpTimeLimit;
 
     Vector3 movement;
     protected bool IsJumping = false;
@@ -78,21 +79,27 @@ public class KineObject : MonoBehaviour
         kine_ani.SetFloat("velocityX", _horizontal);
     }
 
-    public void Jump()
+    public virtual void Jump()
     {
         if (!IsJumping)
             return;
-        if (!IsGrounded)
+
+        if (jumpTime == 0)  //점프 시작 시
+        {
+            IsGrounded = false;
+            kine_ani.SetBool("grounded", false);
+        }
+
+        if (jumpTime >= jumpTimeLimit)  //하락 체크
+        {
+            IsJumping = false;
+            jumpTime = 0;
+
             return;
-
-        rigid.velocity = Vector2.zero;
-        vec2 = Vector2.zero;
-        vec2.y = jumpPower;
-        rigid.AddForce(vec2);
-        kine_ani.SetFloat("velocityY", vec2.y);
-
-        IsJumping = false;
-        IsGrounded = false;
-        kine_ani.SetBool("grounded", false);
+        }
+        vec2 = Vector2.up;
+        vec2.y *= jumpPower * (jumpTime * 0.1f + 1f);
+        rigid.AddForce(vec2, ForceMode2D.Impulse);
+        jumpTime += Time.deltaTime;
     }
 }
