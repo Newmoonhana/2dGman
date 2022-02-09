@@ -6,6 +6,9 @@ public class GameScene : MonoBehaviour
 {
     //tmp
 
+    public List<GameObject> enemy_pre;
+    public Transform enemyPulling_tns;
+    List<EnemyCon> enemy_lst;
 
 
     private void Awake()

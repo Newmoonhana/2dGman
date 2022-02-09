@@ -7,6 +7,7 @@ public class GameManager : SingletonPattern_IsA_Mono<GameManager>
 {
     //tmp
 
+    public static WaitForSeconds waitforseconds_3f = new WaitForSeconds(3f);
 
     public void Awake()
     {

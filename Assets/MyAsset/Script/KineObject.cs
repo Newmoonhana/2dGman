@@ -17,6 +17,7 @@ public class KineObject : MonoBehaviour
     public enum EntityState
     {
         DEFAULT,
+        HURT,
         DIE,
         VICTORY
     }
@@ -25,7 +26,7 @@ public class KineObject : MonoBehaviour
     Vector2 vec2;
     float f;
 
-    protected EntityState state = EntityState.DEFAULT;
+    protected EntityState state;
     public GameObject kine_obj;
     Transform kine_tns;
     public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
@@ -41,8 +42,9 @@ public class KineObject : MonoBehaviour
     protected bool IsJumping = false;
     protected bool IsGrounded = true;
 
-    private void Awake()
+    protected virtual void Awake()
     {
+        UpdateState(EntityState.DEFAULT);
         kine_tns = kine_obj.transform;
     }
 
@@ -60,10 +62,9 @@ public class KineObject : MonoBehaviour
                 }
                 else if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
                 {
-                    SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Hurt"));
                     kine_ani.SetTrigger("hurt");
                     kine_ani.SetBool("dead", true);
-                    state = EntityState.DIE;
+                    UpdateState(EntityState.DIE);
                 }
             }
         }
@@ -71,10 +72,25 @@ public class KineObject : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        
+        Jump();
     }
 
-    public void Move(float _horizontal)
+    protected virtual void UpdateState(EntityState _state)
+    {
+        state = _state;
+
+        switch (state)
+        {
+            case EntityState.HURT:
+                kine_ani.SetTrigger("hurt");
+                break;
+            case EntityState.DIE:
+                kine_ani.SetBool("dead", true);
+                break;
+        }
+    }
+
+    public virtual void Move(float _horizontal)
     {
         movement = Vector3.zero;
         vec2 = kine_tns.localScale;
@@ -93,14 +109,14 @@ public class KineObject : MonoBehaviour
         }
 
         kine_obj.transform.position += movement * GetSpeed * Time.deltaTime;
-        kine_ani.SetFloat("velocityX", _horizontal);
+        kine_ani.SetFloat("velocityX", Mathf.Abs(_horizontal));
     }
 
     public virtual void Jump()
     {
         if (!IsJumping)
             return;
-
+        Debug.Log("Jump");
         if (jumpTime == 0)  //점프 시작 시
         {
             rigid.velocity = Vector3.zero;

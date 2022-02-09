@@ -18,6 +18,20 @@ public class PlayerCon : KineObject
     JumpState jumpState = JumpState.Grounded;
     bool inFlight, stopJump;
 
+    protected override void UpdateState(EntityState _state)
+    {
+        base.UpdateState(_state);
+
+        switch (state)
+        {
+            case EntityState.HURT:
+                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Hurt"));
+                break;
+            case EntityState.DIE:
+                break;
+        }
+    }
+
     void UpdateJumpState()
     {
         switch (jumpState)
@@ -62,7 +76,7 @@ public class PlayerCon : KineObject
         {
             jumpState = JumpState.PrepareToJump;
         }
-        else if (!Input.GetButton("Jump"))
+        else if (Input.GetButtonUp("Jump"))
         {
             if (jumpState == JumpState.Jumping || jumpState == JumpState.InFlight)
             {
