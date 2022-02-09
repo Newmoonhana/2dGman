@@ -14,6 +14,15 @@ public class KineObject : MonoBehaviour
         _MAX
     }
 
+    public enum JumpState
+    {
+        Grounded,   //지면
+        PrepareToJump,  //점프 입력
+        Jumping,    //점프(상승) 중
+        InFlight,   //추락
+        Landed  //땅에 충돌
+    }
+
     public enum EntityState
     {
         DEFAULT,
@@ -27,6 +36,7 @@ public class KineObject : MonoBehaviour
     float f;
 
     protected EntityState state;
+    protected JumpState jumpState;
     public GameObject kine_obj;
     Transform kine_tns;
     public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
@@ -34,6 +44,7 @@ public class KineObject : MonoBehaviour
     public Rigidbody2D rigid;
     public SPEEDTYPE speed;
     float GetSpeed { get { return (int)speed * 3f; } }
+    protected bool inFlight, stopJump;
     public float jumpPower;
     protected float jumpTime = 0;
     public float jumpTimeLimit;
@@ -45,6 +56,7 @@ public class KineObject : MonoBehaviour
     protected virtual void Awake()
     {
         UpdateState(EntityState.DEFAULT);
+        UpdateJumpState(JumpState.Grounded);
         kine_tns = kine_obj.transform;
     }
 
@@ -72,6 +84,12 @@ public class KineObject : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        if (jumpState == JumpState.Jumping || jumpState == JumpState.InFlight)
+            if (IsGrounded)
+            {
+                UpdateJumpState(JumpState.Landed);
+            }
+
         Jump();
     }
 
@@ -86,6 +104,32 @@ public class KineObject : MonoBehaviour
                 break;
             case EntityState.DIE:
                 kine_ani.SetBool("dead", true);
+                break;
+        }
+    }
+
+    protected virtual void UpdateJumpState(JumpState _state)
+    {
+        jumpState = _state;
+
+        switch (jumpState)
+        {
+            case JumpState.Grounded:
+                IsJumping = false;
+                stopJump = false;
+                IsGrounded = true;
+                inFlight = false;
+                break;
+            case JumpState.PrepareToJump:
+                kine_ani.SetBool("grounded", false);
+                jumpTime = 0;
+                IsJumping = true;
+                IsGrounded = false;
+                stopJump = false;
+                break;
+            case JumpState.Landed:
+                kine_ani.SetBool("grounded", true);
+                UpdateJumpState(JumpState.Grounded);
                 break;
         }
     }
@@ -114,26 +158,30 @@ public class KineObject : MonoBehaviour
 
     public virtual void Jump()
     {
-        if (!IsJumping)
-            return;
-        Debug.Log("Jump");
-        if (jumpTime == 0)  //점프 시작 시
+        switch (jumpState)
         {
-            rigid.velocity = Vector3.zero;
-            IsGrounded = false;
-            kine_ani.SetBool("grounded", false);
-        }
+            case JumpState.PrepareToJump:
+                rigid.velocity = Vector3.zero;
+                UpdateJumpState(JumpState.Jumping);
+                break;
+            case JumpState.Jumping:
+                rigid.velocity = Vector3.zero;
+                vec2 = Vector2.up;
+                vec2.y *= jumpPower * (jumpTime * 0.1f + 1f);
+                rigid.AddForce(vec2, ForceMode2D.Impulse);
+                jumpTime += Time.fixedDeltaTime;
 
-        if (jumpTime >= jumpTimeLimit)  //하락 체크
-        {
-            IsJumping = false;
-            jumpTime = 0;
-
-            return;
+                if (stopJump || jumpTime >= jumpTimeLimit)  //하락 체크
+                {
+                    rigid.velocity = Vector3.zero;
+                    vec2.y *= jumpPower / 10 * (jumpTime * 0.1f + 1f);
+                    rigid.AddForce(vec2, ForceMode2D.Impulse);
+                    inFlight = true;
+                    IsJumping = false;
+                    UpdateJumpState(JumpState.InFlight);
+                    return;
+                }
+                break;
         }
-        vec2 = Vector2.up;
-        vec2.y *= jumpPower * (jumpTime * 0.1f + 1f);
-        rigid.AddForce(vec2, ForceMode2D.Impulse);
-        jumpTime += Time.deltaTime;
     }
 }

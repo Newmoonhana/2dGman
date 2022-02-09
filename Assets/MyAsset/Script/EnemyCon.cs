@@ -62,9 +62,7 @@ public class EnemyCon : KineObject
     {
         while (!(state == EntityState.DIE))
         {
-            IsJumping = true;
-            yield return null;
-            IsJumping = false;
+            UpdateJumpState(JumpState.PrepareToJump);
             yield return GameManager.waitforseconds_3f;
         }
     }
