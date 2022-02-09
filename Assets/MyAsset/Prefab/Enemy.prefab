@@ -183,9 +183,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2973200243344065669}
-  - component: {fileID: 2973200243344065670}
   - component: {fileID: 2973200243344065671}
   - component: {fileID: 2973200243344065668}
+  - component: {fileID: 1178781651747224232}
   m_Layer: 9
   m_Name: Enemy
   m_TagString: Untagged
@@ -209,22 +209,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &2973200243344065670
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2973200243344065664}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 12}
-  m_Size: {x: 30, y: 24}
-  m_Direction: 1
 --- !u!50 &2973200243344065671
 Rigidbody2D:
   serializedVersion: 4
@@ -263,6 +247,22 @@ MonoBehaviour:
   kine_ani: {fileID: 2973200242071532517}
   rigid: {fileID: 2973200243344065671}
   speed: 1
-  jumpPower: 6
+  jumpPower: 5
   jumpTimeLimit: 0.4
   player_tns: {fileID: 0}
+--- !u!58 &1178781651747224232
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2973200243344065664}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 13}
+  serializedVersion: 2
+  m_Radius: 13

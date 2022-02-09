@@ -259,7 +259,7 @@ MonoBehaviour:
   rigid: {fileID: 1359504178}
   speed: 2
   jumpPower: 6
-  jumpTimeLimit: 0.8
+  jumpTimeLimit: 0.5
 --- !u!1 &320476346
 GameObject:
   m_ObjectHideFlags: 0
@@ -4685,8 +4685,8 @@ Tilemap:
   - first: {x: 199, y: 0, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 3
-      m_TileSpriteIndex: 3
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -6565,8 +6565,8 @@ Tilemap:
   - first: {x: 199, y: 1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
+      m_TileIndex: 1
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -9974,15 +9974,15 @@ Tilemap:
       m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 8
+  - m_RefCount: 7
     m_Data: {fileID: 11400000, guid: 1dff4508f9bc57f42a27ab9c87d09ce9, type: 2}
-  - m_RefCount: 185
+  - m_RefCount: 186
     m_Data: {fileID: 11400000, guid: b15af0e80b708284f9c3f1c82709a8c8, type: 2}
   - m_RefCount: 14
     m_Data: {fileID: 11400000, guid: 49bc488524bc21d4599dd17b7a4c820a, type: 2}
-  - m_RefCount: 22
+  - m_RefCount: 21
     m_Data: {fileID: 11400000, guid: 7b7e7245882157f40a5fb4f19c71cdff, type: 2}
-  - m_RefCount: 473
+  - m_RefCount: 474
     m_Data: {fileID: 11400000, guid: 004083990c435bd4992a608f048a6bd7, type: 2}
   - m_RefCount: 14
     m_Data: {fileID: 11400000, guid: 9bd2bf6934e013b4897157ebca8687ef, type: 2}
@@ -9991,19 +9991,19 @@ Tilemap:
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileSpriteArray:
-  - m_RefCount: 8
+  - m_RefCount: 7
     m_Data: {fileID: 6664927513078990900, guid: 91fb82b3f895d714d926eb27dfd66898,
       type: 3}
-  - m_RefCount: 185
+  - m_RefCount: 186
     m_Data: {fileID: -7111190638788249605, guid: 91fb82b3f895d714d926eb27dfd66898,
       type: 3}
   - m_RefCount: 14
     m_Data: {fileID: 8747748398515965655, guid: 91fb82b3f895d714d926eb27dfd66898,
       type: 3}
-  - m_RefCount: 22
+  - m_RefCount: 21
     m_Data: {fileID: 1549426263277031239, guid: 91fb82b3f895d714d926eb27dfd66898,
       type: 3}
-  - m_RefCount: 473
+  - m_RefCount: 474
     m_Data: {fileID: 6616439283313026418, guid: 91fb82b3f895d714d926eb27dfd66898,
       type: 3}
   - m_RefCount: 14

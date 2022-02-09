@@ -44,19 +44,19 @@ public class KineObject : MonoBehaviour
     public Rigidbody2D rigid;
     public SPEEDTYPE speed;
     float GetSpeed { get { return (int)speed * 3f; } }
-    protected bool inFlight, stopJump;
+    protected bool stopJump;
     public float jumpPower;
     protected float jumpTime = 0;
     public float jumpTimeLimit;
 
     Vector3 movement;
-    protected bool IsJumping = false;
     protected bool IsGrounded = true;
 
     protected virtual void Awake()
     {
         UpdateState(EntityState.DEFAULT);
         UpdateJumpState(JumpState.Grounded);
+        kine_ani.SetBool("grounded", true);
         kine_tns = kine_obj.transform;
     }
 
@@ -66,17 +66,23 @@ public class KineObject : MonoBehaviour
         {
             if (foot_col_src.state == ColHitState.Enter)
             {
+                
+                if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
+                {
+                    UpdateState(EntityState.HURT);
+                    UpdateState(EntityState.DIE);
+                }
+            }
+            else if (foot_col_src.state == ColHitState.Stay)
+            {
                 //땅 충돌 판정
                 if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land"))
                 {
-                    IsGrounded = true;
-                    kine_ani.SetBool("grounded", true);
-                }
-                else if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
-                {
-                    kine_ani.SetTrigger("hurt");
-                    kine_ani.SetBool("dead", true);
-                    UpdateState(EntityState.DIE);
+                    if (jumpState == JumpState.InFlight)
+                        if (!(jumpState == JumpState.Grounded))
+                        {
+                            UpdateJumpState(JumpState.Landed);
+                        }
                 }
             }
         }
@@ -84,13 +90,10 @@ public class KineObject : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (jumpState == JumpState.Jumping || jumpState == JumpState.InFlight)
-            if (IsGrounded)
-            {
-                UpdateJumpState(JumpState.Landed);
-            }
-
-        Jump();
+        if (state == EntityState.DEFAULT)
+        {
+            Jump();
+        }
     }
 
     protected virtual void UpdateState(EntityState _state)
@@ -115,20 +118,17 @@ public class KineObject : MonoBehaviour
         switch (jumpState)
         {
             case JumpState.Grounded:
-                IsJumping = false;
-                stopJump = false;
                 IsGrounded = true;
-                inFlight = false;
+                kine_ani.SetBool("grounded", true);
+                stopJump = false;
                 break;
             case JumpState.PrepareToJump:
                 kine_ani.SetBool("grounded", false);
                 jumpTime = 0;
-                IsJumping = true;
                 IsGrounded = false;
                 stopJump = false;
                 break;
             case JumpState.Landed:
-                kine_ani.SetBool("grounded", true);
                 UpdateJumpState(JumpState.Grounded);
                 break;
         }
@@ -176,8 +176,6 @@ public class KineObject : MonoBehaviour
                     rigid.velocity = Vector3.zero;
                     vec2.y *= jumpPower / 10 * (jumpTime * 0.1f + 1f);
                     rigid.AddForce(vec2, ForceMode2D.Impulse);
-                    inFlight = true;
-                    IsJumping = false;
                     UpdateJumpState(JumpState.InFlight);
                     return;
                 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerCon : KineObject
 {
     //tmp
-    Vector2 _vec2;
 
     protected override void UpdateState(EntityState _state)
     {
@@ -69,36 +68,7 @@ public class PlayerCon : KineObject
         if (state == EntityState.DEFAULT)
         {
             Move(Input.GetAxisRaw("Horizontal"));
-            Jump();
-            base.FixedUpdate();
         }
+        base.FixedUpdate();
     }
-
-    //public override void Jump()
-    //{
-    //    //Debug.Log(jumpState);
-    //    switch (jumpState)
-    //    {
-    //        case JumpState.PrepareToJump:
-    //            rigid.velocity = Vector3.zero;
-    //            break;
-    //        case JumpState.Jumping:
-    //            rigid.velocity = Vector3.zero;
-    //            _vec2 = Vector2.up;
-    //            _vec2.y *= jumpPower * (jumpTime * 0.1f + 1f);
-    //            rigid.AddForce(_vec2, ForceMode2D.Impulse);
-    //            jumpTime += Time.fixedDeltaTime;
-
-    //            if (stopJump || jumpTime >= jumpTimeLimit)  //하락 체크
-    //            {
-    //                rigid.velocity = Vector3.zero;
-    //                _vec2.y *= jumpPower / 10 * (jumpTime * 0.1f + 1f);
-    //                rigid.AddForce(_vec2, ForceMode2D.Impulse);
-    //                inFlight = true;
-    //                jumpTime = 0;
-    //                return;
-    //            }
-    //            break;
-    //    }
-    //}
 }
