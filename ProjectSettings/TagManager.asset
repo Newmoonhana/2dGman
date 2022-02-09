@@ -12,11 +12,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Dead Zone
   - Land
   - Foot
+  - Enemy
   - Player
-  - 
   - 
   - 
   - 
@@ -41,4 +41,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 827171067
+    locked: 0
+  - name: Land
+    uniqueID: 2821621653
+    locked: 0
+  - name: Entity
+    uniqueID: 3585136543
     locked: 0

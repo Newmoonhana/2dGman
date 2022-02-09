@@ -34,17 +34,18 @@ public class PlayerCon : KineObject
                 IsJumping = true;
                 IsGrounded = false;
                 stopJump = false;
+                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("jump"));
                 break;
             case JumpState.Jumping:
                 if (inFlight)
                 {
+                    IsJumping = false;
                     jumpState = JumpState.InFlight;
                 }
                 break;
             case JumpState.InFlight:
                 if (IsGrounded)
                 {
-                    IsJumping = false;
                     jumpState = JumpState.Landed;
                 }
                 break;
@@ -61,43 +62,67 @@ public class PlayerCon : KineObject
         {
             jumpState = JumpState.PrepareToJump;
         }
-        else if (Input.GetButtonUp("Jump"))
+        else if (!Input.GetButton("Jump"))
         {
-            stopJump = true;
+            if (jumpState == JumpState.Jumping || jumpState == JumpState.InFlight)
+            {
+                stopJump = true;
+            }
         }
 
         UpdateJumpState();
+
+        if (foot_col_src.type == COLTYPE.COLLISION)
+        {
+            if (foot_col_src.state == ColHitState.Enter)
+            {
+                //몬스터 충돌 판정
+                if (jumpState == JumpState.InFlight)
+                    if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                    {
+                        foot_col_src.other_col.gameObject.SetActive(false);
+                        jumpState = JumpState.PrepareToJump;
+                    }
+            }
+        }
 
         base.Update();
     }
 
     protected override void FixedUpdate()
     {
-        Move(Input.GetAxisRaw("Horizontal"));
-        Jump();
-        base.FixedUpdate();
+        if (state == EntityState.DEFAULT)
+        {
+            Move(Input.GetAxisRaw("Horizontal"));
+            Jump();
+            base.FixedUpdate();
+        }
     }
 
     public override void Jump()
     {
-        if (!IsJumping)
-            return;
-
-        if (jumpTime == 0)  //점프 시작 시
+        switch (jumpState)
         {
-            
-        }
+            case JumpState.PrepareToJump:
+                rigid.velocity = Vector3.zero;
+                break;
+            case JumpState.Jumping:
+                rigid.velocity = Vector3.zero;
+                _vec2 = Vector2.up;
+                _vec2.y *= jumpPower * (jumpTime * 0.1f + 1f);
+                rigid.AddForce(_vec2, ForceMode2D.Impulse);
+                jumpTime += Time.fixedDeltaTime;
 
-        if (stopJump || jumpTime >= jumpTimeLimit)  //하락 체크
-        {
-            inFlight = true;
-            jumpTime = 0;
-
-            return;
+                if (stopJump || jumpTime >= jumpTimeLimit)  //하락 체크
+                {
+                    rigid.velocity = Vector3.zero;
+                    _vec2.y *= jumpPower / 10 * (jumpTime * 0.1f + 1f);
+                    rigid.AddForce(_vec2, ForceMode2D.Impulse);
+                    inFlight = true;
+                    jumpTime = 0;
+                    return;
+                }
+                break;
         }
-        _vec2 = Vector2.up;
-        _vec2.y *= jumpPower * (jumpTime * 0.1f + 1f);
-        rigid.AddForce(_vec2, ForceMode2D.Impulse);
-        jumpTime += Time.deltaTime;
     }
 }

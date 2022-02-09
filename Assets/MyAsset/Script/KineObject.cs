@@ -2,22 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SPEEDTYPE
-{
-    NONE,
-    SLOW,
-    NORMAL,
-    FAST,
-
-    _MAX
-}
-
 public class KineObject : MonoBehaviour
 {
+    public enum SPEEDTYPE
+    {
+        NONE,
+        SLOW,
+        NORMAL,
+        FAST,
+
+        _MAX
+    }
+
+    public enum EntityState
+    {
+        DEFAULT,
+        DIE,
+        VICTORY
+    }
+
     //tmp
     Vector2 vec2;
     float f;
 
+    protected EntityState state = EntityState.DEFAULT;
     public GameObject kine_obj;
     Transform kine_tns;
     public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
@@ -40,16 +48,25 @@ public class KineObject : MonoBehaviour
 
     protected virtual void Update()
     {
-        //땅 충돌 판정
         if (foot_col_src.type == COLTYPE.COLLISION)
+        {
             if (foot_col_src.state == ColHitState.Enter)
             {
+                //땅 충돌 판정
                 if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land"))
                 {
                     IsGrounded = true;
                     kine_ani.SetBool("grounded", true);
                 }
+                else if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
+                {
+                    SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Hurt"));
+                    kine_ani.SetTrigger("hurt");
+                    kine_ani.SetBool("dead", true);
+                    state = EntityState.DIE;
+                }
             }
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -86,6 +103,7 @@ public class KineObject : MonoBehaviour
 
         if (jumpTime == 0)  //점프 시작 시
         {
+            rigid.velocity = Vector3.zero;
             IsGrounded = false;
             kine_ani.SetBool("grounded", false);
         }
