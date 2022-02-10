@@ -76,6 +76,9 @@ public class SFXManager : SingletonPattern_IsA_Mono<SFXManager>
         if (_file == null)
             return;
 
+        if (_file.clip == se_clip)
+            return;
+
         switch (_file.type)
         {
             case AUDIOTYPE.BG:

@@ -36,6 +36,21 @@ public class EnemyCon : KineObject
         base.FixedUpdate();
     }
 
+    protected override void UpdateState(EntityState _state)
+    {
+        base.UpdateState(_state);
+
+        switch (state)
+        {
+            case EntityState.HURT:
+                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Pop"));
+                break;
+            case EntityState.DIE:
+                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Pop"));
+                break;
+        }
+    }
+
     //플레이어의 현재 방향 체킹.
     void UpdateDirType()
     {
@@ -62,7 +77,7 @@ public class EnemyCon : KineObject
     {
         while (!(state == EntityState.DIE))
         {
-            UpdateJumpState(JumpState.PrepareToJump);
+            UpdateJumpState(EntityJumpState.PrepareToJump);
             yield return GameManager.waitforseconds_3f;
         }
     }
