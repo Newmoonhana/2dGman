@@ -14,11 +14,11 @@ TagManager:
   - UI
   - Dead Zone
   - Land
-  - Foot
+  - Wall
   - Enemy
   - Player
   - EnemyWallZone
-  - 
+  - Land_Platform
   - 
   - 
   - 
@@ -50,4 +50,7 @@ TagManager:
     locked: 0
   - name: Entity
     uniqueID: 3585136543
+    locked: 0
+  - name: TestingUI
+    uniqueID: 4068940601
     locked: 0

@@ -39,7 +39,7 @@ public class KineObject : MonoBehaviour
     protected JumpState jumpState;
     public GameObject kine_obj;
     Transform kine_tns;
-    public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
+    public IsColliderHit kine_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
     public Animator kine_ani;
     public Rigidbody2D rigid;
     public SPEEDTYPE speed;
@@ -62,21 +62,21 @@ public class KineObject : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (foot_col_src.type == COLTYPE.COLLISION)
+        if (kine_col_src.type == COLTYPE.COLLISION)
         {
-            if (foot_col_src.state == ColHitState.Enter)
+            if (kine_col_src.state == ColHitState.Enter)
             {
                 
-                if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
+                if (kine_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
                 {
                     UpdateState(EntityState.HURT);
                     UpdateState(EntityState.DIE);
                 }
             }
-            else if (foot_col_src.state == ColHitState.Stay)
+            else if (kine_col_src.state == ColHitState.Stay)
             {
                 //땅 충돌 판정
-                if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land"))
+                if (kine_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land") || kine_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
                 {
                     if (jumpState == JumpState.InFlight)
                         if (!(jumpState == JumpState.Grounded))

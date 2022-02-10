@@ -6,6 +6,8 @@ public class PlayerCon : KineObject
 {
     //tmp
 
+    public bool playerkey_jump = false, playerkey_down = false;
+
     protected override void UpdateState(EntityState _state)
     {
         base.UpdateState(_state);
@@ -27,13 +29,24 @@ public class PlayerCon : KineObject
         switch (jumpState)
         {
             case JumpState.PrepareToJump:
+                playerkey_jump = true;
                 SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("jump"));
+                break;
+            case JumpState.Grounded:
+            case JumpState.Landed:
+                playerkey_jump = false;
+                playerkey_down = false;
                 break;
         }
     }
 
     protected override void Update()
     {
+        if (Input.GetButtonDown("Down"))
+        {
+            playerkey_down = true;
+        }
+
         if (jumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
         {
             UpdateJumpState(JumpState.PrepareToJump);
@@ -46,15 +59,15 @@ public class PlayerCon : KineObject
             }
         }
 
-        if (foot_col_src.type == COLTYPE.COLLISION)
+        if (kine_col_src.type == COLTYPE.COLLISION)
         {
-            if (foot_col_src.state == ColHitState.Enter)
+            if (kine_col_src.state == ColHitState.Enter)
             {
                 //몬스터 충돌 판정
                 if (jumpState == JumpState.InFlight)
-                    if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                    if (kine_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                     {
-                        foot_col_src.other_col.gameObject.SetActive(false);
+                        kine_col_src.other_col.gameObject.SetActive(false);
                         UpdateJumpState(JumpState.PrepareToJump);
                     }
             }

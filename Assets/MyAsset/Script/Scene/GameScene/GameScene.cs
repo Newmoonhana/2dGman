@@ -6,6 +6,7 @@ public class GameScene : MonoBehaviour
 {
     //tmp
 
+    public static PlayerCon playerCon_src;
     public List<GameObject> enemy_pre;
     public Transform enemyPulling_tns;
     List<EnemyCon> enemy_lst;
@@ -13,6 +14,7 @@ public class GameScene : MonoBehaviour
 
     private void Awake()
     {
+        playerCon_src = GameObject.Find("Player Controller").GetComponent<PlayerCon>();
         SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Music"));
     }
 }
