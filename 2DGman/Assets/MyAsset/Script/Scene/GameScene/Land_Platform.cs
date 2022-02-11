@@ -5,7 +5,6 @@ using UnityEngine;
 public class Land_Platform : MonoBehaviour
 {
     //tmp
-    int i;
     
     bool playerCheck;
     PlatformEffector2D LandPlatform_Pe2d;
