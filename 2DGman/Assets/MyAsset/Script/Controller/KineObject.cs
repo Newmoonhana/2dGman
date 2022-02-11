@@ -56,19 +56,30 @@ public class KineObject : MonoBehaviour
     {
         UpdateState(EntityState.DEFAULT);
         UpdateJumpState(EntityJumpState.Grounded);
-        kine_ani.SetBool("_grounded", true);
         kine_tns = kine_obj.transform;
     }
 
     protected virtual void Update()
     {
+        
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if (state == EntityState.DEFAULT)
+        {
+            Jump();
+        }
+
         if (foot_col_src.type == COLTYPE.COLLISION)
         {
             if (foot_col_src.other_col == null)
                 return;
             if (foot_col_src.state == ColHitState.Enter)
             {
-                
+                //땅 충돌 판정
+                if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
+                    return;
                 if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
                 {
                     UpdateState(EntityState.HURT);
@@ -79,20 +90,23 @@ public class KineObject : MonoBehaviour
             {
                 //땅 충돌 판정
                 if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
+                {
                     if (jumpState == EntityJumpState.InFlight)
-                    {
                         UpdateJumpState(EntityJumpState.Landed);
-                    }
+                    return;
+                }
+            }
+            else if (foot_col_src.state == ColHitState.Exit)
+            {
+                //땅 충돌 판정(추락)
+                if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
+                {
+                    if (jumpState == EntityJumpState.Grounded)
+                        UpdateJumpState(EntityJumpState.InFlight);
+                }
             }
         }
-    }
-
-    protected virtual void FixedUpdate()
-    {
-        if (state == EntityState.DEFAULT)
-        {
-            Jump();
-        }
+        IsGrounded = false;
     }
 
     protected virtual void UpdateState(EntityState _state)
@@ -124,8 +138,12 @@ public class KineObject : MonoBehaviour
             case EntityJumpState.PrepareToJump:
                 kine_ani.SetBool("_grounded", false);
                 jumpTime = 0;
-                IsGrounded = false;
                 stopJump = false;
+                break;
+            case EntityJumpState.InFlight:
+                IsGrounded = false;
+                kine_ani.SetBool("_grounded", false);
+                kine_ani.SetFloat("_velocityY", 0);
                 break;
             case EntityJumpState.Landed:
                 UpdateJumpState(EntityJumpState.Grounded);
@@ -160,15 +178,17 @@ public class KineObject : MonoBehaviour
         switch (jumpState)
         {
             case EntityJumpState.PrepareToJump:
-                rigid.velocity = Vector3.zero;
+                if (!IsGrounded)
+                    break;
                 UpdateJumpState(EntityJumpState.Jumping);
-                break;
+                return;
             case EntityJumpState.Jumping:
                 rigid.velocity = Vector3.zero;
                 vec2 = Vector2.up;
                 vec2.y *= jumpPower * (jumpTime * 0.1f + 1f);
                 rigid.AddForce(vec2, ForceMode2D.Impulse);
                 jumpTime += Time.fixedDeltaTime;
+                kine_ani.SetFloat("_velocityY", Mathf.Abs(jumpTime));
 
                 if (stopJump || jumpTime >= jumpTimeLimit)  //하락 체크
                 {
@@ -178,7 +198,7 @@ public class KineObject : MonoBehaviour
                     UpdateJumpState(EntityJumpState.InFlight);
                     return;
                 }
-                break;
+                return;
         }
     }
 }

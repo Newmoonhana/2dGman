@@ -29,13 +29,13 @@ public class PlayerCon : KineObject
 
         switch (jumpState)
         {
-            case EntityJumpState.PrepareToJump:
-                playerkey_jump = true;
-                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("jump"));
-                break;
             case EntityJumpState.Grounded:
                 playerkey_jump = false;
                 playerkey_down = false;
+                break;
+            case EntityJumpState.PrepareToJump:
+                playerkey_jump = true;
+                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("jump"));
                 break;
             case EntityJumpState.Landed:
                 playerkey_jump = false;
@@ -65,6 +65,16 @@ public class PlayerCon : KineObject
             }
         }
 
+        base.Update();
+    }
+
+    protected override void FixedUpdate()
+    {
+        if (state == EntityState.DEFAULT)
+        {
+            Move(Input.GetAxisRaw("Horizontal"));
+        }
+
         if (foot_col_src.type == COLTYPE.COLLISION)
         {
             if (foot_col_src.state == ColHitState.Enter)
@@ -79,15 +89,6 @@ public class PlayerCon : KineObject
             }
         }
 
-        base.Update();
-    }
-
-    protected override void FixedUpdate()
-    {
-        if (state == EntityState.DEFAULT)
-        {
-            Move(Input.GetAxisRaw("Horizontal"));
-        }
         base.FixedUpdate();
     }
 
