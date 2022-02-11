@@ -19,6 +19,7 @@ public class AudioFile
     public AudioClip Clip { get { return clip; } set { clip = value; name = value.name; } } //클립 변경 시 name도 같이 바뀌도록
     [SerializeField] public bool playOnAwake = false; // 씬 시작 시 재생.
     [SerializeField] public bool loop = false;  //루프 여부
+    [SerializeField] public bool isOneShot = true;  //PlayOneShot 사용 여부
 }
 
 public class SFXManager : SingletonPattern_IsA_Mono<SFXManager>
@@ -92,10 +93,17 @@ public class SFXManager : SingletonPattern_IsA_Mono<SFXManager>
                 return;
         }
 
-        tmp_source.clip = _file.Clip;
-        tmp_source.playOnAwake = _file.playOnAwake;
-        tmp_source.loop = _file.loop;
-        tmp_source.Play();
+        if (_file.isOneShot)
+        {
+            tmp_source.PlayOneShot(_file.Clip);
+        }
+        else
+        {
+            tmp_source.clip = _file.Clip;
+            tmp_source.playOnAwake = _file.playOnAwake;
+            tmp_source.loop = _file.loop;
+            tmp_source.Play();
+        }
     }
 
     /// <summary>

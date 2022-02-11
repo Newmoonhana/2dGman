@@ -92,7 +92,11 @@ public class KineObject : MonoBehaviour
                 if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
                 {
                     if (jumpState == EntityJumpState.InFlight)
+                    {
+                        rigid.velocity = Vector3.zero;
                         UpdateJumpState(EntityJumpState.Landed);
+                    }
+                        
                     return;
                 }
             }

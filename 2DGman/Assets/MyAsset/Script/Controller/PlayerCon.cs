@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCon : KineObject
 {
     //tmp
+    Vector2 _vec2;
 
     public bool playerkey_jump = false, playerkey_down = false;
 
@@ -51,6 +52,9 @@ public class PlayerCon : KineObject
         if (Input.GetButtonDown("Down"))
         {
             playerkey_down = true;
+            _vec2 = Vector2.down;
+            _vec2.y *= jumpPower / 10 * (jumpTime * 0.1f + 1f);
+            rigid.AddForce(_vec2, ForceMode2D.Impulse);
         }
 
         if (jumpState == EntityJumpState.Grounded && Input.GetButtonDown("Jump"))
@@ -84,6 +88,7 @@ public class PlayerCon : KineObject
                     if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                     {
                         foot_col_src.other_col.gameObject.SetActive(false);
+                        UpdateJumpState(EntityJumpState.Landed);
                         UpdateJumpState(EntityJumpState.PrepareToJump);
                     }
             }
