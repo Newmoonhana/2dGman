@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class KineObject : MonoBehaviour
 {
+    protected enum MOVEDIRTYPE
+    {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
     public enum SPEEDTYPE
     {
         NONE,
@@ -33,9 +40,10 @@ public class KineObject : MonoBehaviour
 
     //tmp
     Vector2 vec2;
-    float f;
+    float f, f1;
 
     protected EntityState state;
+    protected MOVEDIRTYPE movedir = MOVEDIRTYPE.CENTER;
     public EntityJumpState jumpState;
     public GameObject kine_obj;
     Transform kine_tns;
@@ -69,9 +77,12 @@ public class KineObject : MonoBehaviour
         if (state == EntityState.DEFAULT)
         {
             Jump();
-            if (jumpState == EntityJumpState.Jumping)
-                if (rigid.velocity.y < 0)
+
+            if (rigid.velocity.y < 0)
+            {
+                if (jumpState == EntityJumpState.Jumping)
                     UpdateJumpState(EntityJumpState.InFlight);
+            }
         }
 
         if (foot_col_src.type == COLTYPE.TRIGGER)
@@ -80,11 +91,6 @@ public class KineObject : MonoBehaviour
                 return;
             if (foot_col_src.state == ColHitState.Enter)
             {
-                //땅 충돌 판정
-                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
-                {
-
-                }
                 if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
                 {
                     UpdateState(EntityState.HURT);
@@ -109,7 +115,10 @@ public class KineObject : MonoBehaviour
                 if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
                 {
                     if (jumpState == EntityJumpState.Grounded)
+                    {
                         UpdateJumpState(EntityJumpState.InFlight);
+                    }
+                        
                 }
             }
         }
@@ -159,24 +168,56 @@ public class KineObject : MonoBehaviour
 
     public virtual void Move(float _horizontal)
     {
+        //if (jumpState == EntityJumpState.Grounded)    //점프 후 방향 전환 안되는 점프 원하면 이 코드 사용하면 됨(이 프로젝트에선 필요 없어서 주석 처리)
+        //{
+        movedir = MOVEDIRTYPE.CENTER;
+        if (_horizontal < 0)
+        {
+            movedir = MOVEDIRTYPE.LEFT;
+        }
+        else if (_horizontal > 0)
+        {
+            movedir = MOVEDIRTYPE.RIGHT;
+        }
+        //}
+
+        if (movedir == MOVEDIRTYPE.CENTER)
+        {
+            kine_ani.SetFloat("_velocityX", 0);
+            return;
+        }
+
         movement = Vector3.zero;
         vec2 = kine_tns.localScale;
         f = Mathf.Abs(kine_tns.localScale.x);
-        if (_horizontal < 0)
+        f1 = 1;
+        switch (jumpState)
+        {
+            case EntityJumpState.Jumping:
+                f1 = 0.6f;
+                break;
+            case EntityJumpState.InFlight:
+                f1 = 0.4f;
+                break;
+        }
+        if (movedir == MOVEDIRTYPE.LEFT)
         {
             movement = Vector3.left;
             vec2.x = -f;
             kine_tns.localScale = vec2;
+            vec2.x = -f1;
         }
-        else if (_horizontal > 0)
+        else if (movedir == MOVEDIRTYPE.RIGHT)
         {
             movement = Vector3.right;
             vec2.x = f;
             kine_tns.localScale = vec2;
+            vec2.x = f1;
         }
+        movement.x = vec2.x;
 
         kine_obj.transform.position += movement * GetSpeed * Time.deltaTime;
-        kine_ani.SetFloat("_velocityX", Mathf.Abs(_horizontal));
+        kine_ani.SetFloat("_velocityX", Mathf.Abs((int)movedir - 1));
     }
 
     public virtual void Jump()

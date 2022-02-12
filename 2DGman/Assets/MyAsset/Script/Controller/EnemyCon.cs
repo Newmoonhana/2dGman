@@ -43,10 +43,10 @@ public class EnemyCon : KineObject
         switch (state)
         {
             case EntityState.HURT:
-                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Pop"));
+                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("LandOnEnemy"));
                 break;
             case EntityState.DIE:
-                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Pop"));
+                
                 break;
         }
     }

@@ -26,9 +26,7 @@ public class PlayerCon : KineObject
 
     protected override void UpdateJumpState(EntityJumpState _state)
     {
-        base.UpdateJumpState(_state);
-
-        switch (jumpState)
+        switch (_state)
         {
             case EntityJumpState.Grounded:
                 playerkey_jump = false;
@@ -44,6 +42,7 @@ public class PlayerCon : KineObject
                 SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("LandOnGround"));
                 break;
         }
+        base.UpdateJumpState(_state);
     }
 
     protected override void Update()
