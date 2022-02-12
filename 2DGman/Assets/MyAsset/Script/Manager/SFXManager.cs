@@ -77,9 +77,6 @@ public class SFXManager : SingletonPattern_IsA_Mono<SFXManager>
         if (_file == null)
             return;
 
-        if (_file.clip == se_clip)
-            return;
-
         switch (_file.type)
         {
             case AUDIOTYPE.BG:
@@ -99,6 +96,9 @@ public class SFXManager : SingletonPattern_IsA_Mono<SFXManager>
         }
         else
         {
+            if (_file.clip == se_clip)
+                if (tmp_source.isPlaying)
+                    return;
             tmp_source.clip = _file.Clip;
             tmp_source.playOnAwake = _file.playOnAwake;
             tmp_source.loop = _file.loop;

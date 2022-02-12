@@ -253,13 +253,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d74a2cd6341b6994e9964385eecd0d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpState: 0
   kine_obj: {fileID: 1359504176}
   foot_col_src: {fileID: 801407419}
   kine_ani: {fileID: 1164959241}
   rigid: {fileID: 1359504178}
   speed: 2
   jumpPower: 6
-  jumpTimeLimit: 0.5
+  jumpTimeLimit: 0.4
   playerkey_jump: 0
   playerkey_down: 0
 --- !u!1 &320476346
@@ -943,10 +944,10 @@ MonoBehaviour:
     isOneShot: 1
   - name: Walk02
     type: 1
-    clip: {fileID: 8300000, guid: 3318e557ea5714340abb5376ce7fb8c6, type: 3}
+    clip: {fileID: 8300000, guid: bdb49257b73be764a8c04e4f37302e0e, type: 3}
     playOnAwake: 0
     loop: 0
-    isOneShot: 1
+    isOneShot: 0
   - name: Pop
     type: 1
     clip: {fileID: 8300000, guid: 6c05149e5a2fba64ba172e25a61074b7, type: 3}
@@ -1332,7 +1333,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2993,7 +2994,7 @@ PlatformEffector2D:
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 9728
   m_RotationalOffset: 0
   m_UseOneWay: 1
   m_UseOneWayGrouping: 0

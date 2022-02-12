@@ -36,7 +36,7 @@ public class KineObject : MonoBehaviour
     float f;
 
     protected EntityState state;
-    protected EntityJumpState jumpState;
+    public EntityJumpState jumpState;
     public GameObject kine_obj;
     Transform kine_tns;
     public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
@@ -69,18 +69,23 @@ public class KineObject : MonoBehaviour
         if (state == EntityState.DEFAULT)
         {
             Jump();
+            if (jumpState == EntityJumpState.Jumping)
+                if (rigid.velocity.y < 0)
+                    UpdateJumpState(EntityJumpState.InFlight);
         }
 
-        if (foot_col_src.type == COLTYPE.COLLISION)
+        if (foot_col_src.type == COLTYPE.TRIGGER)
         {
-            if (foot_col_src.other_col == null)
+            if (foot_col_src.other_col_TRIGGER == null)
                 return;
             if (foot_col_src.state == ColHitState.Enter)
             {
                 //땅 충돌 판정
-                if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
-                    return;
-                if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
+                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
+                {
+
+                }
+                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
                 {
                     UpdateState(EntityState.HURT);
                     UpdateState(EntityState.DIE);
@@ -89,28 +94,25 @@ public class KineObject : MonoBehaviour
             else if (foot_col_src.state == ColHitState.Stay)
             {
                 //땅 충돌 판정
-                if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
+                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
                 {
                     if (jumpState == EntityJumpState.InFlight)
                     {
                         rigid.velocity = Vector3.zero;
                         UpdateJumpState(EntityJumpState.Landed);
                     }
-                        
-                    return;
                 }
             }
             else if (foot_col_src.state == ColHitState.Exit)
             {
                 //땅 충돌 판정(추락)
-                if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
+                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
                 {
                     if (jumpState == EntityJumpState.Grounded)
                         UpdateJumpState(EntityJumpState.InFlight);
                 }
             }
         }
-        IsGrounded = false;
     }
 
     protected virtual void UpdateState(EntityState _state)
@@ -187,21 +189,15 @@ public class KineObject : MonoBehaviour
                 UpdateJumpState(EntityJumpState.Jumping);
                 return;
             case EntityJumpState.Jumping:
+                if (stopJump || jumpTime >= jumpTimeLimit)  //하락 체크
+                    return;
+
                 rigid.velocity = Vector3.zero;
                 vec2 = Vector2.up;
                 vec2.y *= jumpPower * (jumpTime * 0.1f + 1f);
                 rigid.AddForce(vec2, ForceMode2D.Impulse);
                 jumpTime += Time.fixedDeltaTime;
                 kine_ani.SetFloat("_velocityY", Mathf.Abs(jumpTime));
-
-                if (stopJump || jumpTime >= jumpTimeLimit)  //하락 체크
-                {
-                    rigid.velocity = Vector3.zero;
-                    vec2.y *= jumpPower / 10 * (jumpTime * 0.1f + 1f);
-                    rigid.AddForce(vec2, ForceMode2D.Impulse);
-                    UpdateJumpState(EntityJumpState.InFlight);
-                    return;
-                }
                 return;
         }
     }

@@ -41,7 +41,6 @@ public class PlayerCon : KineObject
             case EntityJumpState.Landed:
                 playerkey_jump = false;
                 playerkey_down = false;
-
                 SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("LandOnGround"));
                 break;
         }
@@ -79,18 +78,17 @@ public class PlayerCon : KineObject
             Move(Input.GetAxisRaw("Horizontal"));
         }
 
-        if (foot_col_src.type == COLTYPE.COLLISION)
+        if (foot_col_src.type == COLTYPE.TRIGGER)
         {
             if (foot_col_src.state == ColHitState.Enter)
             {
                 //몬스터 충돌 판정
-                if (jumpState == EntityJumpState.InFlight)
-                    if (foot_col_src.other_col.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                    {
-                        foot_col_src.other_col.gameObject.SetActive(false);
-                        UpdateJumpState(EntityJumpState.Landed);
-                        UpdateJumpState(EntityJumpState.PrepareToJump);
-                    }
+                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                {
+                    foot_col_src.other_col_TRIGGER.gameObject.SetActive(false);
+                    UpdateJumpState(EntityJumpState.Landed);
+                    UpdateJumpState(EntityJumpState.PrepareToJump);
+                }
             }
         }
 
@@ -101,7 +99,7 @@ public class PlayerCon : KineObject
     {
         if (_horizontal != 0)
             if (jumpState == EntityJumpState.Grounded)
-                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Walk02"));
+                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("Walk01"));
         base.Move(_horizontal);
     }
 }

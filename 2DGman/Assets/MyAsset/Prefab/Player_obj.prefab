@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   state: 0
+  other_col_TRIGGER: {fileID: 0}
 --- !u!50 &942497622219088139
 Rigidbody2D:
   serializedVersion: 4
@@ -83,7 +84,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.2}
+  m_Offset: {x: 0, y: 1.15}
   m_Size: {x: 1, y: 2.3}
   m_Direction: 0
 --- !u!1 &942497622426606655
@@ -198,7 +199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 190502571186522764}
   - component: {fileID: 7324701199361284163}
-  - component: {fileID: 3122565083711064392}
+  - component: {fileID: 3041868682888395695}
   m_Layer: 13
   m_Name: Foot_col
   m_TagString: Untagged
@@ -234,8 +235,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   state: 0
---- !u!58 &3122565083711064392
-CircleCollider2D:
+  other_col_TRIGGER: {fileID: 0}
+--- !u!61 &3041868682888395695
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -244,9 +246,19 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.1}
+  m_Offset: {x: 0, y: 0.025}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Size: {x: 0.7, y: 0.05}
+  m_EdgeRadius: 0
