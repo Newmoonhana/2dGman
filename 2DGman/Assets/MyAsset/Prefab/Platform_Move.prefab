@@ -536,6 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoints:
-  - {x: 0, y: 0}
+  - waypoint: {x: 0, y: 0}
+    staytime: 0
   currpoint: {x: 0, y: 0}
   speed: 2
