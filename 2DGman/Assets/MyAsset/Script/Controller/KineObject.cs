@@ -227,6 +227,7 @@ public class KineObject : MonoBehaviour
             case EntityJumpState.PrepareToJump:
                 if (!IsGrounded)
                     break;
+                rigid.velocity = Vector3.zero;
                 UpdateJumpState(EntityJumpState.Jumping);
                 return;
             case EntityJumpState.Jumping:

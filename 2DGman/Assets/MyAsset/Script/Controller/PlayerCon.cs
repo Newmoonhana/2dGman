@@ -85,7 +85,7 @@ public class PlayerCon : KineObject
                 if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                 {
                     foot_col_src.other_col_TRIGGER.gameObject.SetActive(false);
-                    UpdateJumpState(EntityJumpState.Landed);
+                    UpdateJumpState(EntityJumpState.Grounded);
                     UpdateJumpState(EntityJumpState.PrepareToJump);
                 }
             }

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 947045982825991627}
   - component: {fileID: 947045982825991630}
-  - component: {fileID: 947045982825991625}
   - component: {fileID: 947045982825991624}
+  - component: {fileID: 4672548383761521065}
   m_Layer: 12
   m_Name: Platform
   m_TagString: Untagged
@@ -52,18 +52,6 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 90
---- !u!114 &947045982825991625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 947045982825991626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eef09600733d43e4ba14ebf01f247275, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &947045982825991624
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -90,6 +78,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 8, y: 0.01}
   m_EdgeRadius: 0
+--- !u!114 &4672548383761521065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947045982825991626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef09600733d43e4ba14ebf01f247275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &947045983539305127
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 947045983539305124}
   - component: {fileID: 947045983539305146}
   - component: {fileID: 947045983539305125}
+  - component: {fileID: 7473986776057950260}
   m_Layer: 12
   m_Name: Platform_Move
   m_TagString: Untagged
@@ -522,3 +523,17 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
+--- !u!114 &7473986776057950260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947045983539305127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c6b73c7ac528b34e85dff42396b1ea4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypoints: []
+  speed: 0

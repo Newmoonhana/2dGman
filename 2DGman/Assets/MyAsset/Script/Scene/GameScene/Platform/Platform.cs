@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Land_Platform : MonoBehaviour
+public class Platform : MonoBehaviour
 {
     //tmp
     
@@ -15,14 +15,14 @@ public class Land_Platform : MonoBehaviour
         LandPlatform_Pe2d = GetComponent<PlatformEffector2D>();
     }
 
-    private void Update()
+    protected virtual void Update()
     {
-        if (GameScene.playerCon_src.playerkey_down)
+        if (GameSceneData.playerCon_src.playerkey_down)
         {
             if (playerCheck)
                 LandPlatform_Pe2d.rotationalOffset = 180f;
         }
-        if (GameScene.playerCon_src.playerkey_jump)
+        if (GameSceneData.playerCon_src.playerkey_jump)
         {
             LandPlatform_Pe2d.rotationalOffset = 0f;
         }

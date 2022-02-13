@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 320476347}
   - component: {fileID: 320476348}
   m_Layer: 0
-  m_Name: GameScene
+  m_Name: GameScene Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -477,9 +477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8716945569f5f0d47baa99a07b0dc7eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy_pre:
-  - {fileID: 2973200243344065664, guid: a53ff5852e51c2145bdcab399a1e5d25, type: 3}
-  enemyPulling_tns: {fileID: 1439123945}
 --- !u!1 &349040499
 GameObject:
   m_ObjectHideFlags: 0
@@ -17451,8 +17448,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1439123945}
+  - component: {fileID: 1439123946}
   m_Layer: 0
-  m_Name: EnemyPulling
+  m_Name: GameSceneData
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17472,6 +17470,20 @@ Transform:
   m_Father: {fileID: 1519782892}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1439123946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439123944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4e21eff942ef8447af25429fef4c0db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy_pre:
+  - {fileID: 2973200243344065664, guid: a53ff5852e51c2145bdcab399a1e5d25, type: 3}
 --- !u!1 &1519782891
 GameObject:
   m_ObjectHideFlags: 0
@@ -19520,6 +19532,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Platform_Move (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: speed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.data[0].x
+      value: 151
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.data[0].y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.data[1].x
+      value: 143.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.data[1].y
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91bf630a70352614f83d2857c212a9f8, type: 3}
 --- !u!4 &1835486460 stripped
@@ -20047,6 +20089,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Platform_Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: speed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.data[0].x
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.data[0].y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.data[1].x
+      value: 135.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358529438549070172, guid: 91bf630a70352614f83d2857c212a9f8,
+        type: 3}
+      propertyPath: waypoints.Array.data[1].y
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91bf630a70352614f83d2857c212a9f8, type: 3}
