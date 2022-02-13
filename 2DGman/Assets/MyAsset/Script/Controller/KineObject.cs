@@ -11,16 +11,6 @@ public class KineObject : MonoBehaviour
         RIGHT
     }
 
-    public enum SPEEDTYPE
-    {
-        NONE,
-        SLOW,
-        NORMAL,
-        FAST,
-
-        _MAX
-    }
-
     public enum EntityJumpState
     {
         Grounded,   //Áö¸é
@@ -51,7 +41,6 @@ public class KineObject : MonoBehaviour
     public Animator kine_ani;
     public Rigidbody2D rigid;
     public SPEEDTYPE speed;
-    float GetSpeed { get { return (int)speed * 3f; } }
     protected bool stopJump;
     public float jumpPower;
     protected float jumpTime = 0;
@@ -216,7 +205,7 @@ public class KineObject : MonoBehaviour
         }
         movement.x = vec2.x;
 
-        kine_obj.transform.position += movement * GetSpeed * Time.deltaTime;
+        kine_obj.transform.position += movement * GameSceneData.GetSpeed(speed) * Time.deltaTime;
         kine_ani.SetFloat("_velocityX", Mathf.Abs((int)movedir - 1));
     }
 

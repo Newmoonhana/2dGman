@@ -535,5 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6b73c7ac528b34e85dff42396b1ea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypoints: []
-  speed: 0
+  waypoints:
+  - {x: 0, y: 0}
+  currpoint: {x: 0, y: 0}
+  speed: 2
