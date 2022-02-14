@@ -37,7 +37,7 @@ public class KineObject : MonoBehaviour
     public EntityJumpState jumpState;
     public GameObject kine_obj;
     Transform kine_tns;
-    public GameObject footCol_obj;
+    public Collider2D footcol;
     public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
     public Animator kine_ani;
     public Rigidbody2D rigid;
@@ -144,13 +144,13 @@ public class KineObject : MonoBehaviour
                 kine_ani.SetBool("_grounded", false);
                 jumpTime = 0;
                 stopJump = false;
-                footCol_obj.SetActive(false);
+                footcol.enabled = false;
                 break;
             case EntityJumpState.InFlight:
                 IsGrounded = false;
                 kine_ani.SetBool("_grounded", false);
                 kine_ani.SetFloat("_velocityY", 0);
-                footCol_obj.SetActive(true);
+                footcol.enabled = true;
                 break;
             case EntityJumpState.Landed:
                 UpdateJumpState(EntityJumpState.Grounded);

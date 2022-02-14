@@ -426,7 +426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpState: 0
   kine_obj: {fileID: 1359504176}
-  footCol_obj: {fileID: 1342713622}
+  footcol: {fileID: 1342713624}
   foot_col_src: {fileID: 801407419}
   kine_ani: {fileID: 1164959241}
   rigid: {fileID: 1359504178}
@@ -2127,7 +2127,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 942497623578542649}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1342713622}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bada281b9d4dcae459c55b8e820cf8b4, type: 3}
@@ -17059,9 +17059,9 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1342713622 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5315515193083212161, guid: 8fdb8d054a4b8bf4b82462a08594e0a0,
+--- !u!61 &1342713624 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 3041868682888395695, guid: 8fdb8d054a4b8bf4b82462a08594e0a0,
     type: 3}
   m_PrefabInstance: {fileID: 942497623578542649}
   m_PrefabAsset: {fileID: 0}
