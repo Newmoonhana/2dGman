@@ -77,14 +77,14 @@ public class PlayerCon : KineObject
             Move(Input.GetAxisRaw("Horizontal"));
         }
 
-        if (foot_col_src.type == COLTYPE.TRIGGER)
+        if (foot_col_src.type == COLTYPE.COLLISION)
         {
             if (foot_col_src.state == ColHitState.Enter)
             {
                 //몬스터 충돌 판정
-                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                 {
-                    foot_col_src.other_col_TRIGGER.gameObject.SetActive(false);
+                    foot_col_src.other_col_COLLISION.gameObject.SetActive(false);
                     UpdateJumpState(EntityJumpState.Grounded);
                     UpdateJumpState(EntityJumpState.PrepareToJump);
                 }

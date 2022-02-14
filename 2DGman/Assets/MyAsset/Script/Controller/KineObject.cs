@@ -37,6 +37,7 @@ public class KineObject : MonoBehaviour
     public EntityJumpState jumpState;
     public GameObject kine_obj;
     Transform kine_tns;
+    public GameObject footCol_obj;
     public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
     public Animator kine_ani;
     public Rigidbody2D rigid;
@@ -74,13 +75,13 @@ public class KineObject : MonoBehaviour
             }
         }
 
-        if (foot_col_src.type == COLTYPE.TRIGGER)
+        if (foot_col_src.type == COLTYPE.COLLISION)
         {
-            if (foot_col_src.other_col_TRIGGER == null)
+            if (foot_col_src.other_col_COLLISION == null)
                 return;
             if (foot_col_src.state == ColHitState.Enter)
             {
-                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
+                if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
                 {
                     UpdateState(EntityState.HURT);
                     UpdateState(EntityState.DIE);
@@ -89,7 +90,7 @@ public class KineObject : MonoBehaviour
             else if (foot_col_src.state == ColHitState.Stay)
             {
                 //땅 충돌 판정
-                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
+                if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
                 {
                     if (jumpState == EntityJumpState.InFlight)
                     {
@@ -101,7 +102,7 @@ public class KineObject : MonoBehaviour
             else if (foot_col_src.state == ColHitState.Exit)
             {
                 //땅 충돌 판정(추락)
-                if (foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
+                if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
                 {
                     if (jumpState == EntityJumpState.Grounded)
                     {
@@ -143,11 +144,13 @@ public class KineObject : MonoBehaviour
                 kine_ani.SetBool("_grounded", false);
                 jumpTime = 0;
                 stopJump = false;
+                footCol_obj.SetActive(false);
                 break;
             case EntityJumpState.InFlight:
                 IsGrounded = false;
                 kine_ani.SetBool("_grounded", false);
                 kine_ani.SetFloat("_velocityY", 0);
+                footCol_obj.SetActive(true);
                 break;
             case EntityJumpState.Landed:
                 UpdateJumpState(EntityJumpState.Grounded);
