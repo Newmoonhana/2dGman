@@ -160,6 +160,8 @@ MonoBehaviour:
   speed: 1
   jumpPower: 5
   jumpTimeLimit: 0.3
+  IsJump: 0
+  IsDown: 0
   player_tns: {fileID: 0}
 --- !u!50 &2973200243344065671
 Rigidbody2D:
@@ -228,7 +230,7 @@ GameObject:
   - component: {fileID: 3085061928041147986}
   - component: {fileID: 3858442358853807913}
   - component: {fileID: 4696697894326216819}
-  m_Layer: 13
+  m_Layer: 15
   m_Name: Foot_col
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +279,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.005}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}

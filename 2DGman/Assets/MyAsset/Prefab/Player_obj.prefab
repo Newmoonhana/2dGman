@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 190502571186522764}
   - component: {fileID: 7324701199361284163}
   - component: {fileID: 3041868682888395695}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: Foot_col
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -249,7 +249,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.005}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}

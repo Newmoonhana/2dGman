@@ -18,10 +18,10 @@ TagManager:
   - Enemy
   - Player
   - EnemyWallZone
-  - Land_Platform
-  - Foot
+  - Platform
   - 
-  - 
+  - Foot_Player
+  - Foot_Enemy
   - 
   - 
   - 

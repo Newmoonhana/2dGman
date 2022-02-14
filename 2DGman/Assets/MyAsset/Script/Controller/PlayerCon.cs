@@ -6,8 +6,7 @@ public class PlayerCon : KineObject
 {
     //tmp
     Vector2 _vec2;
-
-    public bool playerkey_jump = false, playerkey_down = false;
+    public bool IsJump = false, IsDown = false;
 
     protected override void UpdateState(EntityState _state)
     {
@@ -29,16 +28,14 @@ public class PlayerCon : KineObject
         switch (_state)
         {
             case EntityJumpState.Grounded:
-                playerkey_jump = false;
-                playerkey_down = false;
+                IsJump = false;
+                IsDown = false;
                 break;
             case EntityJumpState.PrepareToJump:
-                playerkey_jump = true;
                 SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("jump"));
+                IsJump = true;
                 break;
             case EntityJumpState.Landed:
-                playerkey_jump = false;
-                playerkey_down = false;
                 SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("LandOnGround"));
                 break;
         }
@@ -48,12 +45,13 @@ public class PlayerCon : KineObject
     protected override void Update()
     {
         if (Input.GetButtonDown("Down"))
-        {
-            playerkey_down = true;
-            _vec2 = Vector2.down;
-            _vec2.y *= jumpPower / 10 * (jumpTime * 0.1f + 1f);
-            rigid.AddForce(_vec2, ForceMode2D.Impulse);
-        }
+            if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
+            {
+                IsDown = true;
+                _vec2 = Vector2.down;
+                _vec2.y *= jumpPower / 10 * (jumpTime * 0.1f + 1f);
+                rigid.AddForce(_vec2, ForceMode2D.Impulse);
+            }
 
         if (jumpState == EntityJumpState.Grounded && Input.GetButtonDown("Jump"))
         {

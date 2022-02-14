@@ -73,42 +73,42 @@ public class KineObject : MonoBehaviour
                 if (jumpState == EntityJumpState.Jumping)
                     UpdateJumpState(EntityJumpState.InFlight);
             }
-        }
 
-        if (foot_col_src.type == COLTYPE.COLLISION)
-        {
-            if (foot_col_src.other_col_COLLISION == null)
-                return;
-            if (foot_col_src.state == ColHitState.Enter)
+            if (foot_col_src.type == COLTYPE.COLLISION)
             {
-                if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
+                if (foot_col_src.other_col_COLLISION == null)
+                    return;
+                if (foot_col_src.state == ColHitState.Enter)
                 {
-                    UpdateState(EntityState.HURT);
-                    UpdateState(EntityState.DIE);
-                }
-            }
-            else if (foot_col_src.state == ColHitState.Stay)
-            {
-                //땅 충돌 판정
-                if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
-                {
-                    if (jumpState == EntityJumpState.InFlight)
+                    //땅 충돌 판정
+                    if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
+                    {  
+                        if (jumpState == EntityJumpState.InFlight)
+                        {
+                            rigid.velocity = Vector3.zero;
+                            UpdateJumpState(EntityJumpState.Landed);
+                        }
+                    }
+                    else if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
                     {
-                        rigid.velocity = Vector3.zero;
-                        UpdateJumpState(EntityJumpState.Landed);
+                        UpdateState(EntityState.HURT);
+                        UpdateState(EntityState.DIE);
                     }
                 }
-            }
-            else if (foot_col_src.state == ColHitState.Exit)
-            {
-                //땅 충돌 판정(추락)
-                if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land_Platform"))
+                else if (foot_col_src.state == ColHitState.Stay)
                 {
-                    if (jumpState == EntityJumpState.Grounded)
+
+                }
+                else if (foot_col_src.state == ColHitState.Exit)
+                {
+                    //땅 충돌 판정(추락)
+                    if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
                     {
-                        UpdateJumpState(EntityJumpState.InFlight);
+                        if (jumpState == EntityJumpState.Grounded)
+                        {
+                            UpdateJumpState(EntityJumpState.InFlight);
+                        }
                     }
-                        
                 }
             }
         }
@@ -132,7 +132,7 @@ public class KineObject : MonoBehaviour
     protected virtual void UpdateJumpState(EntityJumpState _state)
     {
         jumpState = _state;
-
+        
         switch (jumpState)
         {
             case EntityJumpState.Grounded:
@@ -219,7 +219,7 @@ public class KineObject : MonoBehaviour
             case EntityJumpState.PrepareToJump:
                 if (!IsGrounded)
                     break;
-                rigid.velocity = Vector3.zero;
+                rigid.velocity = Vector3.zero;  //점프 Tag를 밟으면 해당 코드 필요
                 UpdateJumpState(EntityJumpState.Jumping);
                 return;
             case EntityJumpState.Jumping:
