@@ -535,8 +535,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6b73c7ac528b34e85dff42396b1ea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tns: {fileID: 947045983539305124}
   waypoints:
   - waypoint: {x: 0, y: 0}
-    staytime: 0
+    delaytime: 0
+    speed: 2
   currpoint: {x: 0, y: 0}
-  speed: 2
+  isReverse: 1
+  loopcount: -1
