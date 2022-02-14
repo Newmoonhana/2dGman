@@ -4,11 +4,10 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(Waypoint))]
 public class WaypointDrawer : PropertyDrawer
 {
-    Rect _Rect, waypointRect, staytimeRect;
+    Rect defaultRect, staytimeRect;
     SerializedProperty waypoint, staytime;
     GUIStyle staytime_GS;
-    float propertyHeight;
-    int count;  //총 라인의 개수
+    float propertyHeight = 18, count = 2;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -16,40 +15,34 @@ public class WaypointDrawer : PropertyDrawer
         staytime = property.FindPropertyRelative("staytime");
 
         //표시수치를 조정(표시 위치)
-        count = 2;
-        _Rect = new Rect(position)
+        defaultRect = new Rect(position)
         {
-            height = position.height
+            height = propertyHeight
         };
-        waypointRect = new Rect(_Rect)
+        staytimeRect = new Rect(defaultRect)
         {
-            height = _Rect.height / count
+            y = defaultRect.y + defaultRect.height,
+            width = defaultRect.width * 0.5f,
         };
-        staytimeRect = new Rect(_Rect)
-        {
-            y = waypointRect.y + waypointRect.height,
-            width = _Rect.width * 0.5f,
-            height = _Rect.height / count
-        };
-        propertyHeight = count + count * 0.5f;
 
         EditorGUI.BeginChangeCheck();
 
-        waypoint.vector2Value = EditorGUI.Vector2Field(waypointRect, "이동 좌표", waypoint.vector2Value);
+        waypoint.vector2Value = EditorGUI.Vector2Field(defaultRect, "이동 좌표", waypoint.vector2Value);
 
         staytime_GS = new GUIStyle(EditorStyles.numberField);
-        staytime_GS.fixedHeight = _Rect.height * 0.33f;
+        staytime_GS.fixedHeight = 18f;
         staytime.floatValue = EditorGUI.FloatField(staytimeRect, "정지 시간", staytime.floatValue, staytime_GS);
 
-        if (EditorGUI.EndChangeCheck())
-        {
+        //if (EditorGUI.EndChangeCheck())
+        //{
             
-        }
+        //}
     }
 
     //GUI 요소의 높이(전체 크기)
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return base.GetPropertyHeight(property, label) * propertyHeight;
+        propertyHeight = base.GetPropertyHeight(property, label) + 5;
+        return propertyHeight * count;
     }
 }

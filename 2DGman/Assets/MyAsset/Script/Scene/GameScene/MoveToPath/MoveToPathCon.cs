@@ -16,6 +16,7 @@ public class MoveToPathCon : MonoBehaviour
     public SPEEDTYPE speed; //이동 속도
     int waypointsIndex = 0;
     float f;
+    [SerializeField] bool leftLoop, rightLoop;
 
     [ContextMenu("현재 좌표 재설정")]
     void RefreshCurrpoint()
@@ -24,6 +25,11 @@ public class MoveToPathCon : MonoBehaviour
     }
 
     void Update()
+    {
+        Move();
+    }
+
+    private void Move()
     {
         currpoint = transform.position;
 
