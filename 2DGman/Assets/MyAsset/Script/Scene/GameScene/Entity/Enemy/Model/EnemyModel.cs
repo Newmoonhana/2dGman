@@ -8,17 +8,17 @@ public enum ENEMYTYPE
     HUMAN
 }
 
-public abstract class Enemy : MonoBehaviour
+public abstract class EnemyModel : MonoBehaviour
 {
     protected ENEMYTYPE type;
     [SerializeField] protected string this_name;
     [SerializeField] protected int hp;
-    protected EnemyCon controller;
+    protected EnemyController controller;
     [SerializeField] protected SPEEDTYPE speed;
     [SerializeField] protected float jumpPower, jumpTimeLimit;
 }
 
-public abstract class Slime : Enemy
+public abstract class Slime : EnemyModel
 {
     public Slime()
     {

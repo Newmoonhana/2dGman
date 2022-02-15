@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyCon : KineObject
+public class EnemyController : EntityController
 {
     enum DIRTYPE
     {
@@ -12,11 +12,9 @@ public class EnemyCon : KineObject
     }
     DIRTYPE dir = DIRTYPE.CENTER;   //자신을 기준으로 플레이어의 방향
     protected bool IsMove, IsJump;
-    Transform player_tns;
 
     protected override void Start()
     {
-        player_tns = GameSceneData.player_tns;
         if (IsJump)
             StartCoroutine(Jumping());
 
@@ -30,7 +28,7 @@ public class EnemyCon : KineObject
 
     protected override void FixedUpdate()
     {
-        if (state == EntityState.DIE)
+        if (model.state == EntityModel.EntityState.DIE)
             return;
         if (IsMove)
             Move((int)dir - 1);
@@ -38,16 +36,16 @@ public class EnemyCon : KineObject
         base.FixedUpdate();
     }
 
-    protected override void UpdateState(EntityState _state)
+    protected override void UpdateState(EntityModel.EntityState _state)
     {
         base.UpdateState(_state);
 
-        switch (state)
+        switch (model.state)
         {
-            case EntityState.HURT:
-                SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("LandOnEnemy"));
+            case EntityModel.EntityState.HURT:
+                AudioManager.Instance.Play(AudioManager.Instance.GetAudioFile("LandOnEnemy"));
                 break;
-            case EntityState.DIE:
+            case EntityModel.EntityState.DIE:
 
                 break;
         }
@@ -57,11 +55,11 @@ public class EnemyCon : KineObject
     void UpdateDirType()
     {
         dir = DIRTYPE.CENTER;
-        if (player_tns.position.x < transform.position.x)   //플레이어가 자신보다 왼쪽에 있을 때
+        if (PlayerController.player_model.player_tns.position.x < transform.position.x)   //플레이어가 자신보다 왼쪽에 있을 때
         {
             dir = DIRTYPE.LEFT;
         }
-        else if (player_tns.position.x > transform.position.x)   //플레이어가 자신보다 오른쪽에 있을 때
+        else if (PlayerController.player_model.player_tns.position.x > transform.position.x)   //플레이어가 자신보다 오른쪽에 있을 때
         {
             dir = DIRTYPE.RIGHT;
         }
@@ -77,15 +75,15 @@ public class EnemyCon : KineObject
 
     protected IEnumerator Jumping()   //일정 시간 마다 점프.
     {
-        while (!(state == EntityState.DIE))
+        while (!(model.state == EntityModel.EntityState.DIE))
         {
             yield return GameManager.waitforseconds_3f;
-            UpdateJumpState(EntityJumpState.PrepareToJump);
+            UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump);
         }
     }
 }
 
-public class Land : EnemyCon
+public class Land : EnemyController
 {
     public Land()
     {
@@ -94,7 +92,7 @@ public class Land : EnemyCon
     }
 }
 
-public class Jump : EnemyCon
+public class Jump : EnemyController
 {
     public Jump()
     {

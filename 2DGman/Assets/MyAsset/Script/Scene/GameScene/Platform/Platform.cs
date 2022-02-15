@@ -17,11 +17,11 @@ public class Platform : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (GameSceneData.playerCon_src.IsDown)
+        if (PlayerController.player_model.playerCon_src.IsDown)
         {
             if (playerCheck)
             {
-                if (GameSceneData.playerCon_src.jumpState == KineObject.EntityJumpState.Grounded)
+                if (PlayerController.player_model.playerCon_src.model.jumpState == EntityModel.EntityJumpState.Grounded)
                 {
                     platform_Pe2d.colliderMask = 0;
                     isjumpCheck = false;
@@ -30,7 +30,7 @@ public class Platform : MonoBehaviour
         }
             
         if (!isjumpCheck)
-            if (GameSceneData.playerCon_src.IsJump)
+            if (PlayerController.player_model.playerCon_src.IsJump)
             {
                 platform_Pe2d.colliderMask = 1 << LayerMask.NameToLayer("Foot_Player");
                 isjumpCheck = true;

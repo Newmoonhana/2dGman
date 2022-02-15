@@ -12,12 +12,10 @@ public class BlueSlime : Slime
 
     void Awake()
     {
-        EnemyConFactory ef = new LandFactory();
+        EnemyControllerFactory ef = new LandFactory();
         controller = ef.CreateEnemyCon("jump", gameObject);
-        controller.kine_obj = gameObject;
+        controller.Entity_obj = gameObject;
 
-        controller.speed = speed;
-        controller.jumpPower = jumpPower;
-        controller.jumpTimeLimit = jumpTimeLimit;
+        controller.model.SetSubValue(speed, jumpPower, jumpTimeLimit);
     }
 }
