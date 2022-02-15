@@ -48,6 +48,10 @@ public class EntityModel
     public bool stopJump;
     public bool IsGrounded = true;
 
+    /// <summary>
+    /// entity_obj를 기준으로 다른 변수들도 대입해주는 함수
+    /// </summary>
+    /// <param name="_obj">기반이 되는 게임 오브젝트(=entity_obj)</param>
     public void SetEntityObject(GameObject _obj)
     {
         if (_obj == null)
@@ -64,6 +68,12 @@ public class EntityModel
         rigid = entity_obj.GetComponent<Rigidbody2D>();
     }
 
+    /// <summary>
+    /// 부가적인 스탯 변수 대입
+    /// </summary>
+    /// <param name="_type">스피드 값(SPEEDTYPE)</param>
+    /// <param name="_jumpPower">점프 강도</param>
+    /// <param name="_jumpTimeLimit">점프 시간 최대치</param>
     public void SetSubValue(SPEEDTYPE _type, float _jumpPower, float _jumpTimeLimit)
     {
         speed = _type;

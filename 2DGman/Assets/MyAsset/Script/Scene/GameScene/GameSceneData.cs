@@ -25,6 +25,6 @@ public class GameSceneData : MonoBehaviour
 
     private void Awake()
     {
-        AudioManager.Instance.Play(AudioManager.Instance.GetAudioFile("Music"));
+        AudioManager.Instance.Play("Music");
     }
 }

@@ -43,11 +43,11 @@ public class EnemyController : EntityController
         switch (model.state)
         {
             case EntityModel.EntityState.HURT:
-                AudioManager.Instance.Play(AudioManager.Instance.GetAudioFile("LandOnEnemy"));
+                AudioManager.Instance.Play("LandOnEnemy");
                 break;
-            case EntityModel.EntityState.DIE:
+            //case EntityModel.EntityState.DIE:
 
-                break;
+            //    break;
         }
     }
 

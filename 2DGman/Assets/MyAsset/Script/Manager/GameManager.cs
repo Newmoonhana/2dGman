@@ -7,6 +7,7 @@ public class GameManager : SingletonPattern_IsA_Mono<GameManager>
 {
     //tmp
 
+    int _interval;
     public static WaitForSeconds waitforseconds_3f = new WaitForSeconds(3f);
 
     public void Awake()
@@ -24,7 +25,7 @@ public class GameManager : SingletonPattern_IsA_Mono<GameManager>
     public void Setting_Frame(bool _isdown)
     {
         Application.targetFrameRate = 60;   //기본 fps
-        int _interval = 1;  // 60 / 1 = 기본 fps
+        _interval = 1;  // 60 / 1 = 기본 fps
         if (_isdown)
             _interval = 3;  //낮출 fps
         OnDemandRendering.renderFrameInterval = _interval;  // Application.targetFrameRate / _interval fps

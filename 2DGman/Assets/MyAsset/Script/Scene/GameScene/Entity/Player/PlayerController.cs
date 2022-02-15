@@ -3,22 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//[View]
+[System.Serializable]
+public class PlayerView
+{
+    public Text lifeText;   //라이프 표시
+}
+
 // [Controller]
 public class PlayerController : EntityController
 {
     public static PlayerModel player_model = new DefaultPC();
+    [SerializeField] PlayerView player_view = new PlayerView();
     //tmp
     Vector2 _vec2;
     public bool IsJump = false, IsDown = false;
 
     public int Life { get { return player_model.lifePoint; } set { player_model.lifePoint = value; OnLifeChanged(); } }
-
-    //[View]
-    public Text lifeText;   //라이프 표시
-
-    void OnLifeChanged()
+    // 화면에 라이프 표시
+    public void OnLifeChanged()
     {
-        lifeText.text = $"Life x {Life}";
+        player_view.lifeText.text = $"Life x {Life}";
     }
 
     protected override void UpdateState(EntityModel.EntityState _state)
@@ -28,10 +33,10 @@ public class PlayerController : EntityController
         switch (model.state)
         {
             case EntityModel.EntityState.HURT:
-                AudioManager.Instance.Play(AudioManager.Instance.GetAudioFile("Hurt"));
+                AudioManager.Instance.Play("Hurt");
                 break;
             case EntityModel.EntityState.DIE:
-                AudioManager.Instance.Play(AudioManager.Instance.GetAudioFile("Death"));
+                AudioManager.Instance.Play("Death");
                 break;
         }
     }
@@ -45,11 +50,11 @@ public class PlayerController : EntityController
                 IsDown = false;
                 break;
             case EntityModel.EntityJumpState.PrepareToJump:
-                AudioManager.Instance.Play(AudioManager.Instance.GetAudioFile("jump"));
+                AudioManager.Instance.Play("jump");
                 IsJump = true;
                 break;
             case EntityModel.EntityJumpState.Landed:
-                AudioManager.Instance.Play(AudioManager.Instance.GetAudioFile("LandOnGround"));
+                AudioManager.Instance.Play("LandOnGround");
                 break;
         }
         base.UpdateJumpState(_state);
@@ -75,7 +80,7 @@ public class PlayerController : EntityController
                         _vec2 = Vector2.down;
                         _vec2.y *= model.jumpPower / 10 * (jumpTime * 0.1f + 1f);
                         model.rigid.AddForce(_vec2, ForceMode2D.Impulse);
-                        AudioManager.Instance.Play(AudioManager.Instance.GetAudioFile("jump"));
+                        AudioManager.Instance.Play("jump");
                     }
 
         if (model.jumpState == EntityModel.EntityJumpState.Grounded && Input.GetButtonDown("Jump"))
@@ -119,7 +124,7 @@ public class PlayerController : EntityController
     {
         if (_horizontal != 0)
             if (model.jumpState == EntityModel.EntityJumpState.Grounded)
-                AudioManager.Instance.Play(AudioManager.Instance.GetAudioFile("Walk01"));
+                AudioManager.Instance.Play("Walk01");
         base.Move(_horizontal);
     }
 }

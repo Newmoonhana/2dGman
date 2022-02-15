@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// [ Model ]
 [System.Serializable]
 public class AudioManagerModel
 {
@@ -18,7 +19,7 @@ public class AudioManagerModel
     {
         [SerializeField] public string name;
         [SerializeField] public AUDIOTYPE type; // 재생할 오디오 파일의 타입
-        [SerializeField] public AudioClip clip = null;  // 재생할 오디오 파일
+        [SerializeField] AudioClip clip = null;  // 재생할 오디오 파일
         public AudioClip Clip { get { return clip; } set { clip = value; name = value.name; } } //클립 변경 시 name도 같이 바뀌도록
         [SerializeField] public bool playOnAwake = false; // 씬 시작 시 재생.
         [SerializeField] public bool loop = false;  //루프 여부
@@ -36,6 +37,7 @@ public class AudioManagerModel
     public List<AudioFile> audioFile_lst;
 }
 
+// [ Controller ]
 public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
 {
     public AudioManagerModel model;
@@ -43,6 +45,10 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
     int i;
     AudioSource tmp_source;
 
+    /// <summary>
+    /// 오디오 파일 리스트에서 파일 가져오기
+    /// </summary>
+    /// <param name="_name">audioFile_lst에 등록된 오디오 파일</param>
     public AudioManagerModel.AudioFile GetAudioFile(string _name)
     {
         for (i = 0; i < model.audioFile_lst.Count; i++)
@@ -55,13 +61,16 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
         return null;
     }
 
+    /// <summary>
+    /// 오디오 파일 리스트 재 정리(clip를 대입해주고 이름을 재설정)
+    /// </summary>
     [ContextMenu("오디오 파일 리스트 재 정리")]
     public void RefreshAudioFileList()
     {
         for (i = 0; i < model.audioFile_lst.Count; i++)
         {
             // 이름 자동 설정
-            model.audioFile_lst[i].Clip = model.audioFile_lst[i].clip;
+            model.audioFile_lst[i].Clip = model.audioFile_lst[i].Clip;
         }
     }
 
@@ -78,9 +87,10 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
     /// <summary>
     /// 오디오 파일 재생
     /// </summary>
-    /// <param name="_file">SFXManager audioFile_lst에 등록된 오디오 파일</param>
-    public void Play(AudioManagerModel.AudioFile _file)
+    /// <param name="_file">audioFile_lst에 등록된 오디오 파일</param>
+    public void Play(string _filename)
     {
+        AudioManagerModel.AudioFile _file = GetAudioFile(_filename);
         if (_file == null)
             return;
 
@@ -103,7 +113,7 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
         }
         else
         {
-            if (_file.clip == model.se_clip)
+            if (_file.Clip == model.se_clip)
                 if (tmp_source.isPlaying)
                     return;
             tmp_source.clip = _file.Clip;

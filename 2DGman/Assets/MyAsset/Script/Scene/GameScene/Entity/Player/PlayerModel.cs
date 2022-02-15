@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // [Model]
-public enum PLAYERTYPE
-{
-    DEFAULTPC,
-    HUMAN
-}
-
+[System.Serializable]
 public abstract class PlayerModel
 {
+    public enum PLAYERTYPE
+    {
+        DEFAULTPC
+    }
+
     [SerializeField] protected PLAYERTYPE type;
     [SerializeField] protected string this_name;
 
