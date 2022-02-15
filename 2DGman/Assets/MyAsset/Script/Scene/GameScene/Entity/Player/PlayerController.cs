@@ -71,7 +71,7 @@ public class PlayerController : EntityController
 
     void Update()
     {
-        if (Input.GetButtonDown("Down"))
+        if (UserInputManager.Instance.model.IsButtonInput("Down", UserInputModel.inputItem.TYPE.BUTTONDOWN))
             if (model.foot_col_src.type == COLTYPE.COLLISION)   //중복 하강 방지 코드
                 if (model.foot_col_src.state == ColHitState.Stay)
                     if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
@@ -83,11 +83,11 @@ public class PlayerController : EntityController
                         AudioManager.Instance.Play("jump");
                     }
 
-        if (model.jumpState == EntityModel.EntityJumpState.Grounded && Input.GetButtonDown("Jump"))
+        if (model.jumpState == EntityModel.EntityJumpState.Grounded && UserInputManager.Instance.model.IsButtonInput("Jump", UserInputModel.inputItem.TYPE.BUTTONDOWN))
         {
             UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump);
         }
-        else if (Input.GetButtonUp("Jump"))
+        else if (UserInputManager.Instance.model.IsButtonInput("Jump", UserInputModel.inputItem.TYPE.BUTTONUP))
         {
             if (model.jumpState == EntityModel.EntityJumpState.Jumping || model.jumpState == EntityModel.EntityJumpState.InFlight)
             {
