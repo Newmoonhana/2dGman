@@ -42,7 +42,16 @@ public class PlayerCon : KineObject
         base.UpdateJumpState(_state);
     }
 
-    protected override void Update()
+    protected override void Start()
+    {
+        speed = SPEEDTYPE.NORMAL;
+        jumpPower = 6f;
+        jumpTimeLimit = 0.4f;
+
+        base.Start();
+    }
+
+    void Update()
     {
         if (Input.GetButtonDown("Down"))
             if (foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
@@ -64,8 +73,6 @@ public class PlayerCon : KineObject
                 stopJump = true;
             }
         }
-
-        base.Update();
     }
 
     protected override void FixedUpdate()

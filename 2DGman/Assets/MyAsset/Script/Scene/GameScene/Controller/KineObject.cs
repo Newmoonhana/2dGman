@@ -36,11 +36,11 @@ public class KineObject : MonoBehaviour
     protected MOVEDIRTYPE movedir = MOVEDIRTYPE.CENTER;
     public EntityJumpState jumpState;
     public GameObject kine_obj;
-    Transform kine_tns;
-    public Collider2D footcol;
-    public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
-    public Animator kine_ani;
-    public Rigidbody2D rigid;
+    protected Transform kine_tns;
+    protected Collider2D footcol;
+    protected IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
+    protected Animator kine_ani;
+    protected Rigidbody2D rigid;
     public SPEEDTYPE speed;
     protected bool stopJump;
     public float jumpPower;
@@ -50,16 +50,16 @@ public class KineObject : MonoBehaviour
     Vector3 movement;
     protected bool IsGrounded = true;
 
-    protected virtual void Awake()
+    protected virtual void Start()
     {
+        kine_tns = kine_obj.transform;
+        footcol = kine_tns.GetChild(1).GetComponent<Collider2D>();
+        foot_col_src = footcol.GetComponent<IsColliderHit>();
+        kine_ani = kine_tns.GetChild(0).GetComponent<Animator>();
+        rigid = kine_obj.GetComponent<Rigidbody2D>();
+
         UpdateState(EntityState.DEFAULT);
         UpdateJumpState(EntityJumpState.Grounded);
-        kine_tns = kine_obj.transform;
-    }
-
-    protected virtual void Update()
-    {
-        
     }
 
     protected virtual void FixedUpdate()

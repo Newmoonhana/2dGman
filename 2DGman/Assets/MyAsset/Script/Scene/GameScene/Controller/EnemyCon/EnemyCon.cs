@@ -11,27 +11,29 @@ public class EnemyCon : KineObject
         RIGHT
     }
     DIRTYPE dir = DIRTYPE.CENTER;   //자신을 기준으로 플레이어의 방향
-    public Transform player_tns;
+    protected bool IsMove, IsJump;
+    Transform player_tns;
 
-    protected override void Awake()
+    protected override void Start()
     {
-        StartCoroutine(Jumping());
+        player_tns = GameSceneData.player_tns;
+        if (IsJump)
+            StartCoroutine(Jumping());
 
-        base.Awake();
+        base.Start();
     }
 
-    protected override void Update()
+    void Update()
     {
         UpdateDirType();
-
-        base.Update();
     }
 
     protected override void FixedUpdate()
     {
         if (state == EntityState.DIE)
             return;
-        Move((int)dir - 1);
+        if (IsMove)
+            Move((int)dir - 1);
 
         base.FixedUpdate();
     }
@@ -46,7 +48,7 @@ public class EnemyCon : KineObject
                 SFXManager.Instance.Play(SFXManager.Instance.GetAudioFile("LandOnEnemy"));
                 break;
             case EntityState.DIE:
-                
+
                 break;
         }
     }
@@ -73,12 +75,30 @@ public class EnemyCon : KineObject
         base.Move(_horizontal);
     }
 
-    IEnumerator Jumping()   //일정 시간 마다 점프.
+    protected IEnumerator Jumping()   //일정 시간 마다 점프.
     {
         while (!(state == EntityState.DIE))
         {
             yield return GameManager.waitforseconds_3f;
             UpdateJumpState(EntityJumpState.PrepareToJump);
         }
+    }
+}
+
+public class Land : EnemyCon
+{
+    public Land()
+    {
+        IsMove = true;
+        IsJump = false;
+    }
+}
+
+public class Jump : EnemyCon
+{
+    public Jump()
+    {
+        IsMove = true;
+        IsJump = true;
     }
 }
