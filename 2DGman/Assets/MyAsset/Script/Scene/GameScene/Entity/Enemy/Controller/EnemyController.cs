@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : EntityController
+public abstract class EnemyController : EntityController
 {
     enum DIRTYPE
     {
@@ -11,12 +11,10 @@ public class EnemyController : EntityController
         RIGHT
     }
     DIRTYPE dir = DIRTYPE.CENTER;   //자신을 기준으로 플레이어의 방향
-    protected bool IsMove, IsJump;
 
     protected override void Start()
     {
-        if (IsJump)
-            StartCoroutine(Jumping());
+        StartCoroutine(Jumping());
 
         base.Start();
     }
@@ -30,8 +28,7 @@ public class EnemyController : EntityController
     {
         if (model.state == EntityModel.EntityState.DIE)
             return;
-        if (IsMove)
-            Move((int)dir - 1);
+        Move((int)dir - 1, model);
 
         base.FixedUpdate();
     }
@@ -65,12 +62,10 @@ public class EnemyController : EntityController
         }
     }
 
-    public override void Move(float _horizontal)
+    public void Move()
     {
         if (dir == DIRTYPE.CENTER)
             return;
-
-        base.Move(_horizontal);
     }
 
     protected IEnumerator Jumping()   //일정 시간 마다 점프.
@@ -78,7 +73,7 @@ public class EnemyController : EntityController
         while (!(model.state == EntityModel.EntityState.DIE))
         {
             yield return GameManager.waitforseconds_3f;
-            UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump);
+            UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
         }
     }
 }
@@ -87,8 +82,7 @@ public class Land : EnemyController
 {
     public Land()
     {
-        IsMove = true;
-        IsJump = false;
+        model.movableStrategy.Add(new IsMove());
     }
 }
 
@@ -96,7 +90,7 @@ public class Jump : EnemyController
 {
     public Jump()
     {
-        IsMove = true;
-        IsJump = true;
+        model.movableStrategy.Add(new IsMove());
+        model.movableStrategy.Add(new IsJump());
     }
 }

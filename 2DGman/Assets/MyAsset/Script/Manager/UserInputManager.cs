@@ -31,6 +31,7 @@ public class UserInputModel
         inputList.Add(new inputItem("Down", inputItem.TYPE.BUTTONDOWN));
         inputList.Add(new inputItem("Jump", inputItem.TYPE.BUTTONDOWN));
         inputList.Add(new inputItem("Jump", inputItem.TYPE.BUTTONUP));
+        inputList.Add(new inputItem("Dash", inputItem.TYPE.BUTTON));
     }
 
     inputItem FindInputItem(string _input, inputItem.TYPE _type)

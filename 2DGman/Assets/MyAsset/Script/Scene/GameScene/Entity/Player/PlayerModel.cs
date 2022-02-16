@@ -19,6 +19,7 @@ public abstract class PlayerModel
     public int lifePoint = 3;
 
     public SPEEDTYPE speed;
+    public SPEEDTYPE speed_dash;
     public float jumpPower;
     public float jumpTimeLimit;
 }
@@ -29,6 +30,7 @@ public class DefaultPC : PlayerModel
     {
         type = PLAYERTYPE.DEFAULTPC;
         speed = SPEEDTYPE.NORMAL;
+        speed_dash = SPEEDTYPE.FAST;
         jumpPower = 6f;
         jumpTimeLimit = 0.4f;
     }

@@ -20,7 +20,7 @@ public class GameSceneData : MonoBehaviour
 
     public static float GetSpeed(SPEEDTYPE _type)
     {   
-        return (int)_type * 3f;
+        return (float)_type * 2f;
     }
 
     private void Awake()

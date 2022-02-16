@@ -282,9 +282,7 @@ MonoBehaviour:
     IsGrounded: 1
   entity_obj: {fileID: 1359504176}
   player_view:
-    lifeText: {fileID: 0}
-  IsJump: 0
-  IsDown: 0
+    lifeText: {fileID: 461649582}
 --- !u!1 &320476346
 GameObject:
   m_ObjectHideFlags: 0
@@ -19256,6 +19254,9 @@ MonoBehaviour:
       isInput: 0
     - input: Jump
       type: 2
+      isInput: 0
+    - input: Dash
+      type: 1
       isInput: 0
 --- !u!1001 &1751789192
 PrefabInstance:

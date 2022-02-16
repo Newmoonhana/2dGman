@@ -17,7 +17,7 @@ public class Platform : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (PlayerController.player_model.playerCon_src.IsDown)
+        if (UserInputManager.Instance.model.IsButtonInput("Down", UserInputModel.inputItem.TYPE.BUTTONDOWN))
         {
             if (playerCheck)
             {
@@ -30,7 +30,7 @@ public class Platform : MonoBehaviour
         }
             
         if (!isjumpCheck)
-            if (PlayerController.player_model.playerCon_src.IsJump)
+            if (PlayerController.player_model.playerCon_src.model.jumpState == EntityModel.EntityJumpState.PrepareToJump)
             {
                 platform_Pe2d.colliderMask = 1 << LayerMask.NameToLayer("Foot_Player");
                 isjumpCheck = true;
