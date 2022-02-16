@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class PlayerView
 {
     public Text lifeText;   //라이프 표시
+    public Text coinText;   //먹은 코인 개수 표시
 }
 
 // [Controller]
@@ -15,8 +16,8 @@ public class PlayerController : EntityController
 {
     public static PlayerModel player_model = new DefaultPC();
     [SerializeField] PlayerView player_view = new PlayerView();
-    //tmp0
-    Vector2 _vec2;
+    //tmp
+
 
     public int Life { get { return player_model.lifePoint; } set { player_model.lifePoint = value; OnLifeChanged(); } }
     // 화면에 라이프 표시
@@ -46,9 +47,7 @@ public class PlayerController : EntityController
         player_model.player_tns = GameObject.Find("Player").transform;
         player_model.playerCon_src = GameObject.Find("Player Controller").GetComponent<PlayerController>();
         model.SetSubValue(player_model.speed, player_model.jumpPower, player_model.jumpTimeLimit);
-        model.movableStrategy.Clear();
-        model.movableStrategy.Add(new IsInputMove());
-        model.movableStrategy.Add(new IsInputJump());
+        model.movableStrategy = new IsInputPlayer();
 
         base.Start();
     }
@@ -64,14 +63,12 @@ public class PlayerController : EntityController
                 model.speed = player_model.speed;
         } 
 
+        //플랫폼에서 하단 점프
         if (UserInputManager.Instance.model.IsButtonInput("Down", UserInputModel.inputItem.TYPE.BUTTONDOWN))
             if (model.foot_col_src.type == COLTYPE.COLLISION)   //중복 하강 방지 코드
                 if (model.foot_col_src.state == ColHitState.Stay)
                     if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
                     {
-                        _vec2 = Vector2.down;
-                        _vec2.y *= model.jumpPower / 10 * (jumpTime * 0.1f + 1f);
-                        model.rigid.AddForce(_vec2, ForceMode2D.Impulse);
                         AudioManager.Instance.Play("jump");
                     }
 
@@ -99,12 +96,25 @@ public class PlayerController : EntityController
         {
             if (model.foot_col_src.state == ColHitState.Enter)
             {
-                //몬스터 충돌 판정
-                if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                //자동 점프 판정 충돌 판정
+                if (model.foot_col_src.other_col_COLLISION.gameObject.tag == "jump pole")
                 {
-                    model.foot_col_src.other_col_COLLISION.gameObject.SetActive(false);
-                    UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
-                    UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
+                    if (model.jumpState == EntityModel.EntityJumpState.Grounded || model.jumpState == EntityModel.EntityJumpState.InFlight)
+                    {
+                        //몬스터 충돌 판정
+                        if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                        {
+                            if (model.jumpState == EntityModel.EntityJumpState.Grounded || model.jumpState == EntityModel.EntityJumpState.InFlight)
+                            {
+                                model.foot_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>().SetHp(1, DAMAGETYPE.DAMAGE);
+                            }
+                            else
+                                return;
+                        }
+                        
+                        UpdateJumpState(EntityModel.EntityJumpState.Landed, model, ref jumpTime);
+                        UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
+                    }
                 }
             }
         }

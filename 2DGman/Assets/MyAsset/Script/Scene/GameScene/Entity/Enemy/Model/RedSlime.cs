@@ -10,12 +10,16 @@ public class RedSlime : Slime
         hp = 1;
     }
 
-    void Awake()
+    protected override void Awake()
     {
-        EnemyControllerFactory ef = new LandFactory();
-        controller = ef.CreateEnemyCon("land", gameObject);
+        base.Awake();
+
+        //EnemyControllerFactory ef = new LandFactory();
+        //controller = ef.CreateEnemyCon("move", gameObject);
+        controller.model.movableStrategy = new IsMove();
         controller.Entity_obj = gameObject;
 
+        controller.enemy_model = this;
         controller.model.SetSubValue(speed, jumpPower, jumpTimeLimit);
     }
 }

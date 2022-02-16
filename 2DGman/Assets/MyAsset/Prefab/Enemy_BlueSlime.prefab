@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2973200242071532519}
   - component: {fileID: 2973200242071532518}
-  - component: {fileID: 2973200242071532517}
   m_Layer: 9
   m_Name: Sprite
   m_TagString: Untagged
@@ -84,25 +83,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &2973200242071532517
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2973200242071532512}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 017943e74eec55949be12f745fdf26d0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2973200243344065664
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,12 +93,15 @@ GameObject:
   m_Component:
   - component: {fileID: 2973200243344065669}
   - component: {fileID: 3420045941229505687}
+  - component: {fileID: 6875216784261026505}
   - component: {fileID: 2973200243344065671}
   - component: {fileID: 1178781651747224232}
   - component: {fileID: 6703917044268326179}
+  - component: {fileID: 4634524544544161354}
+  - component: {fileID: 7079330100090226046}
   m_Layer: 9
   m_Name: Enemy_BlueSlime
-  m_TagString: Untagged
+  m_TagString: jump pole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,10 +135,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   this_name: Blue Slime
-  hp: 1
+  hp: 2
   speed: 1
   jumpPower: 5
   jumpTimeLimit: 0.3
+--- !u!114 &6875216784261026505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2973200243344065664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 774d1478a8ca88440b2a21038fc60c06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model:
+    state: 0
+    movedir: 1
+    jumpState: 0
+    entity_obj: {fileID: 0}
+    entity_tns: {fileID: 0}
+    footcol: {fileID: 0}
+    foot_col_src: {fileID: 0}
+    entity_ani: {fileID: 0}
+    rigid: {fileID: 0}
+    speed: 0
+    jumpPower: 0
+    jumpTimeLimit: 0
+    stopJump: 0
+    IsGrounded: 1
+  entity_obj: {fileID: 0}
+  enemy_model: {fileID: 0}
 --- !u!50 &2973200243344065671
 Rigidbody2D:
   serializedVersion: 4
@@ -212,6 +224,40 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 1
   m_SideArc: 1
+--- !u!114 &4634524544544161354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2973200243344065664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bada281b9d4dcae459c55b8e820cf8b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  state: 0
+  other_col_TRIGGER: {fileID: 0}
+--- !u!95 &7079330100090226046
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2973200243344065664}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 017943e74eec55949be12f745fdf26d0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4708038219627267785
 GameObject:
   m_ObjectHideFlags: 0

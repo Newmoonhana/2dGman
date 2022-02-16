@@ -50,7 +50,7 @@ AnimationClip:
       value: {fileID: -8363020214710389662, guid: 3dff63c75b77c524085217295fafcd3a,
         type: 3}
     attribute: m_Sprite
-    path: 
+    path: Sprite
     classID: 212
     script: {fileID: 0}
   m_SampleRate: 12
@@ -61,7 +61,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 0
+      path: 850496168
       attribute: 0
       script: {fileID: 0}
       typeID: 212

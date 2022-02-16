@@ -283,6 +283,7 @@ MonoBehaviour:
   entity_obj: {fileID: 1359504176}
   player_view:
     lifeText: {fileID: 461649582}
+    coinText: {fileID: 1898130052}
 --- !u!1 &320476346
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,39 +1036,45 @@ MonoBehaviour:
     bg_source: {fileID: 0}
     se_source: {fileID: 0}
     audioFile_lst:
-    - name: 
+    - name: Music
       type: 0
       clip: {fileID: 8300000, guid: 5833894e2899f1840ac04193ca462e39, type: 3}
       playOnAwake: 1
       loop: 1
       isOneShot: 0
-    - name: 
+    - name: jump
       type: 1
       clip: {fileID: 8300000, guid: 67975c08d56ceb147bad38572d805aa8, type: 3}
       playOnAwake: 0
       loop: 0
       isOneShot: 1
-    - name: 
+    - name: Walk01
       type: 1
       clip: {fileID: 8300000, guid: bdb49257b73be764a8c04e4f37302e0e, type: 3}
       playOnAwake: 1
       loop: 0
       isOneShot: 0
-    - name: 
+    - name: Hurt
       type: 1
       clip: {fileID: 8300000, guid: 6c05149e5a2fba64ba172e25a61074b7, type: 3}
       playOnAwake: 0
       loop: 0
       isOneShot: 1
-    - name: 
+    - name: Death
       type: 1
       clip: {fileID: 8300000, guid: e18959d46b63f3c4c8cc020a433cf848, type: 3}
       playOnAwake: 0
       loop: 0
       isOneShot: 1
-    - name: 
+    - name: LandOnGround
       type: 1
       clip: {fileID: 8300000, guid: dd6057fd464f77942a0bf39c54651b32, type: 3}
+      playOnAwake: 0
+      loop: 0
+      isOneShot: 1
+    - name: LandOnEnemy
+      type: 1
+      clip: {fileID: 8300000, guid: b7f741588644cd64bbee6387cb54a96d, type: 3}
       playOnAwake: 0
       loop: 0
       isOneShot: 1
@@ -1105,8 +1112,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -50}
-  m_SizeDelta: {x: 500, y: 100}
+  m_AnchoredPosition: {x: 50, y: -25}
+  m_SizeDelta: {x: 500, y: 65}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &461649582
 MonoBehaviour:
@@ -1130,7 +1137,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 85
+    m_FontSize: 55
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
@@ -1141,7 +1148,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Life x 000
+  m_Text: Life x 00
 --- !u!222 &461649583
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19673,6 +19680,85 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1885067666}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1898130050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1898130051}
+  - component: {fileID: 1898130053}
+  - component: {fileID: 1898130052}
+  m_Layer: 5
+  m_Name: Player_Coin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1898130051
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898130050}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1986222989}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 50, y: -95}
+  m_SizeDelta: {x: 500, y: 45}
+  m_Pivot: {x: 0, y: 1}
+--- !u!114 &1898130052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898130050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 35
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 85
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Coin x 00
+--- !u!222 &1898130053
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898130050}
+  m_CullTransparentMesh: 1
 --- !u!1 &1951862489
 GameObject:
   m_ObjectHideFlags: 0
@@ -19770,6 +19856,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 461649581}
+  - {fileID: 1898130051}
   m_Father: {fileID: 1307174439}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -2,15 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EnemyController : EntityController
+public enum DAMAGETYPE
 {
+    DAMAGE,
+    HEAL
+}
+
+public class EnemyController : EntityController
+{
+    public EnemyModel enemy_model;
+
     enum DIRTYPE
     {
         LEFT,
         CENTER,
         RIGHT
     }
-    DIRTYPE dir = DIRTYPE.CENTER;   //자신을 기준으로 플레이어의 방향
+    DIRTYPE dirOfPlayer = DIRTYPE.CENTER;   //자신을 기준으로 플레이어의 방향
+
+    public bool SetHp(float _hp, DAMAGETYPE _type) //hp가 0 이하일 경우 false
+    {
+        if (_type == DAMAGETYPE.DAMAGE)
+            enemy_model.hp -= _hp;
+        else if (_type == DAMAGETYPE.HEAL)
+            enemy_model.hp += _hp;
+        if (enemy_model.hp > 0)
+        {
+            UpdateState(EntityModel.EntityState.HURT);
+            return true;
+        }
+
+        UpdateState(EntityModel.EntityState.DIE);
+        return false;
+    }
 
     protected override void Start()
     {
@@ -28,7 +52,7 @@ public abstract class EnemyController : EntityController
     {
         if (model.state == EntityModel.EntityState.DIE)
             return;
-        Move((int)dir - 1, model);
+        Move((int)dirOfPlayer - 1, model);
 
         base.FixedUpdate();
     }
@@ -40,31 +64,37 @@ public abstract class EnemyController : EntityController
         switch (model.state)
         {
             case EntityModel.EntityState.HURT:
+            case EntityModel.EntityState.DIE:
                 AudioManager.Instance.Play("LandOnEnemy");
                 break;
-            //case EntityModel.EntityState.DIE:
-
-            //    break;
         }
+    }
+    public void IsHurt()
+    {
+        UpdateState(EntityModel.EntityState.DEFAULT);
+    }
+    public void IsDead()
+    {
+        Entity_obj.SetActive(false);
     }
 
     //플레이어의 현재 방향 체킹.
     void UpdateDirType()
     {
-        dir = DIRTYPE.CENTER;
+        dirOfPlayer = DIRTYPE.CENTER;
         if (PlayerController.player_model.player_tns.position.x < transform.position.x)   //플레이어가 자신보다 왼쪽에 있을 때
         {
-            dir = DIRTYPE.LEFT;
+            dirOfPlayer = DIRTYPE.LEFT;
         }
         else if (PlayerController.player_model.player_tns.position.x > transform.position.x)   //플레이어가 자신보다 오른쪽에 있을 때
         {
-            dir = DIRTYPE.RIGHT;
+            dirOfPlayer = DIRTYPE.RIGHT;
         }
     }
 
     public void Move()
     {
-        if (dir == DIRTYPE.CENTER)
+        if (dirOfPlayer == DIRTYPE.CENTER)
             return;
     }
 
@@ -78,19 +108,24 @@ public abstract class EnemyController : EntityController
     }
 }
 
-public class Land : EnemyController
+public class Move : EnemyController
 {
-    public Land()
+    public Move()
     {
-        model.movableStrategy.Add(new IsMove());
+        model.movableStrategy = new IsMove();
     }
 }
-
 public class Jump : EnemyController
 {
     public Jump()
     {
-        model.movableStrategy.Add(new IsMove());
-        model.movableStrategy.Add(new IsJump());
+        model.movableStrategy = new IsJump();
+    }
+}
+public class MoveAndJump : EnemyController
+{
+    public MoveAndJump()
+    {
+        model.movableStrategy = new IsMoveAndJump();
     }
 }

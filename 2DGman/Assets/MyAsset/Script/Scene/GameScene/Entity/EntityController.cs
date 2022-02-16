@@ -48,7 +48,7 @@ public class EntityModel
     public bool stopJump;
     public bool IsGrounded = true;
 
-    [SerializeField] public List<IEntityMovableStrategy> movableStrategy = new List<IEntityMovableStrategy>();
+    [SerializeField] public IEntityMovableStrategy movableStrategy;
 
     /// <summary>
     /// entity_obj를 기준으로 다른 변수들도 대입해주는 함수
@@ -64,9 +64,9 @@ public class EntityModel
             
         entity_obj = _obj;
         entity_tns = entity_obj.transform;
+        entity_ani = entity_obj.GetComponent<Animator>();
         footcol = entity_tns.GetChild(1).GetComponent<Collider2D>();
         foot_col_src = footcol.GetComponent<IsColliderHit>();
-        entity_ani = entity_tns.GetChild(0).GetComponent<Animator>();
         rigid = entity_obj.GetComponent<Rigidbody2D>();
     }
 
@@ -174,27 +174,18 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
     public void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j)
     {
         if (m.movableStrategy != null)
-            if (m.movableStrategy.Count > 0)
-                foreach (IEntityMovableStrategy IItem in m.movableStrategy)
-                    if (IItem != null)
-                        IItem.UpdateJumpState(s, m, ref j);
+            m.movableStrategy.UpdateJumpState(s, m, ref j);
     }
 
     public void Move(float f, EntityModel m)
     {
         if (m.movableStrategy != null)
-            if (m.movableStrategy.Count > 0)
-                foreach (IEntityMovableStrategy IItem in m.movableStrategy)
-                    if (IItem != null)
-                        IItem.Move(f, m);
+            m.movableStrategy.Move(f, m);
     }
 
     public void Jump(EntityModel m, ref float j)
     {
         if (m.movableStrategy != null)
-            if (m.movableStrategy.Count > 0)
-                foreach (IEntityMovableStrategy IItem in m.movableStrategy)
-                    if (IItem != null)
-                        IItem.Jump(m, ref j);
+            m.movableStrategy.Jump(m, ref j);
     }
 }
