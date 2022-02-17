@@ -108,24 +108,24 @@ public class EnemyController : EntityController
     }
 }
 
-public class Move : EnemyController
-{
-    public Move()
-    {
-        model.movableStrategy = new IsMove();
-    }
-}
-public class Jump : EnemyController
-{
-    public Jump()
-    {
-        model.movableStrategy = new IsJump();
-    }
-}
-public class MoveAndJump : EnemyController
-{
-    public MoveAndJump()
-    {
-        model.movableStrategy = new IsMoveAndJump();
-    }
-}
+//public class Move : EnemyController
+//{
+//    public Move()
+//    {
+//        model.movableStrategy = new IsMove();
+//    }
+//}
+//public class Jump : EnemyController
+//{
+//    public Jump()
+//    {
+//        model.movableStrategy = new IsJump();
+//    }
+//}
+//public class MoveAndJump : EnemyController
+//{
+//    public MoveAndJump()
+//    {
+//        model.movableStrategy = new IsMoveAndJump();
+//    }
+//}
