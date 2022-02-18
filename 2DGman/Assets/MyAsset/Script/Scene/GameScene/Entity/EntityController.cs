@@ -36,6 +36,8 @@ public class EntityModel
     //entity 관련
     public GameObject entity_obj;
     public Transform entity_tns;
+    public Collider2D entity_col;
+    public IsColliderHit entity_col_src; // 몸 충돌 콜라이더 충돌 정보 스크립트
     public Collider2D footcol;
     public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
     public Animator entity_ani;
@@ -65,6 +67,8 @@ public class EntityModel
         entity_obj = _obj;
         entity_tns = entity_obj.transform;
         entity_ani = entity_obj.GetComponent<Animator>();
+        entity_col = entity_obj.GetComponent<Collider2D>();
+        entity_col_src = entity_col.GetComponent<IsColliderHit>();
         footcol = entity_tns.GetChild(1).GetComponent<Collider2D>();
         foot_col_src = footcol.GetComponent<IsColliderHit>();
         rigid = entity_obj.GetComponent<Rigidbody2D>();
@@ -160,8 +164,12 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
 
         switch (model.state)
         {
+            case EntityModel.EntityState.DEFAULT:
+                model.entity_col.enabled = true;
+                break;
             case EntityModel.EntityState.HURT:
                 model.entity_ani.SetTrigger("_hurt");
+                model.entity_col.enabled = false;
                 break;
             case EntityModel.EntityState.DIE:
                 model.entity_ani.SetBool("_dead", true);

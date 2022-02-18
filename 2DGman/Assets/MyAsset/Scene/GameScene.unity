@@ -271,6 +271,8 @@ MonoBehaviour:
     jumpState: 0
     entity_obj: {fileID: 0}
     entity_tns: {fileID: 0}
+    entity_col: {fileID: 0}
+    entity_col_src: {fileID: 0}
     footcol: {fileID: 0}
     foot_col_src: {fileID: 0}
     entity_ani: {fileID: 0}
@@ -281,9 +283,7 @@ MonoBehaviour:
     stopJump: 0
     IsGrounded: 1
   entity_obj: {fileID: 1359504176}
-  player_view:
-    lifeText: {fileID: 461649582}
-    coinText: {fileID: 1898130052}
+  player_view: {fileID: 942497623578542650}
 --- !u!1 &320476346
 GameObject:
   m_ObjectHideFlags: 0
@@ -20318,8 +20318,35 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4975708383385942273, guid: 8fdb8d054a4b8bf4b82462a08594e0a0,
+        type: 3}
+      propertyPath: coinText
+      value: 
+      objectReference: {fileID: 1898130052}
+    - target: {fileID: 4975708383385942273, guid: 8fdb8d054a4b8bf4b82462a08594e0a0,
+        type: 3}
+      propertyPath: lifeText
+      value: 
+      objectReference: {fileID: 461649582}
+    - target: {fileID: 4975708383385942273, guid: 8fdb8d054a4b8bf4b82462a08594e0a0,
+        type: 3}
+      propertyPath: player_con
+      value: 
+      objectReference: {fileID: 251331463}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fdb8d054a4b8bf4b82462a08594e0a0, type: 3}
+--- !u!114 &942497623578542650 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4975708383385942273, guid: 8fdb8d054a4b8bf4b82462a08594e0a0,
+    type: 3}
+  m_PrefabInstance: {fileID: 942497623578542649}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359504176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ba78d7fe550e9642afbb4c1a50c777f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &947045983677901194
 PrefabInstance:
   m_ObjectHideFlags: 0

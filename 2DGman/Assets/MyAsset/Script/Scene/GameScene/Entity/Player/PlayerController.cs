@@ -1,21 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
-//[View]
-[System.Serializable]
-public class PlayerView
-{
-    public Text lifeText;   //라이프 표시
-    public Text coinText;   //먹은 코인 개수 표시
-}
 
 // [Controller]
 public class PlayerController : EntityController
 {
     public static PlayerModel player_model = new DefaultPC();
-    [SerializeField] PlayerView player_view = new PlayerView();
+    public PlayerView player_view;
     //tmp
 
 
@@ -24,6 +15,26 @@ public class PlayerController : EntityController
     public void OnLifeChanged()
     {
         player_view.lifeText.text = $"Life x {Life}";
+    }
+
+    public bool SetHp(float _hp, DAMAGETYPE _type) //hp가 0 이하일 경우 false
+    {
+        if (_type == DAMAGETYPE.DAMAGE)
+        {
+            player_model.hp -= _hp;
+            UpdateState(EntityModel.EntityState.HURT);
+            if (player_model.hp <= 0)
+                UpdateState(EntityModel.EntityState.DIE);
+            return true;
+        }
+
+        else if (_type == DAMAGETYPE.HEAL)
+        {
+            player_model.hp += _hp;
+            return true;
+        }
+
+        return false;
     }
 
     protected override void UpdateState(EntityModel.EntityState _state)
@@ -39,6 +50,15 @@ public class PlayerController : EntityController
                 AudioManager.Instance.Play("Death");
                 break;
         }
+    }
+    public void IsHurtEnd()
+    {
+        if (player_model.hp > 0)
+            UpdateState(EntityModel.EntityState.DEFAULT);
+    }
+    public void IsDeadEnd()
+    {
+        
     }
 
     protected override void Start()
@@ -94,6 +114,7 @@ public class PlayerController : EntityController
             Move(Input.GetAxisRaw("Horizontal"), model);
         }
 
+        bool isEnemyjump = false;
         if (model.foot_col_src.type == COLTYPE.COLLISION)
         {
             if (model.foot_col_src.state == ColHitState.Enter)
@@ -103,7 +124,7 @@ public class PlayerController : EntityController
                 {
                     if (model.jumpState == EntityModel.EntityJumpState.Grounded || model.jumpState == EntityModel.EntityJumpState.InFlight)
                     {
-                        //몬스터 충돌 판정
+                        //몬스터 충돌 판정(몬스터 밟고 점프)
                         if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                         {
                             EnemyController enemy = model.foot_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>();
@@ -113,12 +134,28 @@ public class PlayerController : EntityController
                                 enemy.SetHp(1, DAMAGETYPE.DAMAGE);
                                 UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
                                 UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
+                                isEnemyjump = true;
                             }
                         }
                     }
                 }
             }
         }
+
+        if (!isEnemyjump)
+            if (model.entity_col_src.type == COLTYPE.COLLISION)
+            {
+                if (model.entity_col_src.state == ColHitState.Enter)
+                {
+                    //몬스터 충돌 판정
+                    if (model.state == EntityModel.EntityState.DEFAULT)
+                        if (model.entity_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                            if (model.entity_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>().model.state == EntityModel.EntityState.DEFAULT)
+                            {
+                                SetHp(1, DAMAGETYPE.DAMAGE);
+                            }
+                }
+            }
 
         base.FixedUpdate();
     }
