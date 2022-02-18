@@ -23,12 +23,18 @@ public class EnemyController : EntityController
     public bool SetHp(float _hp, DAMAGETYPE _type) //hp가 0 이하일 경우 false
     {
         if (_type == DAMAGETYPE.DAMAGE)
-            enemy_model.hp -= _hp;
-        else if (_type == DAMAGETYPE.HEAL)
-            enemy_model.hp += _hp;
-        if (enemy_model.hp > 0)
         {
-            UpdateState(EntityModel.EntityState.HURT);
+            enemy_model.hp -= _hp;
+            if (enemy_model.hp > 0)
+            {
+                UpdateState(EntityModel.EntityState.HURT);
+                return true;
+            }
+        }
+            
+        else if (_type == DAMAGETYPE.HEAL)
+        {
+            enemy_model.hp += _hp;
             return true;
         }
 
@@ -60,7 +66,7 @@ public class EnemyController : EntityController
     protected override void UpdateState(EntityModel.EntityState _state)
     {
         base.UpdateState(_state);
-
+        
         switch (model.state)
         {
             case EntityModel.EntityState.HURT:
@@ -69,11 +75,11 @@ public class EnemyController : EntityController
                 break;
         }
     }
-    public void IsHurt()
+    public void IsHurtEnd()
     {
         UpdateState(EntityModel.EntityState.DEFAULT);
     }
-    public void IsDead()
+    public void IsDeadEnd()
     {
         Entity_obj.SetActive(false);
     }

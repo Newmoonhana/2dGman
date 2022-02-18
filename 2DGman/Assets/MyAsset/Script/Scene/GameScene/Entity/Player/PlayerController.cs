@@ -69,14 +69,16 @@ public class PlayerController : EntityController
                 if (model.foot_col_src.state == ColHitState.Stay)
                     if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
                     {
-                        AudioManager.Instance.Play("jump");
+                        AudioManager.Instance.Play("Jump");
                     }
 
-        if (model.jumpState == EntityModel.EntityJumpState.Grounded && UserInputManager.Instance.model.IsButtonInput("Jump", UserInputModel.inputItem.TYPE.BUTTONDOWN))
+        if (model.jumpState == EntityModel.EntityJumpState.Grounded)
         {
-            UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
+            if (UserInputManager.Instance.model.IsButtonInput("Jump", UserInputModel.inputItem.TYPE.BUTTONDOWN))
+                UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
         }
-        else if (UserInputManager.Instance.model.IsButtonInput("Jump", UserInputModel.inputItem.TYPE.BUTTONUP))
+
+        if (UserInputManager.Instance.model.IsButtonInput("Jump", UserInputModel.inputItem.TYPE.BUTTONUP))
         {
             if (model.jumpState == EntityModel.EntityJumpState.Jumping || model.jumpState == EntityModel.EntityJumpState.InFlight)
             {
@@ -104,16 +106,15 @@ public class PlayerController : EntityController
                         //몬스터 충돌 판정
                         if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                         {
-                            if (model.jumpState == EntityModel.EntityJumpState.Grounded || model.jumpState == EntityModel.EntityJumpState.InFlight)
+                            EnemyController enemy = model.foot_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>();
+
+                            if (enemy.model.state == EntityModel.EntityState.DEFAULT)
                             {
-                                model.foot_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>().SetHp(1, DAMAGETYPE.DAMAGE);
+                                enemy.SetHp(1, DAMAGETYPE.DAMAGE);
+                                UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
+                                UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
                             }
-                            else
-                                return;
                         }
-                        
-                        UpdateJumpState(EntityModel.EntityJumpState.Landed, model, ref jumpTime);
-                        UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
                     }
                 }
             }

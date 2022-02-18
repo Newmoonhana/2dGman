@@ -998,7 +998,7 @@ GameObject:
   - component: {fileID: 448682816}
   - component: {fileID: 448682817}
   m_Layer: 0
-  m_Name: SFXManager
+  m_Name: AudioManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1036,15 +1036,15 @@ MonoBehaviour:
     bg_source: {fileID: 0}
     se_source: {fileID: 0}
     audioFile_lst:
-    - name: Music
+    - name: 10. Track 10
       type: 0
-      clip: {fileID: 8300000, guid: 5833894e2899f1840ac04193ca462e39, type: 3}
+      clip: {fileID: 8300000, guid: c30fb566db8d61c47b24b39f932ba848, type: 3}
       playOnAwake: 1
       loop: 1
       isOneShot: 0
-    - name: jump
+    - name: Jump
       type: 1
-      clip: {fileID: 8300000, guid: 67975c08d56ceb147bad38572d805aa8, type: 3}
+      clip: {fileID: 8300000, guid: 026076d371cdc604482a1794035cb5e2, type: 3}
       playOnAwake: 0
       loop: 0
       isOneShot: 1
@@ -1075,6 +1075,12 @@ MonoBehaviour:
     - name: LandOnEnemy
       type: 1
       clip: {fileID: 8300000, guid: b7f741588644cd64bbee6387cb54a96d, type: 3}
+      playOnAwake: 0
+      loop: 0
+      isOneShot: 1
+    - name: Item3
+      type: 1
+      clip: {fileID: 8300000, guid: e157d8c7fe1c3c64c912271f5c63885f, type: 3}
       playOnAwake: 0
       loop: 0
       isOneShot: 1
@@ -1113,7 +1119,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -25}
-  m_SizeDelta: {x: 500, y: 65}
+  m_SizeDelta: {x: 600, y: 200}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &461649582
 MonoBehaviour:
@@ -1136,12 +1142,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 55
+    m_Font: {fileID: 12800000, guid: 585188cdc4600544eb408bee749e4b3a, type: 3}
+    m_FontSize: 150
     m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 2
-    m_MaxSize: 85
+    m_MinSize: 1
+    m_MaxSize: 150
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -19714,8 +19720,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -95}
-  m_SizeDelta: {x: 500, y: 45}
+  m_AnchoredPosition: {x: 50, y: -125}
+  m_SizeDelta: {x: 600, y: 150}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1898130052
 MonoBehaviour:
@@ -19738,12 +19744,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 35
+    m_Font: {fileID: 12800000, guid: 585188cdc4600544eb408bee749e4b3a, type: 3}
+    m_FontSize: 100
     m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 2
-    m_MaxSize: 85
+    m_MinSize: 1
+    m_MaxSize: 100
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -19894,12 +19900,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -19914,8 +19920,8 @@ Canvas:
   m_GameObject: {fileID: 1986222988}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 972202475}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -19923,7 +19929,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1361456407
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!1001 &1990104581

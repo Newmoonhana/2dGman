@@ -90,9 +90,7 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
     [SerializeField] GameObject entity_obj;
     public GameObject Entity_obj { get { return model.entity_obj; } set { entity_obj = value; model.SetEntityObject(value); } }
     //tmp
-    Vector2 vec2;
-    Vector3 vec3;
-    float f, f1;
+    
 
     protected float jumpTime = 0;
 
@@ -110,6 +108,7 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
         {
             Jump(model, ref jumpTime);
 
+            // 점프 시 추락 체크
             if (model.rigid.velocity.y < 0)
             {
                 if (model.jumpState == EntityModel.EntityJumpState.Jumping)
@@ -133,7 +132,6 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
                     }
                     else if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
                     {
-                        UpdateState(EntityModel.EntityState.HURT);
                         UpdateState(EntityModel.EntityState.DIE);
                     }
                 }

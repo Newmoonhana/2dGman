@@ -54,3 +54,6 @@ TagManager:
   - name: TestingUI
     uniqueID: 4068940601
     locked: 0
+  - name: InGameUI
+    uniqueID: 2933510889
+    locked: 0
