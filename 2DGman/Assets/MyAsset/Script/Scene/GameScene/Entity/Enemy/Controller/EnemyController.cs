@@ -108,8 +108,12 @@ public class EnemyController : EntityController
     {
         while (!(model.state == EntityModel.EntityState.DIE))
         {
-            yield return GameManager.waitforseconds_3f;
-            UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
+            yield return null;
+            if (model.state != EntityModel.EntityState.HURT)
+            {
+                yield return GameManager.waitforseconds_3f;
+                UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
+            }
         }
     }
 }
