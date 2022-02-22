@@ -130,7 +130,13 @@ public class PlayerController : EntityController
         if (model.state != EntityModel.EntityState.HURT)
             if (model.state != EntityModel.EntityState.DIE)
             {
-                Move(Input.GetAxisRaw("Horizontal"), model);
+                if (Input.GetAxisRaw("Horizontal") < 0)
+                    model.movedir = EntityModel.MOVEDIRTYPE.LEFT;
+                else if (Input.GetAxisRaw("Horizontal") > 0)
+                    model.movedir = EntityModel.MOVEDIRTYPE.RIGHT;
+                else
+                    model.movedir = EntityModel.MOVEDIRTYPE.CENTER;
+                Move(model, (1 << LayerMask.NameToLayer("Land")));
             }
 
         bool isEnemyjump = false;

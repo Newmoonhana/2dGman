@@ -96,8 +96,6 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
     public EntityModel model = new EntityModel();
     [SerializeField] GameObject entity_obj;
     public GameObject Entity_obj { get { return model.entity_obj; } set { entity_obj = value; model.SetEntityObject(value); } }
-    //tmp
-    
 
     protected float jumpTime = 0;
 
@@ -183,12 +181,12 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
             m.movableStrategy.UpdateJumpState(s, m, ref j);
     }
 
-    public void Move(float f, EntityModel m)
+    public virtual void Move(EntityModel m, int _layoutMask)
     {
         if (m.state != EntityModel.EntityState.HURT)
             if (m.state != EntityModel.EntityState.DIE)
                 if (m.movableStrategy != null)
-                    m.movableStrategy.Move(f, m);
+                    m.movableStrategy.Move(m, _layoutMask);
     }
 
     public void Jump(EntityModel m, ref float j)

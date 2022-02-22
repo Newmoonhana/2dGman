@@ -12,14 +12,6 @@ public class EnemyController : EntityController
 {
     public EnemyModel enemy_model;
 
-    enum DIRTYPE
-    {
-        LEFT,
-        CENTER,
-        RIGHT
-    }
-    DIRTYPE dirOfPlayer = DIRTYPE.CENTER;   //자신을 기준으로 플레이어의 방향
-
     public bool SetHp(float _hp, DAMAGETYPE _type) //hp가 0 이하일 경우 false
     {
         if (_type == DAMAGETYPE.DAMAGE)
@@ -49,16 +41,11 @@ public class EnemyController : EntityController
         base.Start();
     }
 
-    void Update()
-    {
-        UpdateDirType();
-    }
-
     protected override void FixedUpdate()
     {
         if (model.state == EntityModel.EntityState.DIE)
             return;
-        Move((int)dirOfPlayer - 1, model);
+        Move(model, (1 << LayerMask.NameToLayer("Land")) + (1 << LayerMask.NameToLayer("Enemy")) + (1 << LayerMask.NameToLayer("EnemyWall")));
 
         base.FixedUpdate();
     }
@@ -87,21 +74,24 @@ public class EnemyController : EntityController
     //플레이어의 현재 방향 체킹.
     void UpdateDirType()
     {
-        dirOfPlayer = DIRTYPE.CENTER;
+        model.movedir = EntityModel.MOVEDIRTYPE.CENTER;
         if (PlayerController.player_model.player_tns.position.x < transform.position.x)   //플레이어가 자신보다 왼쪽에 있을 때
         {
-            dirOfPlayer = DIRTYPE.LEFT;
+            model.movedir = EntityModel.MOVEDIRTYPE.LEFT;
         }
         else if (PlayerController.player_model.player_tns.position.x > transform.position.x)   //플레이어가 자신보다 오른쪽에 있을 때
         {
-            dirOfPlayer = DIRTYPE.RIGHT;
+            model.movedir = EntityModel.MOVEDIRTYPE.RIGHT;
         }
     }
 
-    public void Move()
+    public override void Move(EntityModel m, int _layoutMask)
     {
-        if (dirOfPlayer == DIRTYPE.CENTER)
+        UpdateDirType();
+        if (model.movedir == EntityModel.MOVEDIRTYPE.CENTER)
             return;
+
+        base.Move(m, _layoutMask);
     }
 
     protected IEnumerator Jumping()   //일정 시간 마다 점프.
