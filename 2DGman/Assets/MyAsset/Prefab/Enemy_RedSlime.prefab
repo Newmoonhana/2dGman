@@ -163,6 +163,7 @@ MonoBehaviour:
     foot_col_src: {fileID: 0}
     entity_ani: {fileID: 0}
     rigid: {fileID: 0}
+    parent_tns: {fileID: 0}
     speed: 0
     jumpPower: 0
     jumpTimeLimit: 0
@@ -254,7 +255,7 @@ GameObject:
   - component: {fileID: 4696697894326216819}
   m_Layer: 15
   m_Name: Foot_col
-  m_TagString: Untagged
+  m_TagString: foot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

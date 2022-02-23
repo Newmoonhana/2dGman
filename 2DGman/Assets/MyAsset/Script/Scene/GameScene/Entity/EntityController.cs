@@ -35,15 +35,16 @@ public class EntityModel
     public EntityJumpState jumpState;
 
     //entity 관련
-    public GameObject entity_obj;
-    public Transform entity_tns;
-    public SpriteRenderer entity_spr;
-    public Collider2D entity_col;
-    public IsColliderHit entity_col_src; // 몸 충돌 콜라이더 충돌 정보 스크립트
-    public Collider2D footcol;
-    public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
-    public Animator entity_ani;
-    public Rigidbody2D rigid;
+    [HideInInspector] public GameObject entity_obj;
+    [HideInInspector] public Transform entity_tns;
+    [HideInInspector] public SpriteRenderer entity_spr;
+    [HideInInspector] public Collider2D entity_col;
+    [HideInInspector] public IsColliderHit entity_col_src; // 몸 충돌 콜라이더 충돌 정보 스크립트
+    [HideInInspector] public Collider2D footcol;
+    [HideInInspector] public IsColliderHit foot_col_src; // 땅에 닿는 콜라이더 충돌 정보 스크립트
+    [HideInInspector] public Animator entity_ani;
+    [HideInInspector] public Rigidbody2D rigid;
+    [HideInInspector] public Transform parent_tns;    //부모 트랜스폼 백업(움직이는 발판에서 부모 교체 사용)
 
     //부가적인 스탯 변수
     public SPEEDTYPE speed;
@@ -75,6 +76,7 @@ public class EntityModel
         footcol = entity_tns.GetChild(1).GetComponent<Collider2D>();
         foot_col_src = footcol.GetComponent<IsColliderHit>();
         rigid = entity_obj.GetComponent<Rigidbody2D>();
+        parent_tns = entity_tns.parent;
     }
 
     /// <summary>
