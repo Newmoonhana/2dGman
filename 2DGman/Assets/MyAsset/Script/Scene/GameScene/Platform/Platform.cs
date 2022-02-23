@@ -15,7 +15,7 @@ public class Platform : MonoBehaviour
     private void Start()
     {
         platform_Pe2d = GetComponent<PlatformEffector2D>();
-        pc = GameObject.Find("Player Controller").GetComponent<PlayerController>();
+        pc = GameSceneData.player_controller;
     }
 
     protected virtual void Update()

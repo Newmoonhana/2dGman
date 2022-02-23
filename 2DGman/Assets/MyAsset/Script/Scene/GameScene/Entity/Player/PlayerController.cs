@@ -10,31 +10,21 @@ public class PlayerController : EntityController
     //tmp
     Color color_tmp;
 
-    public int Life { get { return player_model.lifePoint; } set { player_model.lifePoint = value; OnLifeChanged(); } }
-    // 화면에 라이프 표시
-    public void OnLifeChanged()
-    {
-        player_view.lifeText.text = $"Life x {Life}";
-    }
+    public int Life { get { return player_model.lifePoint; } set { player_model.lifePoint = value; player_view.OnLifeChanged(value); } }
 
-    public bool SetHp(float _hp, DAMAGETYPE _type) //hp가 0 이하일 경우 false
+    public override bool SetHp(float _hp, float _hpMax, DAMAGETYPE _type) //hp가 0 이하일 경우 false
     {
+        float value = model.hp;
         if (_type == DAMAGETYPE.DAMAGE)
         {
-            player_model.hp -= _hp;
-            UpdateState(EntityModel.EntityState.HURT);
-            if (player_model.hp <= 0)
-                UpdateState(EntityModel.EntityState.DIE);
-            return true;
+            value -= _hp;
         }
-
         else if (_type == DAMAGETYPE.HEAL)
         {
-            player_model.hp += _hp;
-            return true;
+            value += _hp;
         }
-
-        return false;
+        player_view.OnHpChanged(value, _hpMax, true);
+        return base.SetHp(_hp, _hpMax, _type);
     }
 
     protected override void UpdateState(EntityModel.EntityState _state)
@@ -81,9 +71,9 @@ public class PlayerController : EntityController
 
     protected override void Start()
     {
-        Life = Life;
+        player_view.onInit(Life, model.hp, player_model.hp);
         player_model.player_tns = GameObject.Find("Player").transform;
-        player_model.playerCon_src = GameObject.Find("Player Controller").GetComponent<PlayerController>();
+        player_model.playerCon_src = GameSceneData.player_controller;
         model.SetSubValue(player_model.speed, player_model.jumpPower, player_model.jumpTimeLimit);
         model.movableStrategy = new IsInputPlayer();
 
@@ -159,7 +149,7 @@ public class PlayerController : EntityController
                                     if (enemy.model.state == EntityModel.EntityState.DEFAULT)
                                     {
                                         enemy.model.rigid.velocity = Vector2.zero;
-                                        enemy.SetHp(1, DAMAGETYPE.DAMAGE);
+                                        enemy.SetHp(1, player_model.hp, DAMAGETYPE.DAMAGE);
 
                                         if (enemy.model.jumpState == EntityModel.EntityJumpState.Jumping)
                                         {
@@ -187,7 +177,7 @@ public class PlayerController : EntityController
                         if (model.entity_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                             if (model.entity_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>().model.state == EntityModel.EntityState.DEFAULT)
                             {
-                                SetHp(1, DAMAGETYPE.DAMAGE);
+                                SetHp(1, player_model.hp, DAMAGETYPE.DAMAGE);
                             }
                 }
             }

@@ -47,6 +47,9 @@ public class EntityModel
     [HideInInspector] public Transform parent_tns;    //부모 트랜스폼 백업(움직이는 발판에서 부모 교체 사용)
 
     //부가적인 스탯 변수
+    public float hp_max = 3;
+    public float hp = 3;
+
     public SPEEDTYPE speed;
     public float jumpPower, jumpTimeLimit;
 
@@ -101,6 +104,28 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
 
     protected float jumpTime = 0;
 
+    public virtual bool SetHp(float _hp, float _hpMax, DAMAGETYPE _type) //hp가 0 이하일 경우 false
+    {
+        model.hp_max = _hpMax;
+        if (_type == DAMAGETYPE.DAMAGE)
+        {
+            model.hp -= _hp;
+            UpdateState(EntityModel.EntityState.HURT);
+            if (model.hp <= 0)
+                UpdateState(EntityModel.EntityState.DIE);
+            return true;
+        }
+
+        else if (_type == DAMAGETYPE.HEAL)
+        {
+            if (model.hp > model.hp_max)
+                model.hp += _hp;
+            return true;
+        }
+
+        return false;
+    }
+
     protected virtual void Start()
     {
         model.SetEntityObject(entity_obj);
@@ -129,7 +154,14 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
                 
                 if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
                 {
-                    UpdateState(EntityModel.EntityState.DIE);
+                    if (model.entity_obj.layer == LayerMask.NameToLayer("Player"))
+                    {
+                        GameSceneData.player_controller.SetHp(PlayerController.player_model.hp, PlayerController.player_model.hp, DAMAGETYPE.DAMAGE);
+                    }
+                    else
+                    {
+                        SetHp(model.hp_max, model.hp_max, DAMAGETYPE.DAMAGE);
+                    }
                 }
             }
             else if (model.foot_col_src.state == ColHitState.Stay)

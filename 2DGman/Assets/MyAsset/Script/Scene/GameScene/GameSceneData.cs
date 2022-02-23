@@ -16,7 +16,7 @@ public class GameSceneData : MonoBehaviour
 {
     //tmp
 
-
+    public static PlayerController player_controller;
 
     public static float GetSpeed(SPEEDTYPE _type)
     {   
@@ -26,5 +26,6 @@ public class GameSceneData : MonoBehaviour
     private void Awake()
     {
         AudioManager.Instance.Play("10. Track 10");
+        player_controller = GameObject.Find("Player Controller").GetComponent<PlayerController>();
     }
 }

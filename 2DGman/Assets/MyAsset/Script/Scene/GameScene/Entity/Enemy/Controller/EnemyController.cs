@@ -12,30 +12,9 @@ public class EnemyController : EntityController
 {
     public EnemyModel enemy_model;
 
-    public bool SetHp(float _hp, DAMAGETYPE _type) //hp가 0 이하일 경우 false
-    {
-        if (_type == DAMAGETYPE.DAMAGE)
-        {
-            enemy_model.hp -= _hp;
-            if (enemy_model.hp > 0)
-            {
-                UpdateState(EntityModel.EntityState.HURT);
-                return true;
-            }
-        }
-            
-        else if (_type == DAMAGETYPE.HEAL)
-        {
-            enemy_model.hp += _hp;
-            return true;
-        }
-
-        UpdateState(EntityModel.EntityState.DIE);
-        return false;
-    }
-
     protected override void Start()
     {
+        model.hp_max = model.hp = enemy_model.hp;
         StartCoroutine(Jumping());
 
         base.Start();
