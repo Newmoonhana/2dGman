@@ -220,9 +220,8 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
     {
         if (m.state != EntityModel.EntityState.HURT)
             if (m.state != EntityModel.EntityState.DIE)
-                if (m.movableStrategy != null)
-                    foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
-                        item.Move(m, _layoutMask);
+                m.movableStrategy.Move(m, _layoutMask);
+
     }
 
     public void Jump(EntityModel m, ref float j)
@@ -232,8 +231,7 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
             if (m.state == EntityModel.EntityState.HURT || m.state == EntityModel.EntityState.DIE)
                 if (m.jumpState == EntityModel.EntityJumpState.PrepareToJump)
                     return;
-            foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
-                item.Jump(m, ref j);
+            m.movableStrategy.Jump(m, ref j);
         }
     }
 }

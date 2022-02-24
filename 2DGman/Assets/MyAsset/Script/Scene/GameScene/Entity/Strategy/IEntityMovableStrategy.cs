@@ -232,9 +232,22 @@ public class IsInputPlayer : DefaultMoveable
     }
 }
 
-public class EntityMovableStrategyList
+public class EntityMovableStrategyList  //옵저버 패턴으로 움직임 관리
 {
     public List<IEntityMovableStrategy> strategy = new List<IEntityMovableStrategy>();
+
+    public virtual void Move(EntityModel m, int _layoutMask)
+    {
+        if (m.movableStrategy != null)
+            foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
+                item.Move(m, _layoutMask);
+    }
+    public void Jump(EntityModel m, ref float j)
+    {
+        if (m.movableStrategy != null)
+            foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
+                item.Jump(m, ref j);
+    }
 }
 public class Move : EntityMovableStrategyList
 {

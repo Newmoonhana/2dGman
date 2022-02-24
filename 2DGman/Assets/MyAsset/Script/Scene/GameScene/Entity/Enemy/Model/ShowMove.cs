@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShowMove : EnemyModel_Slime
+public class ShowMove : EnemyModel_None
 {
+    public string moveable_name;
+
     public ShowMove()
     {
-        this_name = "Show Move";
+        this_name = "Show " + moveable_name;
         hp = 1;
     }
 
@@ -19,6 +21,6 @@ public class ShowMove : EnemyModel_Slime
         controller.model.SetSubValue(speed, jumpPower, jumpTimeLimit);
 
         EnemyControllerFactory ef = new LandFactory();
-        controller.model.movableStrategy = ef.CreateEnemyCon("move");
+        controller.model.movableStrategy = ef.CreateEnemyCon(moveable_name);
     }
 }
