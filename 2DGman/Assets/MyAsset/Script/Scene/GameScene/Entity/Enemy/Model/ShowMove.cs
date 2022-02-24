@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlueSlime : EnemyModel_Slime
+public class ShowMove : EnemyModel_Slime
 {
-    public BlueSlime()
+    public ShowMove()
     {
-        this_name = "Blue Slime";
+        this_name = "Show Move";
         hp = 1;
     }
 
@@ -19,6 +19,6 @@ public class BlueSlime : EnemyModel_Slime
         controller.model.SetSubValue(speed, jumpPower, jumpTimeLimit);
 
         EnemyControllerFactory ef = new LandFactory();
-        controller.model.movableStrategy = ef.CreateEnemyCon("move&jump");
+        controller.model.movableStrategy = ef.CreateEnemyCon("move");
     }
 }

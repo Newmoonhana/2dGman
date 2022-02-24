@@ -75,7 +75,7 @@ public class PlayerController : EntityController
         player_model.player_tns = GameObject.Find("Player").transform;
         player_model.playerCon_src = GameSceneData.player_controller;
         model.SetSubValue(player_model.speed, player_model.jumpPower, player_model.jumpTimeLimit);
-        model.movableStrategy = new IsInputPlayer();
+        model.movableStrategy = new InputPlayer();
 
         base.Start();
     }

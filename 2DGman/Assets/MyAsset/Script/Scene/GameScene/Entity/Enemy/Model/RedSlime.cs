@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RedSlime : Slime
+public class RedSlime : EnemyModel_Slime
 {
     public RedSlime()
     {
@@ -14,12 +14,11 @@ public class RedSlime : Slime
     {
         base.Awake();
 
-        //EnemyControllerFactory ef = new LandFactory();
-        //controller = ef.CreateEnemyCon("move", gameObject);
-        controller.model.movableStrategy = new IsMove();
         controller.Entity_obj = gameObject;
-
         controller.enemy_model = this;
         controller.model.SetSubValue(speed, jumpPower, jumpTimeLimit);
+
+        EnemyControllerFactory ef = new LandFactory();
+        controller.model.movableStrategy = ef.CreateEnemyCon("move");
     }
 }

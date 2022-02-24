@@ -31,8 +31,8 @@ public class EntityModel
     }
 
     public EntityState state;
-    public MOVEDIRTYPE movedir = MOVEDIRTYPE.CENTER;
-    public EntityJumpState jumpState;
+    [HideInInspector] public MOVEDIRTYPE movedir = MOVEDIRTYPE.CENTER;
+    [HideInInspector] public EntityJumpState jumpState;
 
     //entity 관련
     [HideInInspector] public GameObject entity_obj;
@@ -53,10 +53,10 @@ public class EntityModel
     public SPEEDTYPE speed;
     public float jumpPower, jumpTimeLimit;
 
-    public bool stopJump;
-    public bool IsGrounded = true;
+    [HideInInspector] public bool stopJump;
+    [HideInInspector] public bool IsGrounded = true;
 
-    [SerializeField] public IEntityMovableStrategy movableStrategy;
+    [SerializeField] public EntityMovableStrategyList movableStrategy;
 
     /// <summary>
     /// entity_obj를 기준으로 다른 변수들도 대입해주는 함수
@@ -98,7 +98,7 @@ public class EntityModel
 
 public class EntityController : MonoBehaviour, IEntityMovableStrategy
 {
-    public EntityModel model = new EntityModel();
+    public EntityModel model;
     [SerializeField] GameObject entity_obj;
     public GameObject Entity_obj { get { return model.entity_obj; } set { entity_obj = value; model.SetEntityObject(value); } }
 
@@ -212,7 +212,8 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
     public void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j)
     {
         if (m.movableStrategy != null)
-            m.movableStrategy.UpdateJumpState(s, m, ref j);
+            foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
+                item.UpdateJumpState(s, m, ref j);
     }
 
     public virtual void Move(EntityModel m, int _layoutMask)
@@ -220,7 +221,8 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
         if (m.state != EntityModel.EntityState.HURT)
             if (m.state != EntityModel.EntityState.DIE)
                 if (m.movableStrategy != null)
-                    m.movableStrategy.Move(m, _layoutMask);
+                    foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
+                        item.Move(m, _layoutMask);
     }
 
     public void Jump(EntityModel m, ref float j)
@@ -230,7 +232,8 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
             if (m.state == EntityModel.EntityState.HURT || m.state == EntityModel.EntityState.DIE)
                 if (m.jumpState == EntityModel.EntityJumpState.PrepareToJump)
                     return;
-            m.movableStrategy.Jump(m, ref j);
+            foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
+                item.Jump(m, ref j);
         }
     }
 }

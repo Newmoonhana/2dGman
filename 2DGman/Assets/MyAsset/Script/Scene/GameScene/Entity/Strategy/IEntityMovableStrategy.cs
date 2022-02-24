@@ -17,7 +17,7 @@ public class DefaultMoveable : IEntityMovableStrategy
     float f;
     int i;
 
-    bool IsForwardHit(EntityModel model, int _layerMask)
+    protected bool IsForwardHit(EntityModel model, int _layerMask)
     {
         if (model.movedir == EntityModel.MOVEDIRTYPE.CENTER)
             return false;
@@ -160,6 +160,44 @@ public class DefaultMoveable : IEntityMovableStrategy
 
 public class IsMove : DefaultMoveable
 {
+    public override void Move(EntityModel model, int _layerMask)
+    {
+        if (model.movedir == EntityModel.MOVEDIRTYPE.CENTER)
+            return;
+
+        if (base.IsForwardHit(model, _layerMask))   //물체에 충돌 시 방향 전환
+            model.movedir = model.movedir == EntityModel.MOVEDIRTYPE.LEFT ? EntityModel.MOVEDIRTYPE.RIGHT : EntityModel.MOVEDIRTYPE.LEFT;
+
+        base.Move(model, _layerMask);
+    }
+    public override void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j) { }
+    public override void Jump(EntityModel m, ref float j) { }
+}
+
+public class IsFollowPlayer : DefaultMoveable
+{
+    //플레이어의 현재 방향 체킹.
+    void UpdateDirType(EntityModel model)
+    {
+        model.movedir = EntityModel.MOVEDIRTYPE.CENTER;
+        if (PlayerController.player_model.player_tns.position.x < model.entity_tns.transform.position.x)   //플레이어가 자신보다 왼쪽에 있을 때
+        {
+            model.movedir = EntityModel.MOVEDIRTYPE.LEFT;
+        }
+        else if (PlayerController.player_model.player_tns.position.x > model.entity_tns.transform.position.x)   //플레이어가 자신보다 오른쪽에 있을 때
+        {
+            model.movedir = EntityModel.MOVEDIRTYPE.RIGHT;
+        }
+    }
+
+    public override void Move(EntityModel model, int _layerMask)
+    {
+        UpdateDirType(model);
+        if (model.movedir == EntityModel.MOVEDIRTYPE.CENTER)
+            return;
+
+        base.Move(model, _layerMask);
+    }
     public override void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j) { }
     public override void Jump(EntityModel m, ref float j) { }
 }
@@ -169,12 +207,7 @@ public class IsJump : DefaultMoveable
     public override void Move(EntityModel m, int l) { }
 }
 
-public class IsMoveAndJump : DefaultMoveable
-{
-    
-}
-
-public class IsInputPlayer : IsMoveAndJump
+public class IsInputPlayer : DefaultMoveable
 {
     public override void Move(EntityModel model, int _layerMask)
     {
@@ -196,5 +229,46 @@ public class IsInputPlayer : IsMoveAndJump
                 break;
         }
         base.UpdateJumpState(_state, model, ref jumpTime);
+    }
+}
+
+public class EntityMovableStrategyList
+{
+    public List<IEntityMovableStrategy> strategy = new List<IEntityMovableStrategy>();
+}
+public class Move : EntityMovableStrategyList
+{
+    public Move()
+    {
+        strategy.Add(new IsMove());
+    }
+}
+public class FollowPlayer : EntityMovableStrategyList
+{
+    public FollowPlayer()
+    {
+        strategy.Add(new IsFollowPlayer());
+    }
+}
+public class Jump : EntityMovableStrategyList
+{
+    public Jump()
+    {
+        strategy.Add(new IsJump());
+    }
+}
+public class MoveAndJump : EntityMovableStrategyList
+{
+    public MoveAndJump()
+    {
+        strategy.Add(new IsMove());
+        strategy.Add(new IsJump());
+    }
+}
+public class InputPlayer : EntityMovableStrategyList
+{
+    public InputPlayer()
+    {
+        strategy.Add(new IsInputPlayer());
     }
 }

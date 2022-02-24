@@ -6,8 +6,8 @@ public abstract class EnemyModel : MonoBehaviour
 {
     public enum ENEMYTYPE
     {
-        SLIME,
-        HUMAN
+        NONE,
+        SLIME
     }
 
     protected ENEMYTYPE type;
@@ -18,9 +18,22 @@ public abstract class EnemyModel : MonoBehaviour
     [SerializeField] protected float jumpPower, jumpTimeLimit;
 }
 
-public abstract class Slime : EnemyModel
+public abstract class EnemyModel_None : EnemyModel
 {
-    public Slime()
+    public EnemyModel_None()
+    {
+        type = ENEMYTYPE.NONE;
+    }
+
+    protected virtual void Awake()
+    {
+        controller = GetComponent<EnemyController>();
+    }
+}
+
+public abstract class EnemyModel_Slime : EnemyModel
+{
+    public EnemyModel_Slime()
     {
         type = ENEMYTYPE.SLIME;
     }

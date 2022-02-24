@@ -152,7 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model:
     state: 0
-    movedir: 1
+    movedir: 0
     jumpState: 0
     entity_obj: {fileID: 0}
     entity_tns: {fileID: 0}
@@ -164,6 +164,8 @@ MonoBehaviour:
     entity_ani: {fileID: 0}
     rigid: {fileID: 0}
     parent_tns: {fileID: 0}
+    hp_max: 3
+    hp: 3
     speed: 0
     jumpPower: 0
     jumpTimeLimit: 0
