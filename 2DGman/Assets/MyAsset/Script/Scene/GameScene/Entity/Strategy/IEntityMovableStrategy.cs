@@ -75,6 +75,9 @@ public class DefaultMoveable : IEntityMovableStrategy
             return;
         }
 
+        if (!model.cameraDis_src.isDist)
+            return;
+
         Vector3 movement = Vector3.zero; //이동 좌표 계산
         float speed = 1;
         //점프 상태에 따른 속도값 조절(마찰력처럼)인데 그냥 점프가 나을 듯해서 주석 처리.
@@ -109,6 +112,8 @@ public class DefaultMoveable : IEntityMovableStrategy
         switch (model.jumpState)
         {
             case EntityModel.EntityJumpState.PrepareToJump:
+                if (!model.cameraDis_src.isDist)
+                    return;
                 if (!model.IsGrounded)
                     break;
                 model.rigid.velocity = Vector3.zero;  //점프 Tag를 밟으면 해당 코드 필요

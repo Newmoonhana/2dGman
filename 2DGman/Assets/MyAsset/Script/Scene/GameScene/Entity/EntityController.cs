@@ -45,6 +45,7 @@ public class EntityModel
     [HideInInspector] public Animator entity_ani;
     [HideInInspector] public Rigidbody2D rigid;
     [HideInInspector] public Transform parent_tns;    //부모 트랜스폼 백업(움직이는 발판에서 부모 교체 사용)
+    [HideInInspector] public IsDistance cameraDis_src;  //카메라와의 거리 측정 후 거리가 멀다면 움직임 정지
 
     //부가적인 스탯 변수
     public float hp_max = 3;
@@ -80,6 +81,13 @@ public class EntityModel
         foot_col_src = footcol.GetComponent<IsColliderHit>();
         rigid = entity_obj.GetComponent<Rigidbody2D>();
         parent_tns = entity_tns.parent;
+
+        cameraDis_src = entity_obj.GetComponent<IsDistance>();
+        if (cameraDis_src == null)
+            cameraDis_src = entity_obj.AddComponent<IsDistance>();
+            
+        cameraDis_src.entity_tns = Camera.main.transform;
+        cameraDis_src.distance = 20;
     }
 
     /// <summary>
