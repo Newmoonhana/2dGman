@@ -87,7 +87,7 @@ public class EntityModel
             cameraDis_src = entity_obj.AddComponent<IsDistance>();
             
         cameraDis_src.entity_tns = Camera.main.transform;
-        cameraDis_src.distance = 20;
+        cameraDis_src.distance = 30;
     }
 
     /// <summary>

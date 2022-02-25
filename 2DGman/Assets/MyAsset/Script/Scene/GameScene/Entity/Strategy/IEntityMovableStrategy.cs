@@ -112,8 +112,6 @@ public class DefaultMoveable : IEntityMovableStrategy
         switch (model.jumpState)
         {
             case EntityModel.EntityJumpState.PrepareToJump:
-                if (!model.cameraDis_src.isDist)
-                    return;
                 if (!model.IsGrounded)
                     break;
                 model.rigid.velocity = Vector3.zero;  //점프 Tag를 밟으면 해당 코드 필요
@@ -145,16 +143,21 @@ public class DefaultMoveable : IEntityMovableStrategy
                 model.stopJump = false;
                 break;
             case EntityModel.EntityJumpState.PrepareToJump:
+                if (!model.cameraDis_src.isDist)
+                {
+                    model.jumpState = EntityModel.EntityJumpState.Grounded;
+                    return;
+                }
                 model.entity_ani.SetBool("_grounded", false);
                 jumpTime = 0;
                 model.stopJump = false;
-                model.footcol.enabled = false;
+                //model.footcol.enabled = false;
                 break;
             case EntityModel.EntityJumpState.InFlight:
                 model.IsGrounded = false;
                 model.entity_ani.SetBool("_grounded", false);
                 model.entity_ani.SetFloat("_velocityY", -1);
-                model.footcol.enabled = true;
+                //model.footcol.enabled = true;
                 break;
             case EntityModel.EntityJumpState.Landed:
                 UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
