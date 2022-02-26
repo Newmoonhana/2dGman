@@ -30,6 +30,10 @@ public class LandFactory : EnemyControllerFactory
         {
             enemy = new MoveAndJump();
         }
+        else if (_type.Equals("down&jump"))
+        {
+            enemy = new DownAndJump();
+        }
         else
             Debug.LogWarning("동작 전략 패턴이 할당되지 않았습니다.");
 

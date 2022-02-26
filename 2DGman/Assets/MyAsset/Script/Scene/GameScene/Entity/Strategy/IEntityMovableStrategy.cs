@@ -7,6 +7,7 @@ public interface IEntityMovableStrategy
     void Move(EntityModel model, int _layerMask);
     void UpdateJumpState(EntityModel.EntityJumpState _state, EntityModel model, ref float jumpTime);
     void Jump(EntityModel model, ref float jumpTime);
+    void Down(EntityModel model);
 }
 
 public class DefaultMoveable : IEntityMovableStrategy
@@ -157,12 +158,23 @@ public class DefaultMoveable : IEntityMovableStrategy
                 model.IsGrounded = false;
                 model.entity_ani.SetBool("_grounded", false);
                 model.entity_ani.SetFloat("_velocityY", -1);
-                //model.footcol.enabled = true;
+                model.footcol.enabled = true;
                 break;
             case EntityModel.EntityJumpState.Landed:
                 UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
                 break;
         }
+    }
+
+    public virtual void Down(EntityModel model)
+    {
+        if (model.foot_col_src.type == COLTYPE.COLLISION)   //중복 하강 방지 코드
+            if (model.foot_col_src.state == ColHitState.Stay)
+                if (model.jumpState == EntityModel.EntityJumpState.Grounded)
+                    if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
+                    {
+                        //model.footcol.enabled = false;
+                    }
     }
 }
 
@@ -180,6 +192,7 @@ public class IsMove : DefaultMoveable
     }
     public override void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j) { }
     public override void Jump(EntityModel m, ref float j) { }
+    public override void Down(EntityModel model) { }
 }
 
 public class IsFollowPlayer : DefaultMoveable
@@ -208,9 +221,16 @@ public class IsFollowPlayer : DefaultMoveable
     }
     public override void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j) { }
     public override void Jump(EntityModel m, ref float j) { }
+    public override void Down(EntityModel model) { }
 }
 
 public class IsJump : DefaultMoveable
+{
+    public override void Move(EntityModel m, int l) { }
+    public override void Down(EntityModel model) { }
+}
+
+public class IsDown : DefaultMoveable
 {
     public override void Move(EntityModel m, int l) { }
 }
@@ -238,6 +258,16 @@ public class IsInputPlayer : DefaultMoveable
         }
         base.UpdateJumpState(_state, model, ref jumpTime);
     }
+
+    public override void Down(EntityModel model)
+    {
+        if (model.foot_col_src.type == COLTYPE.COLLISION)   //중복 하강 방지 코드
+            if (model.foot_col_src.state == ColHitState.Stay)
+                if (model.jumpState == EntityModel.EntityJumpState.Grounded)
+                    if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
+                        AudioManager.Instance.Play("Jump");
+        base.Down(model);
+    }
 }
 
 public class EntityMovableStrategyList  //옵저버 패턴으로 움직임 관리
@@ -255,6 +285,12 @@ public class EntityMovableStrategyList  //옵저버 패턴으로 움직임 관리
         if (m.movableStrategy != null)
             foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
                 item.Jump(m, ref j);
+    }
+    public void Down(EntityModel m)
+    {
+        if (m.movableStrategy != null)
+            foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
+                item.Down(m);
     }
 }
 public class Move : EntityMovableStrategyList
@@ -284,6 +320,13 @@ public class MoveAndJump : EntityMovableStrategyList
     {
         strategy.Add(new IsMove());
         strategy.Add(new IsJump());
+    }
+}
+public class DownAndJump : EntityMovableStrategyList
+{
+    public DownAndJump()
+    {
+        strategy.Add(new IsDown());
     }
 }
 public class InputPlayer : EntityMovableStrategyList

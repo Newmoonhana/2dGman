@@ -242,4 +242,17 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
             m.movableStrategy.Jump(m, ref j);
         }
     }
+
+    public void Down(EntityModel m)
+    {
+        if (m.movableStrategy != null)
+        {
+            if (m.state == EntityModel.EntityState.HURT || m.state == EntityModel.EntityState.DIE)
+                    return;
+            if (model.foot_col_src.type == COLTYPE.COLLISION)   //중복 하강 방지 코드
+                if (model.foot_col_src.state == ColHitState.Stay)
+                    if (model.jumpState == EntityModel.EntityJumpState.Grounded)
+                        m.movableStrategy.Down(m);
+        }
+    }
 }

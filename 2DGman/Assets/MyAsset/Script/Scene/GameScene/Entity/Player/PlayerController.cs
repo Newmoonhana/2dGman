@@ -89,16 +89,11 @@ public class PlayerController : EntityController
                 model.speed = player_model.speed_dash;
             else
                 model.speed = player_model.speed;
-        } 
+        }
 
         //플랫폼에서 하단 점프
         if (UserInputManager.Instance.model.IsButtonInput("Down", UserInputModel.inputItem.TYPE.BUTTONDOWN))
-            if (model.foot_col_src.type == COLTYPE.COLLISION)   //중복 하강 방지 코드
-                if (model.foot_col_src.state == ColHitState.Stay)
-                    if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
-                    {
-                        AudioManager.Instance.Play("Jump");
-                    }
+            Down(model);
 
         if (model.jumpState == EntityModel.EntityJumpState.Grounded)
         {
