@@ -12,6 +12,14 @@ public class EntityModel
         RIGHT
     }
 
+    public enum ENTITYTYPE
+    {
+        NONE,
+        OBJECT,
+        PLAYER,
+        ENEMY
+    }
+
     public enum EntityJumpState
     {
         Grounded,   //지면
@@ -30,6 +38,7 @@ public class EntityModel
         VICTORY
     }
 
+    public ENTITYTYPE type;
     public EntityState state;
     [HideInInspector] public MOVEDIRTYPE movedir = MOVEDIRTYPE.CENTER;
     [HideInInspector] public EntityJumpState jumpState;
@@ -159,18 +168,7 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
                 return;
             if (model.foot_col_src.state == ColHitState.Enter)
             {
-                
-                if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
-                {
-                    if (model.entity_obj.layer == LayerMask.NameToLayer("Player"))
-                    {
-                        GameSceneData.player_controller.SetHp(PlayerController.player_model.hp, PlayerController.player_model.hp, DAMAGETYPE.DAMAGE);
-                    }
-                    else
-                    {
-                        SetHp(model.hp_max, model.hp_max, DAMAGETYPE.DAMAGE);
-                    }
-                }
+
             }
             else if (model.foot_col_src.state == ColHitState.Stay)
             {
@@ -189,9 +187,33 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
                 //땅 충돌 판정(추락)
                 if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
                 {
+
                     if (model.jumpState == EntityModel.EntityJumpState.Grounded)
                     {
                         UpdateJumpState(EntityModel.EntityJumpState.InFlight, model, ref jumpTime);
+                    }
+                }
+            }
+        }
+
+        if (model.foot_col_src.type == COLTYPE.TRIGGER)
+        {
+            if (model.foot_col_src.other_col_TRIGGER == null)
+                return;
+            if (model.foot_col_src.state == ColHitState.Enter)
+            {
+                if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
+                {
+                    if (model.type == EntityModel.ENTITYTYPE.PLAYER || model.type == EntityModel.ENTITYTYPE.ENEMY)
+                    {
+                        if (model.entity_obj.layer == LayerMask.NameToLayer("Player"))
+                        {
+                            GameSceneData.player_controller.SetHp(PlayerController.player_model.hp, PlayerController.player_model.hp, DAMAGETYPE.DAMAGE);
+                        }
+                        else
+                        {
+                            SetHp(model.hp_max, model.hp_max, DAMAGETYPE.DAMAGE);
+                        }
                     }
                 }
             }

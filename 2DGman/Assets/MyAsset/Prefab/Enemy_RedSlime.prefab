@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model:
+    type: 3
     state: 0
     movedir: 0
     jumpState: 0
@@ -164,6 +165,7 @@ MonoBehaviour:
     entity_ani: {fileID: 0}
     rigid: {fileID: 0}
     parent_tns: {fileID: 0}
+    cameraDis_src: {fileID: 0}
     hp_max: 3
     hp: 3
     speed: 0

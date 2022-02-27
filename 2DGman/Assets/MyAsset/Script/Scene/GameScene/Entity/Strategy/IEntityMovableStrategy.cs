@@ -173,7 +173,11 @@ public class DefaultMoveable : IEntityMovableStrategy
                 if (model.jumpState == EntityModel.EntityJumpState.Grounded)
                     if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
                     {
-                        //model.footcol.enabled = false;
+                        Vector2 vec2 = model.entity_tns.position;
+                        vec2.y -= model.foot_col_src.other_col_COLLISION.collider.GetComponent<BoxCollider2D>().size.y;
+                        model.entity_tns.position = vec2;
+                        float tmp = 0;
+                        UpdateJumpState(EntityModel.EntityJumpState.InFlight, model, ref tmp);
                     }
     }
 }
@@ -233,6 +237,8 @@ public class IsJump : DefaultMoveable
 public class IsDown : DefaultMoveable
 {
     public override void Move(EntityModel m, int l) { }
+    public override void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j) { }
+    public override void Jump(EntityModel m, ref float j) { }
 }
 
 public class IsInputPlayer : DefaultMoveable
@@ -266,7 +272,6 @@ public class IsInputPlayer : DefaultMoveable
                 if (model.jumpState == EntityModel.EntityJumpState.Grounded)
                     if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
                         AudioManager.Instance.Play("Jump");
-        base.Down(model);
     }
 }
 
@@ -326,6 +331,7 @@ public class DownAndJump : EntityMovableStrategyList
 {
     public DownAndJump()
     {
+        strategy.Add(new IsJump());
         strategy.Add(new IsDown());
     }
 }

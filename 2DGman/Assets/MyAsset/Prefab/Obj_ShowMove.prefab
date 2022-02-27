@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 524141697564007506}
   - component: {fileID: 4980047503796452403}
   m_Layer: 9
-  m_Name: Enemy_ShowMove
+  m_Name: Obj_ShowMove
   m_TagString: jump pole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,6 +137,11 @@ MonoBehaviour:
   speed: 2
   jumpPower: 6
   jumpTimeLimit: 0.4
+  jumpOnTime: 2
+  jumpLoopTime: 2
+  downOnTime: 1
+  downLoopTime: 2
+  moveable_name: 
 --- !u!114 &1652406148831757452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model:
+    type: 1
     state: 0
     movedir: 0
     jumpState: 0
@@ -163,6 +169,7 @@ MonoBehaviour:
     entity_ani: {fileID: 0}
     rigid: {fileID: 0}
     parent_tns: {fileID: 0}
+    cameraDis_src: {fileID: 0}
     hp_max: 3
     hp: 3
     speed: 0

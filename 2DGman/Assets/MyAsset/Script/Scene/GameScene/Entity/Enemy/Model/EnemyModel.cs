@@ -16,6 +16,8 @@ public abstract class EnemyModel : MonoBehaviour
     protected EnemyController controller;
     [SerializeField] protected SPEEDTYPE speed;
     [SerializeField] protected float jumpPower, jumpTimeLimit;
+    [SerializeField] public float jumpOnTime, jumpLoopTime;
+    [SerializeField] public float downOnTime, downLoopTime;
 }
 
 public abstract class EnemyModel_None : EnemyModel

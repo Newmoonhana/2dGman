@@ -15,7 +15,8 @@ public class EnemyController : EntityController
     protected override void Start()
     {
         model.hp_max = model.hp = enemy_model.hp;
-        StartCoroutine(Jumping());
+        InvokeRepeating("Jumping", enemy_model.jumpOnTime, enemy_model.jumpLoopTime);
+        InvokeRepeating("Downing", enemy_model.downOnTime, enemy_model.downLoopTime);
 
         base.Start();
     }
@@ -50,16 +51,18 @@ public class EnemyController : EntityController
         Entity_obj.SetActive(false);
     }
 
-    protected IEnumerator Jumping()   //일정 시간 마다 점프.
+    protected void Jumping()   //일정 시간 마다 점프.
     {
-        while (!(model.state == EntityModel.EntityState.DIE))
-        {
-            yield return null;
-            if (model.state != EntityModel.EntityState.HURT)
-            {
-                yield return GameManager.waitforseconds_3f;
-                UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
-            }
-        }
+        if (model.state == EntityModel.EntityState.DIE)
+            return;
+        if (model.state == EntityModel.EntityState.HURT)
+            return;
+        if (model.jumpState == EntityModel.EntityJumpState.Grounded)
+            UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
+    }
+
+    protected void Downing()
+    {
+        base.Down(model);
     }
 }

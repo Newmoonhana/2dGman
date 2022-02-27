@@ -138,6 +138,10 @@ MonoBehaviour:
   speed: 1
   jumpPower: 5
   jumpTimeLimit: 0.3
+  jumpOnTime: 3
+  jumpLoopTime: 3
+  downOnTime: 0
+  downLoopTime: 0
 --- !u!114 &6875216784261026505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model:
+    type: 3
     state: 0
     movedir: 0
     jumpState: 0
@@ -164,6 +169,7 @@ MonoBehaviour:
     entity_ani: {fileID: 0}
     rigid: {fileID: 0}
     parent_tns: {fileID: 0}
+    cameraDis_src: {fileID: 0}
     hp_max: 3
     hp: 3
     speed: 0
