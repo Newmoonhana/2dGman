@@ -67,6 +67,7 @@ public class EntityModel
     [HideInInspector] public bool IsGrounded = true;
 
     [SerializeField] public EntityMovableStrategyList movableStrategy;
+    [SerializeField] public EntityIsHitStrategyList ishitStrategy;
 
     /// <summary>
     /// entity_obj를 기준으로 다른 변수들도 대입해주는 함수
@@ -82,13 +83,28 @@ public class EntityModel
             
         entity_obj = _obj;
         entity_tns = entity_obj.transform;
-        entity_spr = entity_tns.GetChild(0).GetComponent<SpriteRenderer>();
+        
         entity_ani = entity_obj.GetComponent<Animator>();
         entity_col = entity_obj.GetComponent<Collider2D>();
-        entity_col_src = entity_col.GetComponent<IsColliderHit>();
-        footcol = entity_tns.GetChild(1).GetComponent<Collider2D>();
-        foot_col_src = footcol.GetComponent<IsColliderHit>();
         rigid = entity_obj.GetComponent<Rigidbody2D>();
+        entity_col_src = entity_col.GetComponent<IsColliderHit>();
+
+        if (entity_tns.childCount >= 1)
+        {
+            if (entity_tns.GetChild(0) != null)
+                entity_spr = entity_tns.GetChild(0).GetComponent<SpriteRenderer>();
+
+            if (entity_tns.childCount >= 2)
+            {
+                if (entity_tns.GetChild(1) != null)
+                    if (entity_tns.GetChild(1).tag == "foot")
+                    {
+                        footcol = entity_tns.GetChild(1).GetComponent<Collider2D>();
+                        foot_col_src = footcol.GetComponent<IsColliderHit>();
+                    }
+            }
+        }
+
         parent_tns = entity_tns.parent;
 
         cameraDis_src = entity_obj.GetComponent<IsDistance>();
@@ -153,68 +169,72 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
 
     protected virtual void FixedUpdate()
     {
-        Jump(model, ref jumpTime);
-
-        // 점프 시 추락 체크
-        if (model.rigid.velocity.y < 0)
+        if (model.rigid != null)
         {
-            if (model.jumpState == EntityModel.EntityJumpState.Jumping)
-                UpdateJumpState(EntityModel.EntityJumpState.InFlight, model, ref jumpTime);
-        }
+            Jump(model, ref jumpTime);
 
-        if (model.foot_col_src.type == COLTYPE.COLLISION)
-        {
-            if (model.foot_col_src.other_col_COLLISION == null)
-                return;
-            if (model.foot_col_src.state == ColHitState.Enter)
+            // 점프 시 추락 체크
+            if (model.rigid.velocity.y < 0)
             {
-
-            }
-            else if (model.foot_col_src.state == ColHitState.Stay)
-            {
-                //땅 충돌 판정
-                if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
-                {
-                    if (model.jumpState == EntityModel.EntityJumpState.InFlight)
-                    {
-                        model.rigid.velocity = Vector3.zero;
-                        UpdateJumpState(EntityModel.EntityJumpState.Landed, model, ref jumpTime);
-                    }
-                }
-            }
-            else if (model.foot_col_src.state == ColHitState.Exit)
-            {
-                //땅 충돌 판정(추락)
-                if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
-                {
-
-                    if (model.jumpState == EntityModel.EntityJumpState.Grounded)
-                    {
-                        UpdateJumpState(EntityModel.EntityJumpState.InFlight, model, ref jumpTime);
-                    }
-                }
+                if (model.jumpState == EntityModel.EntityJumpState.Jumping)
+                    UpdateJumpState(EntityModel.EntityJumpState.InFlight, model, ref jumpTime);
             }
         }
 
-        if (model.foot_col_src.type == COLTYPE.TRIGGER)
+        if (model.footcol != null)
         {
-            if (model.foot_col_src.other_col_TRIGGER == null)
-                return;
-            if (model.foot_col_src.state == ColHitState.Enter)
+            if (model.foot_col_src.type == COLTYPE.COLLISION)
             {
-                if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
+                if (model.foot_col_src.other_col_COLLISION == null)
+                    return;
+                if (model.foot_col_src.state == ColHitState.Enter)
                 {
-                    if (model.type == EntityModel.ENTITYTYPE.PLAYER || model.type == EntityModel.ENTITYTYPE.ENEMY)
+
+                }
+                else if (model.foot_col_src.state == ColHitState.Stay)
+                {
+                    //땅 충돌 판정
+                    if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
                     {
-                        if (model.entity_obj.layer == LayerMask.NameToLayer("Player"))
+                        if (model.jumpState == EntityModel.EntityJumpState.InFlight)
                         {
-                            GameSceneData.player_controller.SetHp(PlayerController.player_model.hp, PlayerController.player_model.hp, DAMAGETYPE.DAMAGE);
-                        }
-                        else
-                        {
-                            SetHp(model.hp_max, model.hp_max, DAMAGETYPE.DAMAGE);
+                            model.rigid.velocity = Vector3.zero;
+                            UpdateJumpState(EntityModel.EntityJumpState.Landed, model, ref jumpTime);
                         }
                     }
+                }
+                else if (model.foot_col_src.state == ColHitState.Exit)
+                {
+                    //땅 충돌 판정(추락)
+                    if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
+                    {
+
+                        if (model.jumpState == EntityModel.EntityJumpState.Grounded)
+                        {
+                            UpdateJumpState(EntityModel.EntityJumpState.InFlight, model, ref jumpTime);
+                        }
+                    }
+                }
+            }
+
+            if (model.foot_col_src.type == COLTYPE.TRIGGER)
+            {
+                if (model.foot_col_src.other_col_TRIGGER == null)
+                    return;
+                if (model.foot_col_src.state == ColHitState.Enter)
+                {
+                    if (model.foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
+                        if (model.type == EntityModel.ENTITYTYPE.PLAYER || model.type == EntityModel.ENTITYTYPE.ENEMY)
+                        {
+                            if (model.entity_obj.layer == LayerMask.NameToLayer("Player"))
+                            {
+                                GameSceneData.player_controller.SetHp(PlayerController.player_model.hp, PlayerController.player_model.hp, DAMAGETYPE.DAMAGE);
+                            }
+                            else
+                            {
+                                SetHp(model.hp_max, model.hp_max, DAMAGETYPE.DAMAGE);
+                            }
+                        }
                 }
             }
         }

@@ -20,7 +20,7 @@ TagManager:
   - Player
   - EnemyWallZone
   - Platform
-  - 
+  - Token
   - Foot_Player
   - Foot_Enemy
   - 

@@ -18,7 +18,7 @@ public class BlueSlime : EnemyModel_Slime
         controller.enemy_model = this;
         controller.model.SetSubValue(speed, jumpPower, jumpTimeLimit);
 
-        EnemyControllerFactory ef = new LandFactory();
-        controller.model.movableStrategy = ef.CreateEnemyCon("move&jump");
+        EntityMovableStrategyFactory ef = new LandFactory();
+        controller.model.movableStrategy = ef.CreateMovableStrategy("move&jump");
     }
 }

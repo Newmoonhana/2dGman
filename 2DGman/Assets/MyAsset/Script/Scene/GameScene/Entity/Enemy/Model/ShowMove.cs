@@ -20,7 +20,7 @@ public class ShowMove : EnemyModel_None
         controller.enemy_model = this;
         controller.model.SetSubValue(speed, jumpPower, jumpTimeLimit);
 
-        EnemyControllerFactory ef = new LandFactory();
-        controller.model.movableStrategy = ef.CreateEnemyCon(moveable_name);
+        EntityMovableStrategyFactory ef = new LandFactory();
+        controller.model.movableStrategy = ef.CreateMovableStrategy(moveable_name);
     }
 }
