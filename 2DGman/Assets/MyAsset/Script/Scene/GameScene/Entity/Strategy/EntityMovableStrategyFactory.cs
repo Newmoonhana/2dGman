@@ -33,6 +33,10 @@ public class LandFactory : EntityMovableStrategyFactory
         {
             strategy = new DownAndJump();
         }
+        else if (_type.Equals("input_player"))
+        {
+            strategy = new InputPlayer();
+        }
         else
             Debug.LogWarning("동작 전략 패턴이 할당되지 않았습니다.");
 

@@ -4,18 +4,18 @@ using UnityEngine;
 
 public abstract class EntityIsHitStrategyFactory
 {
-    public abstract EntityIsHitStrategyFactory CreateIsHitStrategy(string _type);   //팩토리 메서드
+    public abstract EntityIsHitStrategyList CreateIsHitStrategy(string _type);   //팩토리 메서드
 }
 
-public class DefaultFactory : EntityIsHitStrategyFactory
+public class IsHitFactory : EntityIsHitStrategyFactory
 {
-    public override EntityIsHitStrategyFactory CreateIsHitStrategy(string _type)
+    public override EntityIsHitStrategyList CreateIsHitStrategy(string _type)
     {
-        EntityIsHitStrategyFactory strategy = null;
+        EntityIsHitStrategyList strategy = null;
 
-        if (_type.Equals(""))
+        if (_type.Equals("player"))
         {
-            
+            strategy = new PlayerIsHit();
         }
         else
             Debug.LogWarning("동작 전략 패턴이 할당되지 않았습니다.");

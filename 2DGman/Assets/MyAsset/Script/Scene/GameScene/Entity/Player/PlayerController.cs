@@ -39,6 +39,7 @@ public class PlayerController : EntityController
                 model.entity_spr.color = color_tmp;
                 break;
             case EntityModel.EntityState.HURT:
+                CancelInvoke("IsUnBeadEnd");
                 AudioManager.Instance.Play("Hurt");
                 break;
             case EntityModel.EntityState.UNBEAT:
@@ -54,11 +55,11 @@ public class PlayerController : EntityController
     }
     public void IsHurtEnd()
     {
-        if (player_model.hp > 0)
+        if (model.hp > 0)
         {
             UpdateState(EntityModel.EntityState.UNBEAT);
             Invoke("IsUnBeatEnd", 3f);
-        } 
+        }
     }
     public void IsDeadEnd()
     {
@@ -75,7 +76,10 @@ public class PlayerController : EntityController
         player_model.player_tns = GameObject.Find("Player").transform;
         player_model.playerCon_src = GameSceneData.player_controller;
         model.SetSubValue(player_model.speed, player_model.jumpPower, player_model.jumpTimeLimit);
-        model.movableStrategy = new InputPlayer();
+        EntityMovableStrategyFactory ef = new LandFactory();
+        model.movableStrategy = ef.CreateMovableStrategy("input_player");
+        EntityIsHitStrategyFactory ef_ih = new IsHitFactory();
+        model.ishitStrategy = ef_ih.CreateIsHitStrategy("player");
 
         base.Start();
     }
@@ -163,19 +167,7 @@ public class PlayerController : EntityController
         }
 
         if (!isEnemyjump)
-            if (model.entity_col_src.type == COLTYPE.COLLISION)
-            {
-                if (model.entity_col_src.state == ColHitState.Stay)
-                {
-                    //몬스터 충돌 판정
-                    if (model.state == EntityModel.EntityState.DEFAULT)
-                        if (model.entity_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                            if (model.entity_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>().model.state == EntityModel.EntityState.DEFAULT)
-                            {
-                                SetHp(1, player_model.hp, DAMAGETYPE.DAMAGE);
-                            }
-                }
-            }
+            Hit(model, model.entity_col, model.entity_col_src);
 
         base.FixedUpdate();
     }

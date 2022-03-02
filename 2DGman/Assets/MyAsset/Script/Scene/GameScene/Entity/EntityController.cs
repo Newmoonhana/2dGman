@@ -261,6 +261,10 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
 
     public void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j)
     {
+        if (s == EntityModel.EntityJumpState.PrepareToJump)
+            if (m.state == EntityModel.EntityState.HURT || m.state == EntityModel.EntityState.DIE)
+                return;
+
         if (m.movableStrategy != null)
             foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
                 item.UpdateJumpState(s, m, ref j);
@@ -271,15 +275,14 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
         if (m.state != EntityModel.EntityState.HURT)
             if (m.state != EntityModel.EntityState.DIE)
                 m.movableStrategy.Move(m, _layoutMask);
-
     }
 
     public void Jump(EntityModel m, ref float j)
     {
         if (m.movableStrategy != null)
         {
-            if (m.state == EntityModel.EntityState.HURT || m.state == EntityModel.EntityState.DIE)
-                if (m.jumpState == EntityModel.EntityJumpState.PrepareToJump)
+            if (m.jumpState == EntityModel.EntityJumpState.PrepareToJump)
+                if (m.state == EntityModel.EntityState.HURT || m.state == EntityModel.EntityState.DIE)
                     return;
             m.movableStrategy.Jump(m, ref j);
         }
@@ -296,5 +299,12 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
                     if (model.jumpState == EntityModel.EntityJumpState.Grounded)
                         m.movableStrategy.Down(m);
         }
+    }
+
+    public void Hit(EntityModel m, Collider2D _col, IsColliderHit _col_src)
+    {
+        if (m.state != EntityModel.EntityState.HURT)
+            if (m.state != EntityModel.EntityState.DIE)
+                m.ishitStrategy.Hit(m, _col, _col_src);
     }
 }
