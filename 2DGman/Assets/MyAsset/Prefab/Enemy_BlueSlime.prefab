@@ -178,6 +178,7 @@ MonoBehaviour:
     stopJump: 0
     IsGrounded: 1
   entity_obj: {fileID: 0}
+  jumpTime: 0
   enemy_model: {fileID: 0}
 --- !u!50 &2973200243344065671
 Rigidbody2D:
@@ -213,9 +214,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.7}
+  m_Offset: {x: 0, y: 0.75}
   serializedVersion: 2
-  m_Radius: 0.7
+  m_Radius: 0.65
 --- !u!114 &4634524544544161354
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -147,17 +147,18 @@ public class PlayerController : EntityController
 
                                     if (enemy.model.state == EntityModel.EntityState.DEFAULT)
                                     {
-                                        enemy.model.rigid.velocity = Vector2.zero;
-                                        enemy.SetHp(1, player_model.hp, DAMAGETYPE.DAMAGE);
+                                        //enemy.model.rigid.velocity = Vector2.zero;
+                                        //enemy.SetHp(1, player_model.hp, DAMAGETYPE.DAMAGE);
 
-                                        if (enemy.model.jumpState == EntityModel.EntityJumpState.Jumping)
-                                        {
-                                            float tmp = 0;
-                                            enemy.UpdateJumpState(EntityModel.EntityJumpState.InFlight, enemy.model, ref tmp);
-                                        }
+                                        //if (enemy.model.jumpState == EntityModel.EntityJumpState.Jumping)
+                                        //{
+                                        //    float tmp = 0;
+                                        //    enemy.UpdateJumpState(EntityModel.EntityJumpState.InFlight, enemy.model, ref tmp);
+                                        //}
 
-                                        UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
-                                        UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
+                                        //UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
+                                        //UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
+                                        Debug.Log("¹¹¿ä?");
                                         isEnemyjump = true;
                                     }
                                 }
@@ -167,7 +168,7 @@ public class PlayerController : EntityController
         }
 
         if (!isEnemyjump)
-            Hit(model, model.entity_col, model.entity_col_src);
+            Hit(model, this, model.entity_col_src);
 
         base.FixedUpdate();
     }

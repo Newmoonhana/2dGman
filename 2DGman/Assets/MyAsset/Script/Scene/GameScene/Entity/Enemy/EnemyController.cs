@@ -18,6 +18,7 @@ public class EnemyController : EntityController
         InvokeRepeating("Jumping", enemy_model.jumpOnTime, enemy_model.jumpLoopTime);
         InvokeRepeating("Downing", enemy_model.downOnTime, enemy_model.downLoopTime);
 
+
         base.Start();
     }
 
@@ -26,6 +27,7 @@ public class EnemyController : EntityController
         if (model.state == EntityModel.EntityState.DIE)
             return;
         Move(model, (1 << LayerMask.NameToLayer("Land")) + (1 << LayerMask.NameToLayer("Enemy")) + (1 << LayerMask.NameToLayer("EnemyWallZone")));
+        Hit(model, this, model.entity_col_src);
 
         base.FixedUpdate();
     }

@@ -30,6 +30,8 @@ public abstract class EnemyModel_None : EnemyModel
     protected virtual void Awake()
     {
         controller = GetComponent<EnemyController>();
+        EntityIsHitStrategyFactory ef_ih = new IsHitFactory();
+        controller.model.ishitStrategy = ef_ih.CreateIsHitStrategy("enemy");
     }
 }
 
@@ -43,5 +45,7 @@ public abstract class EnemyModel_Slime : EnemyModel
     protected virtual void Awake()
     {
         controller = GetComponent<EnemyController>();
+        EntityIsHitStrategyFactory ef_ih = new IsHitFactory();
+        controller.model.ishitStrategy = ef_ih.CreateIsHitStrategy("enemy");
     }
 }

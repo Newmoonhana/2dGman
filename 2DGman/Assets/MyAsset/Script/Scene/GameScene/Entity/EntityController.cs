@@ -135,7 +135,7 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
     [SerializeField] GameObject entity_obj;
     public GameObject Entity_obj { get { return model.entity_obj; } set { entity_obj = value; model.SetEntityObject(value); } }
 
-    protected float jumpTime = 0;
+    [HideInInspector] public float jumpTime = 0;
 
     public virtual bool SetHp(float _hp, float _hpMax, DAMAGETYPE _type) //hp가 0 이하일 경우 false
     {
@@ -228,7 +228,8 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
                         {
                             if (model.entity_obj.layer == LayerMask.NameToLayer("Player"))
                             {
-                                GameSceneData.player_controller.SetHp(PlayerController.player_model.hp, PlayerController.player_model.hp, DAMAGETYPE.DAMAGE);
+                                Hit(model, this, model.entity_col_src);
+                                //GameSceneData.player_controller.SetHp(PlayerController.player_model.hp, PlayerController.player_model.hp, DAMAGETYPE.DAMAGE);
                             }
                             else
                             {
@@ -301,10 +302,11 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
         }
     }
 
-    public void Hit(EntityModel m, Collider2D _col, IsColliderHit _col_src)
+    public void Hit(EntityModel m, EntityController con, IsColliderHit _col_src)
     {
         if (m.state != EntityModel.EntityState.HURT)
             if (m.state != EntityModel.EntityState.DIE)
-                m.ishitStrategy.Hit(m, _col, _col_src);
+                if (m.ishitStrategy != null)
+                    m.ishitStrategy.Hit(m, con, _col_src);
     }
 }

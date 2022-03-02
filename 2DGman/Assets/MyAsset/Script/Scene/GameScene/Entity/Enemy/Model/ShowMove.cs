@@ -22,5 +22,6 @@ public class ShowMove : EnemyModel_None
 
         EntityMovableStrategyFactory ef = new LandFactory();
         controller.model.movableStrategy = ef.CreateMovableStrategy(moveable_name);
+        controller.model.ishitStrategy = null;
     }
 }

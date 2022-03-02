@@ -17,6 +17,10 @@ public class IsHitFactory : EntityIsHitStrategyFactory
         {
             strategy = new PlayerIsHit();
         }
+        else if (_type.Equals("enemy"))
+        {
+            strategy = new EnemyIsHit();
+        }
         else
             Debug.LogWarning("동작 전략 패턴이 할당되지 않았습니다.");
 
