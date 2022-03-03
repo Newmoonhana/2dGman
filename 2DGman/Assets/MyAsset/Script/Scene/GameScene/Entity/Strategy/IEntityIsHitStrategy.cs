@@ -76,19 +76,22 @@ public class IsJumpPoleHit : IsHitStrategy //플레이어를 점프시키는 엔티티가 플레
                     {
                         EnemyController enemy = model.foot_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>();
 
-                        if (enemy.model.state == EntityModel.EntityState.DEFAULT)
+                        if (enemy != null)
                         {
-                            enemy.model.rigid.velocity = Vector2.zero;
-                            enemy.SetHp(1, enemy.model.hp_max, DAMAGETYPE.DAMAGE);
-
-                            if (enemy.model.jumpState == EntityModel.EntityJumpState.Jumping)
+                            if (enemy.model.state == EntityModel.EntityState.DEFAULT)
                             {
-                                float tmp = 0;
-                                enemy.UpdateJumpState(EntityModel.EntityJumpState.InFlight, enemy.model, ref tmp);
-                            }
+                                enemy.model.rigid.velocity = Vector2.zero;
+                                enemy.SetHp(1, enemy.model.hp_max, DAMAGETYPE.DAMAGE);
 
-                            GameSceneData.player_controller.UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref GameSceneData.player_controller.jumpTime);
-                            GameSceneData.player_controller.UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref GameSceneData.player_controller.jumpTime);
+                                if (enemy.model.jumpState == EntityModel.EntityJumpState.Jumping)
+                                {
+                                    float tmp = 0;
+                                    enemy.UpdateJumpState(EntityModel.EntityJumpState.InFlight, enemy.model, ref tmp);
+                                }
+
+                                GameSceneData.player_controller.UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref GameSceneData.player_controller.jumpTime);
+                                GameSceneData.player_controller.UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref GameSceneData.player_controller.jumpTime);
+                            }
                         }
                     }
     }
