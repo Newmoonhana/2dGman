@@ -5052,6 +5052,7 @@ MonoBehaviour:
     stopJump: 0
     IsGrounded: 1
   entity_obj: {fileID: 1359504176}
+  jumpTime: 0
   player_view: {fileID: 942497623578542650}
 --- !u!1001 &254130836
 PrefabInstance:
@@ -7729,9 +7730,8 @@ Transform:
   - {fileID: 722750236}
   - {fileID: 674499251}
   - {fileID: 2020664649}
-  - {fileID: 1152633983}
-  - {fileID: 98147129}
   - {fileID: 275657023}
+  - {fileID: 98147129}
   - {fileID: 58378842}
   - {fileID: 1547288628}
   - {fileID: 33818645}
@@ -7790,18 +7790,13 @@ Transform:
   - {fileID: 1932390599}
   - {fileID: 472325221}
   - {fileID: 1438265416}
+  - {fileID: 1152633983}
   - {fileID: 431530618}
-  - {fileID: 2037471280}
-  - {fileID: 912831361}
-  - {fileID: 680439858}
-  - {fileID: 1967166062}
-  - {fileID: 1912317795}
-  - {fileID: 1085688104}
   - {fileID: 570586063}
   - {fileID: 732694480}
-  - {fileID: 1936885730}
+  - {fileID: 680439858}
   - {fileID: 202792550}
-  - {fileID: 2009628031}
+  - {fileID: 1912317795}
   - {fileID: 116320590}
   - {fileID: 1081422788}
   - {fileID: 2126239772}
@@ -7832,6 +7827,7 @@ Transform:
   - {fileID: 1379380584}
   - {fileID: 278807048}
   - {fileID: 1699504222}
+  - {fileID: 912831361}
   - {fileID: 1588837458}
   - {fileID: 1476017815}
   - {fileID: 2030964512}
@@ -7865,19 +7861,23 @@ Transform:
   - {fileID: 1466527668}
   - {fileID: 1233990382}
   - {fileID: 1749774959}
+  - {fileID: 1085688104}
   - {fileID: 495076286}
   - {fileID: 1859276874}
   - {fileID: 1825131495}
   - {fileID: 1013362181}
   - {fileID: 561704843}
   - {fileID: 766940574}
+  - {fileID: 2037471280}
   - {fileID: 94673273}
+  - {fileID: 2009628031}
   - {fileID: 351670954}
   - {fileID: 100221403}
   - {fileID: 722503658}
   - {fileID: 533489063}
   - {fileID: 1439766708}
   - {fileID: 2143454779}
+  - {fileID: 1967166062}
   - {fileID: 154433964}
   - {fileID: 220172591}
   - {fileID: 746897738}
@@ -7885,6 +7885,7 @@ Transform:
   - {fileID: 1631831162}
   - {fileID: 946522029}
   - {fileID: 844205065}
+  - {fileID: 1936885730}
   - {fileID: 136360358}
   - {fileID: 2004601759}
   - {fileID: 1737076982}
@@ -7949,10 +7950,10 @@ Transform:
   - {fileID: 894947313}
   - {fileID: 884418478}
   - {fileID: 1591433592}
+  - {fileID: 406382835}
   - {fileID: 28116018}
   - {fileID: 1779644886}
   - {fileID: 275755095}
-  - {fileID: 406382835}
   - {fileID: 531439878}
   - {fileID: 366115199}
   - {fileID: 211582464}

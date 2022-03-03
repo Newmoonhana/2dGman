@@ -181,64 +181,8 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
             }
         }
 
-        if (model.footcol != null)
-        {
-            if (model.foot_col_src.type == COLTYPE.COLLISION)
-            {
-                if (model.foot_col_src.other_col_COLLISION == null)
-                    return;
-                if (model.foot_col_src.state == ColHitState.Enter)
-                {
-
-                }
-                else if (model.foot_col_src.state == ColHitState.Stay)
-                {
-                    //땅 충돌 판정
-                    if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
-                    {
-                        if (model.jumpState == EntityModel.EntityJumpState.InFlight)
-                        {
-                            model.rigid.velocity = Vector3.zero;
-                            UpdateJumpState(EntityModel.EntityJumpState.Landed, model, ref jumpTime);
-                        }
-                    }
-                }
-                else if (model.foot_col_src.state == ColHitState.Exit)
-                {
-                    //땅 충돌 판정(추락)
-                    if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Land") || model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Platform"))
-                    {
-
-                        if (model.jumpState == EntityModel.EntityJumpState.Grounded)
-                        {
-                            UpdateJumpState(EntityModel.EntityJumpState.InFlight, model, ref jumpTime);
-                        }
-                    }
-                }
-            }
-
-            if (model.foot_col_src.type == COLTYPE.TRIGGER)
-            {
-                if (model.foot_col_src.other_col_TRIGGER == null)
-                    return;
-                if (model.foot_col_src.state == ColHitState.Enter)
-                {
-                    if (model.foot_col_src.other_col_TRIGGER.gameObject.layer == LayerMask.NameToLayer("Dead Zone"))  //데드 존(추락사) 판정
-                        if (model.type == EntityModel.ENTITYTYPE.PLAYER || model.type == EntityModel.ENTITYTYPE.ENEMY)
-                        {
-                            if (model.entity_obj.layer == LayerMask.NameToLayer("Player"))
-                            {
-                                Hit(model, this, model.entity_col_src);
-                                //GameSceneData.player_controller.SetHp(PlayerController.player_model.hp, PlayerController.player_model.hp, DAMAGETYPE.DAMAGE);
-                            }
-                            else
-                            {
-                                SetHp(model.hp_max, model.hp_max, DAMAGETYPE.DAMAGE);
-                            }
-                        }
-                }
-            }
-        }
+        Hit(model, this, model.foot_col_src);
+        Hit(model, this, model.entity_col_src);
     }
 
     protected virtual void UpdateState(EntityModel.EntityState _state)

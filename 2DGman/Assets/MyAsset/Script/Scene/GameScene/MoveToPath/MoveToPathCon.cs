@@ -57,7 +57,7 @@ public class MoveToPathCon : MonoBehaviour
             }
             
             currpoint = tns.position;
-            f = GameSceneData.GetSpeed(waypoints[waypointsIndex].speed) * Time.fixedDeltaTime;    // 1프레임 당 움직임 크기
+            f = GameSceneData.GetSpeed(waypoints[waypointsIndex].speed) * 5 * Time.fixedDeltaTime;    // 1프레임 당 움직임 크기
             tns.position = Vector2.MoveTowards(currpoint, waypoints[waypointsIndex].waypoint, f);
             
             if (Vector2.Distance(waypoints[waypointsIndex].waypoint, currpoint) == 0)    //현재 좌표 = 이동 좌표(waypoints[waypointsIndex])라면 인덱스 증가
@@ -98,7 +98,7 @@ public class MoveToPathCon : MonoBehaviour
                 return;
             }
             currpoint = tns.position;
-            f = GameSceneData.GetSpeed(waypoints[waypointsIndex].speed) * Time.fixedDeltaTime;    // 1프레임 당 움직임 크기
+            f = GameSceneData.GetSpeed(waypoints[waypointsIndex].speed) * 5 * Time.fixedDeltaTime;    // 1프레임 당 움직임 크기
             tns.position = Vector2.MoveTowards(currpoint, waypoints[waypointsIndex].waypoint, f);
 
             if (Vector2.Distance(waypoints[waypointsIndex].waypoint, currpoint) == 0)    //현재 좌표 = 이동 좌표(waypoints[waypointsIndex])라면 인덱스 증가

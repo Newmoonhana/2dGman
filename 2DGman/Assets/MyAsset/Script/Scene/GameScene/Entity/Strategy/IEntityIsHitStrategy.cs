@@ -50,6 +50,40 @@ public class IsHitStrategy : IEntityIsHitStrategy
     public virtual void Hit(EntityModel model, EntityController con, IsColliderHit _col_src) { }
 }
 
+public class IsLandHit : IsHitStrategy
+{
+    public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
+    {
+        if (model.footcol != null)
+        {
+            //땅 충돌 판정
+            if (IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Stay, LayerMask.NameToLayer("Land"))
+            || IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Stay, LayerMask.NameToLayer("Platform")))
+            {
+                if (_col_src.other_col_COLLISION == null)
+                    return;
+
+                if (model.jumpState == EntityModel.EntityJumpState.InFlight)
+                {
+                    model.rigid.velocity = Vector3.zero;
+                    con.UpdateJumpState(EntityModel.EntityJumpState.Landed, model, ref con.jumpTime);
+                }
+            }
+
+            //땅 충돌 판정(추락)
+            if (IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Exit, LayerMask.NameToLayer("Land"))
+                || IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Exit, LayerMask.NameToLayer("Platform")))
+            {
+                if (_col_src.other_col_COLLISION == null)
+                    return;
+
+                if (model.jumpState == EntityModel.EntityJumpState.Grounded)
+                    con.UpdateJumpState(EntityModel.EntityJumpState.InFlight, model, ref con.jumpTime);
+            }
+        }
+    }
+}
+
 public class IsEnemyHit : IsHitStrategy //플레이어가 Enemy에 충돌
 {
     public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
@@ -122,6 +156,7 @@ public class PlayerIsHit : EntityIsHitStrategyList
 {
     public PlayerIsHit()
     {
+        strategy.Add(new IsLandHit());
         strategy.Add(new IsJumpPoleHit());
         strategy.Add(new IsEnemyHit());
         strategy.Add(new IsDeadZoneHit());
@@ -132,6 +167,15 @@ public class EnemyIsHit : EntityIsHitStrategyList
 {
     public EnemyIsHit()
     {
+        strategy.Add(new IsLandHit());
         strategy.Add(new IsDeadZoneHit());
+    }
+}
+
+public class DontDieEnemyIsHit : EntityIsHitStrategyList
+{
+    public DontDieEnemyIsHit()
+    {
+        strategy.Add(new IsLandHit());
     }
 }

@@ -127,48 +127,7 @@ public class PlayerController : EntityController
                     model.movedir = EntityModel.MOVEDIRTYPE.CENTER;
                 Move(model, (1 << LayerMask.NameToLayer("Land")));
             }
-
-        bool isEnemyjump = false;
-        if (model.foot_col_src.type == COLTYPE.COLLISION)
-        {
-            if (model.foot_col_src.state == ColHitState.Enter)
-            {
-                //자동 점프 판정 충돌 판정
-                if (model.foot_col_src.other_col_COLLISION.gameObject.tag == "jump pole")
-                {
-                    if (model.jumpState == EntityModel.EntityJumpState.Grounded || model.jumpState == EntityModel.EntityJumpState.InFlight)
-                    {
-                        //몬스터 충돌 판정(몬스터 밟고 점프)
-                        if (model.state != EntityModel.EntityState.HURT)
-                            if (model.state != EntityModel.EntityState.DIE)
-                                if (model.foot_col_src.other_col_COLLISION.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                                {
-                                    EnemyController enemy = model.foot_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>();
-
-                                    if (enemy.model.state == EntityModel.EntityState.DEFAULT)
-                                    {
-                                        //enemy.model.rigid.velocity = Vector2.zero;
-                                        //enemy.SetHp(1, player_model.hp, DAMAGETYPE.DAMAGE);
-
-                                        //if (enemy.model.jumpState == EntityModel.EntityJumpState.Jumping)
-                                        //{
-                                        //    float tmp = 0;
-                                        //    enemy.UpdateJumpState(EntityModel.EntityJumpState.InFlight, enemy.model, ref tmp);
-                                        //}
-
-                                        //UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
-                                        //UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref jumpTime);
-                                        Debug.Log("뭐요?");
-                                        isEnemyjump = true;
-                                    }
-                                }
-                    }
-                }
-            }
-        }
-
-        if (!isEnemyjump)
-            Hit(model, this, model.entity_col_src);
+        Hit(model, this, model.entity_col_src);
 
         base.FixedUpdate();
     }
