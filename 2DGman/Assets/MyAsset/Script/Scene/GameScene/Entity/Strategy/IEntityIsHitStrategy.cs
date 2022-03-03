@@ -4,7 +4,8 @@ using UnityEngine;
 
 public interface IEntityIsHitStrategy
 {
-    bool IsHit(EntityModel model, IsColliderHit _col_src, COLTYPE hit_type, ColHitState hit_state, int _layerMask);
+    bool IsHit(EntityModel model, IsColliderHit _col_src, COLTYPE hit_type, ColHitState hit_state, int _layerMask); //레이어로 체크
+    bool IsHit(EntityModel model, IsColliderHit _col_src, COLTYPE hit_type, ColHitState hit_state, string _tagMask); //태그로 체크
     void Hit(EntityModel model, EntityController con, IsColliderHit _col_src);
 }
 
@@ -28,6 +29,24 @@ public class IsHitStrategy : IEntityIsHitStrategy
             
         return false;
     }
+    public bool IsHit(EntityModel model, IsColliderHit _col_src, COLTYPE hit_type, ColHitState hit_state, string _tagMask)
+    {
+        if (_col_src.state == hit_state)
+        {
+            if (_col_src.type == COLTYPE.COLLISION)
+            {
+                if (string.Equals(_col_src.other_col_COLLISION.gameObject.tag, _tagMask))
+                    return true;
+            }
+            else if (_col_src.type == COLTYPE.TRIGGER)
+            {
+                if (string.Equals(_col_src.other_col_TRIGGER.gameObject.tag, _tagMask))
+                    return true;
+            }
+        }
+
+        return false;
+    }
     public virtual void Hit(EntityModel model, EntityController con, IsColliderHit _col_src) { }
 }
 
@@ -43,34 +62,35 @@ public class IsEnemyHit : IsHitStrategy //플레이어가 Enemy에 충돌
                 con.SetHp(1, model.hp_max, DAMAGETYPE.DAMAGE);
     }
 }
-public class IsFootPlayerHit : IsHitStrategy //플레이어를 점프시키는 엔티티가 플레이어 발에 충돌
+public class IsJumpPoleHit : IsHitStrategy //플레이어를 점프시키는 엔티티가 플레이어 발에 충돌
 {
     public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
     {
-        if (model.entity_obj.name == "Enemy")
-            if (_col_src.other_col_COLLISION != null)
-                if (_col_src.state == ColHitState.Enter)
-                    Debug.Log(model.entity_obj.name + " layer : " + _col_src.other_col_COLLISION.gameObject.name);
-        if (!IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Enter, LayerMask.NameToLayer("Foot_Player")))
+        if (!IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Stay, "jump pole"))
             return;
-
-        if (model.state == EntityModel.EntityState.DEFAULT)
-            if (model.entity_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>().model.state == EntityModel.EntityState.DEFAULT)
-            {
-                if (model.entity_obj.layer == LayerMask.NameToLayer("Enemy"))
-                {
-                    model.rigid.velocity = Vector2.zero;
-                    if (model.jumpState == EntityModel.EntityJumpState.Jumping)
+        
+        if (model.state == EntityModel.EntityState.DEFAULT || model.state == EntityModel.EntityState.UNBEAT)
+            if (model.jumpState == EntityModel.EntityJumpState.Grounded || model.jumpState == EntityModel.EntityJumpState.InFlight)
+                if (model.state != EntityModel.EntityState.HURT)
+                    if (model.state != EntityModel.EntityState.DIE)
                     {
-                        float tmp = 0;
-                        con.UpdateJumpState(EntityModel.EntityJumpState.InFlight, model, ref tmp);
-                    }
-                    con.SetHp(1, model.hp_max, DAMAGETYPE.DAMAGE);
-                }
+                        EnemyController enemy = model.foot_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>();
 
-                GameSceneData.player_controller.UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref GameSceneData.player_controller.jumpTime);
-                GameSceneData.player_controller.UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref GameSceneData.player_controller.jumpTime);
-            }
+                        if (enemy.model.state == EntityModel.EntityState.DEFAULT)
+                        {
+                            enemy.model.rigid.velocity = Vector2.zero;
+                            enemy.SetHp(1, enemy.model.hp_max, DAMAGETYPE.DAMAGE);
+
+                            if (enemy.model.jumpState == EntityModel.EntityJumpState.Jumping)
+                            {
+                                float tmp = 0;
+                                enemy.UpdateJumpState(EntityModel.EntityJumpState.InFlight, enemy.model, ref tmp);
+                            }
+
+                            GameSceneData.player_controller.UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref GameSceneData.player_controller.jumpTime);
+                            GameSceneData.player_controller.UpdateJumpState(EntityModel.EntityJumpState.PrepareToJump, model, ref GameSceneData.player_controller.jumpTime);
+                        }
+                    }
     }
 }
 public class IsDeadZoneHit : IsHitStrategy  //엔티티가 낙사
@@ -85,14 +105,12 @@ public class IsDeadZoneHit : IsHitStrategy  //엔티티가 낙사
     }
 }
 
-public class EntityIsHitStrategyList  //옵저버 패턴으로 움직임 관리
+public class EntityIsHitStrategyList : StrategyList<IEntityIsHitStrategy>  //옵저버 패턴으로 움직임 관리
 {
-    public List<IEntityIsHitStrategy> strategy = new List<IEntityIsHitStrategy>();
-
     public virtual void Hit(EntityModel m, EntityController con, IsColliderHit _col_src)
     {
-        if (m.ishitStrategy != null)
-            foreach (IEntityIsHitStrategy item in m.ishitStrategy.strategy)
+        if (IsNotNull())
+            foreach (IEntityIsHitStrategy item in strategy)
                 item.Hit(m, con, _col_src);
     }
     
@@ -101,6 +119,7 @@ public class PlayerIsHit : EntityIsHitStrategyList
 {
     public PlayerIsHit()
     {
+        strategy.Add(new IsJumpPoleHit());
         strategy.Add(new IsEnemyHit());
         strategy.Add(new IsDeadZoneHit());
     }
@@ -110,7 +129,6 @@ public class EnemyIsHit : EntityIsHitStrategyList
 {
     public EnemyIsHit()
     {
-        strategy.Add(new IsFootPlayerHit());
         strategy.Add(new IsDeadZoneHit());
     }
 }

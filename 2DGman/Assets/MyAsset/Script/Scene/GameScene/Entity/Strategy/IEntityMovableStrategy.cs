@@ -158,7 +158,7 @@ public class DefaultMoveable : IEntityMovableStrategy
                 model.IsGrounded = false;
                 model.entity_ani.SetBool("_grounded", false);
                 model.entity_ani.SetFloat("_velocityY", -1);
-                model.footcol.enabled = true;
+                //model.footcol.enabled = true;
                 break;
             case EntityModel.EntityJumpState.Landed:
                 UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
@@ -275,26 +275,24 @@ public class IsInputPlayer : DefaultMoveable
     }
 }
 
-public class EntityMovableStrategyList  //옵저버 패턴으로 움직임 관리
+public class EntityMovableStrategyList : StrategyList<IEntityMovableStrategy>  //옵저버 패턴으로 움직임 관리
 {
-    public List<IEntityMovableStrategy> strategy = new List<IEntityMovableStrategy>();
-
     public virtual void Move(EntityModel m, int _layoutMask)
     {
-        if (m.movableStrategy != null)
-            foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
+        if (IsNotNull())
+            foreach (IEntityMovableStrategy item in strategy)
                 item.Move(m, _layoutMask);
     }
     public void Jump(EntityModel m, ref float j)
     {
-        if (m.movableStrategy != null)
-            foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
+        if (IsNotNull())
+            foreach (IEntityMovableStrategy item in strategy)
                 item.Jump(m, ref j);
     }
     public void Down(EntityModel m)
     {
-        if (m.movableStrategy != null)
-            foreach (IEntityMovableStrategy item in m.movableStrategy.strategy)
+        if (IsNotNull())
+            foreach (IEntityMovableStrategy item in strategy)
                 item.Down(m);
     }
 }
