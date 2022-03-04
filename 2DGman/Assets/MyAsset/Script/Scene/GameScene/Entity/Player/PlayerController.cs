@@ -127,7 +127,6 @@ public class PlayerController : EntityController
                     model.movedir = EntityModel.MOVEDIRTYPE.CENTER;
                 Move(model, (1 << LayerMask.NameToLayer("Land")));
             }
-        Hit(model, this, model.entity_col_src);
 
         base.FixedUpdate();
     }

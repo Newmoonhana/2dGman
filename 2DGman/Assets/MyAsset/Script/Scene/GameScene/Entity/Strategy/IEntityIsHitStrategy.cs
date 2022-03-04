@@ -15,15 +15,24 @@ public class IsHitStrategy : IEntityIsHitStrategy
     {
         if (_col_src.state == hit_state)
         {
+            if (COLTYPE.TRIGGER == hit_type)
+                if (_col_src.other_col_TRIGGER != null)
+                    if (_layerMask == LayerMask.NameToLayer("Token"))
+                    {
+                        Debug.Log(_col_src.type + ", " + _col_src.other_col_TRIGGER.transform.parent.parent.name);
+                    }
+
             if (_col_src.type == COLTYPE.COLLISION)
             {
-                if (_col_src.other_col_COLLISION.gameObject.layer == _layerMask)
-                    return true;
+                if (_col_src.other_col_COLLISION != null)
+                    if (_col_src.other_col_COLLISION.gameObject.layer == _layerMask)
+                        return true;
             }
             else if (_col_src.type == COLTYPE.TRIGGER)
             {
-                if (_col_src.other_col_TRIGGER.gameObject.layer == _layerMask)
-                    return true;
+                if (_col_src.other_col_TRIGGER != null)
+                    if (_col_src.other_col_TRIGGER.gameObject.layer == _layerMask)
+                        return true;
             }
         }
             
@@ -56,6 +65,9 @@ public class IsLandHit : IsHitStrategy
     {
         if (model.footcol != null)
         {
+            if (model.foot_col_src != _col_src)
+                return;
+
             //땅 충돌 판정
             if (IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Stay, LayerMask.NameToLayer("Land"))
             || IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Stay, LayerMask.NameToLayer("Platform")))
@@ -88,6 +100,9 @@ public class IsEnemyHit : IsHitStrategy //플레이어가 Enemy에 충돌
 {
     public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
     {
+        if (model.entity_col_src != _col_src)
+            return;
+
         if (!IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Stay, LayerMask.NameToLayer("Enemy")))
             return;
         
@@ -96,10 +111,32 @@ public class IsEnemyHit : IsHitStrategy //플레이어가 Enemy에 충돌
                 con.SetHp(1, model.hp_max, DAMAGETYPE.DAMAGE);
     }
 }
+
+public class IsTokenHit : IsHitStrategy //플레이어가 Enemy에 충돌
+{
+    public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
+    {
+        if (model.entity_col_src != _col_src)
+            return;
+
+        if (!IsHit(model, _col_src, COLTYPE.TRIGGER, ColHitState.Enter, LayerMask.NameToLayer("Token")))
+            return;
+
+        if (model.state == EntityModel.EntityState.DEFAULT)
+            if (model.entity_col_src.other_col_TRIGGER.transform.parent.parent.GetComponent<TokenController>().model.state == EntityModel.EntityState.DEFAULT)
+            {
+                Debug.Log("Token Hit");
+            }
+    }
+}
+
 public class IsJumpPoleHit : IsHitStrategy //플레이어를 점프시키는 엔티티가 플레이어 발에 충돌
 {
     public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
     {
+        if (model.foot_col_src != _col_src)
+            return;
+
         if (!IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Stay, "jump pole"))
             return;
         
@@ -108,7 +145,7 @@ public class IsJumpPoleHit : IsHitStrategy //플레이어를 점프시키는 엔티티가 플레
                 if (model.state != EntityModel.EntityState.HURT)
                     if (model.state != EntityModel.EntityState.DIE)
                     {
-                        EnemyController enemy = model.foot_col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>();
+                        EnemyController enemy = _col_src.other_col_COLLISION.gameObject.GetComponent<EnemyController>();
 
                         if (enemy != null)
                         {
@@ -134,6 +171,9 @@ public class IsDeadZoneHit : IsHitStrategy  //엔티티가 낙사
 {
     public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
     {
+        if (model.entity_col_src != _col_src)
+            return;
+
         if (!IsHit(model, _col_src, COLTYPE.TRIGGER, ColHitState.Enter, LayerMask.NameToLayer("Dead Zone")))
             return;
 
@@ -156,6 +196,7 @@ public class PlayerIsHit : EntityIsHitStrategyList
 {
     public PlayerIsHit()
     {
+        strategy.Add(new IsTokenHit());
         strategy.Add(new IsLandHit());
         strategy.Add(new IsJumpPoleHit());
         strategy.Add(new IsEnemyHit());

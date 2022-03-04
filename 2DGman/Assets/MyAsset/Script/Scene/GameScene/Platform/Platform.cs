@@ -51,7 +51,7 @@ public class Platform : MonoBehaviour
                 playerCheck = true;
             }
             else
-                con = collision.collider.transform.parent.GetComponent<EntityController>();
+                con = collision.collider.transform.parent.parent.GetComponent<EntityController>();
 
             if (con.model.entity_obj.activeSelf)
                 con.model.entity_tns.parent = transform;
@@ -68,7 +68,7 @@ public class Platform : MonoBehaviour
                 playerCheck = false;
             }
             else
-                con = collision.collider.transform.parent.GetComponent<EntityController>();
+                con = collision.collider.transform.parent.parent.GetComponent<EntityController>();
 
             if (con.model.entity_obj.activeSelf)
                 con.model.entity_tns.parent = con.model.parent_tns;

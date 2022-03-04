@@ -85,9 +85,9 @@ public class EntityModel
         entity_tns = entity_obj.transform;
         
         entity_ani = entity_obj.GetComponent<Animator>();
-        entity_col = entity_obj.GetComponent<Collider2D>();
         rigid = entity_obj.GetComponent<Rigidbody2D>();
-        entity_col_src = entity_col.GetComponent<IsColliderHit>();
+
+
 
         if (entity_tns.childCount >= 1)
         {
@@ -97,11 +97,19 @@ public class EntityModel
             if (entity_tns.childCount >= 2)
             {
                 if (entity_tns.GetChild(1) != null)
-                    if (entity_tns.GetChild(1).tag == "foot")
+                {
+                    entity_col = entity_tns.GetChild(1).GetChild(0).GetComponent<Collider2D>();
+                    entity_col_src = entity_col.GetComponent<IsColliderHit>();
+
+                    if (entity_tns.GetChild(1).childCount >= 2)
                     {
-                        footcol = entity_tns.GetChild(1).GetComponent<Collider2D>();
-                        foot_col_src = footcol.GetComponent<IsColliderHit>();
+                        if (entity_tns.GetChild(1).GetChild(1).tag == "foot")
+                        {
+                            footcol = entity_tns.GetChild(1).GetChild(1).GetComponent<Collider2D>();
+                            foot_col_src = footcol.GetComponent<IsColliderHit>();
+                        }
                     }
+                }
             }
         }
 
