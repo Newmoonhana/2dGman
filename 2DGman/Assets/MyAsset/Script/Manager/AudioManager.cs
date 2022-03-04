@@ -19,6 +19,7 @@ public class AudioManagerModel
     {
         [SerializeField] public string name;
         [SerializeField] public AUDIOTYPE type; // 재생할 오디오 파일의 타입
+        [SerializeField] public float volume = 1;   //오디오 재생 볼륨
         [SerializeField] AudioClip clip = null;  // 재생할 오디오 파일
         public AudioClip Clip { get { return clip; } set { clip = value; name = value.name; } } //클립 변경 시 name도 같이 바뀌도록
         [SerializeField] public bool playOnAwake = false; // 씬 시작 시 재생.
@@ -28,6 +29,7 @@ public class AudioManagerModel
 
     //인게임에 있는 AudioSource
     public AudioSource bg_source, se_source;
+    public float bg_volume = 1, se_volume = 1;
     //인게임 AudioSource에 현재 있는 클립 바로 수정 될 수 있도록 설정
     public AudioClip bg_clip { get { return bg_source.clip; } set { bg_source.clip = value; } }
     public AudioClip se_clip { get { return se_source.clip; } set { se_source.clip = value; } }
@@ -81,7 +83,9 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
 
         RefreshAudioFileList();
         model.bg_source = transform.GetChild((int)AudioManagerModel.AUDIOTYPE.BG).GetComponent<AudioSource>();
+        model.bg_volume = model.bg_source.volume;
         model.se_source = transform.GetChild((int)AudioManagerModel.AUDIOTYPE.SE).GetComponent<AudioSource>();
+        model.se_volume = model.se_source.volume;
     }
 
     /// <summary>
@@ -90,6 +94,7 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
     /// <param name="_file">audioFile_lst에 등록된 오디오 파일</param>
     public void Play(string _filename)
     {
+        float tmp_volume = 1;
         AudioManagerModel.AudioFile _file = GetAudioFile(_filename);
         if (_file == null)
             return;
@@ -98,9 +103,11 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
         {
             case AudioManagerModel.AUDIOTYPE.BG:
                 tmp_source = model.bg_source;
+                tmp_volume = model.bg_volume;
                 break;
             case AudioManagerModel.AUDIOTYPE.SE:
                 tmp_source = model.se_source;
+                tmp_volume = model.se_volume;
                 break;
             default:
                 Debug.LogWarning("AUDIOTYPE이 없는 종류입니다.");
@@ -109,7 +116,7 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
 
         if (_file.isOneShot)
         {
-            tmp_source.PlayOneShot(_file.Clip);
+            tmp_source.PlayOneShot(_file.Clip, tmp_volume * _file.volume);
         }
         else
         {
@@ -117,6 +124,7 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
                 if (tmp_source.isPlaying)
                     return;
             tmp_source.clip = _file.Clip;
+            tmp_source.volume = tmp_volume * _file.volume;
             tmp_source.playOnAwake = _file.playOnAwake;
             tmp_source.loop = _file.loop;
             tmp_source.Play();

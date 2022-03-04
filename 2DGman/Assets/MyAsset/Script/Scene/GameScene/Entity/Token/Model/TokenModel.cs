@@ -11,14 +11,17 @@ public abstract class TokenModel : MonoBehaviour
         COIN
     }
 
-    [SerializeField] protected TOKENTYPE type;
+    [SerializeField] public TOKENTYPE type;
     [SerializeField] protected string this_name;
 
     public TokenController controller;
+
+    public abstract void GetToken();
 }
 
 public abstract class CoinModel : TokenModel
 {
+    public int coinCount = 1;
     public CoinModel()
     {
         type = TOKENTYPE.COIN;
@@ -27,5 +30,14 @@ public abstract class CoinModel : TokenModel
     protected virtual void Awake()
     {
         controller = GetComponent<TokenController>();
+    }
+
+    public override void GetToken()
+    {
+        if (type != TOKENTYPE.COIN)
+            return;
+
+        GameSceneData.player_controller.Coin += coinCount;
+        controller.model.entity_obj.SetActive(false);
     }
 }

@@ -11,6 +11,7 @@ public class PlayerController : EntityController
     Color color_tmp;
 
     public int Life { get { return player_model.lifePoint; } set { player_model.lifePoint = value; player_view.OnLifeChanged(value); } }
+    public int Coin { get { return PlayerModel.coinCount; } set { SetCoin(value); } }
 
     public override bool SetHp(float _hp, float _hpMax, DAMAGETYPE _type) //hp가 0 이하일 경우 false
     {
@@ -25,6 +26,26 @@ public class PlayerController : EntityController
         }
         player_view.OnHpChanged(value, _hpMax, true);
         return base.SetHp(_hp, _hpMax, _type);
+    }
+    public void SetCoin(int _coin)
+    {
+        bool isPlus = false;
+        if (PlayerModel.coinCount < _coin)
+            isPlus = true;
+        PlayerModel.coinCount = _coin;
+
+        if (isPlus) //코인 추가
+        {
+            AudioManager.Instance.Play("Item3");
+            if (PlayerModel.coinCount >= 100)   //코인 100개 모을 시 라이프 상승
+            {
+                PlayerModel.coinCount -= 100;
+                Life += 1;
+                AudioManager.Instance.Play("Item2");
+            }
+        }
+        
+        player_view.OnCoinChanged(PlayerModel.coinCount);
     }
 
     protected override void UpdateState(EntityModel.EntityState _state)

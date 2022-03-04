@@ -17,7 +17,8 @@ public class EntityModel
         NONE,
         OBJECT,
         PLAYER,
-        ENEMY
+        ENEMY,
+        TOKEN
     }
 
     public enum EntityJumpState

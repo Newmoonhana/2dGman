@@ -123,10 +123,11 @@ public class IsTokenHit : IsHitStrategy //플레이어가 Enemy에 충돌
             return;
 
         if (model.state == EntityModel.EntityState.DEFAULT)
-            if (model.entity_col_src.other_col_TRIGGER.transform.parent.parent.GetComponent<TokenController>().model.state == EntityModel.EntityState.DEFAULT)
-            {
-                Debug.Log("Token Hit");
-            }
+        {
+            TokenController token = model.entity_col_src.other_col_TRIGGER.transform.parent.parent.GetComponent<TokenController>();
+            if (token.model.state == EntityModel.EntityState.DEFAULT)
+                token.token_model.GetToken();
+        }
     }
 }
 

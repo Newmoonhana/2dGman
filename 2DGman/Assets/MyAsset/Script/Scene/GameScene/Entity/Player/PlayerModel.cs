@@ -23,6 +23,8 @@ public abstract class PlayerModel
     public SPEEDTYPE speed_dash;
     public float jumpPower;
     public float jumpTimeLimit;
+
+    public static int coinCount = 0;
 }
 
 public class DefaultPC : PlayerModel

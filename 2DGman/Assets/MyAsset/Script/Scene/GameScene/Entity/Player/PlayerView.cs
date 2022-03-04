@@ -61,6 +61,11 @@ public class PlayerView : MonoBehaviour
         hpIcon_sd.value = _hp;
     }
 
+    public void OnCoinChanged(int _coin)
+    {
+        coinText.text = $"Coin x {_coin}";
+    }
+
     public void IsHurtEnd()
     {
         player_con.IsHurtEnd();
