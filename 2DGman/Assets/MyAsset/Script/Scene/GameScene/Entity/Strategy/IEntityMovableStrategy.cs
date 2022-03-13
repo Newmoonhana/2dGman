@@ -12,11 +12,7 @@ public interface IEntityMovableStrategy
 
 public class DefaultMoveable : IEntityMovableStrategy
 {
-    //tmp
-    Vector2 vec2;
-    RaycastHit2D[] hit;
-    float f;
-    int i;
+    Vector2 vec2; RaycastHit2D[] hit; float f; int i;   //tmp
 
     protected bool IsForwardHit(EntityModel model, int _layerMask)
     {
@@ -52,7 +48,6 @@ public class DefaultMoveable : IEntityMovableStrategy
         }
         return false;
     }   //바라보는 방향에 충돌하는 물체 확인
-
     public virtual void Move(EntityModel model, int _layerMask)
     {
         //if (jumpState == EntityJumpState.Grounded)    //점프 후 방향 전환 안되는 점프 원하면 이 코드 사용하면 됨(이 프로젝트에선 필요 없어서 주석 처리)
@@ -108,7 +103,6 @@ public class DefaultMoveable : IEntityMovableStrategy
         if (model.entity_ani != null)
             model.entity_ani.SetFloat("_velocityX", Mathf.Abs((int)model.movedir - 1));
     }
-
     public virtual void Jump(EntityModel model, ref float jumpTime)
     {
         switch (model.jumpState)
@@ -133,7 +127,6 @@ public class DefaultMoveable : IEntityMovableStrategy
                 return;
         }
     }
-
     public virtual void UpdateJumpState(EntityModel.EntityJumpState _state, EntityModel model, ref float jumpTime)
     {
         model.jumpState = _state;
@@ -173,7 +166,6 @@ public class DefaultMoveable : IEntityMovableStrategy
                 break;
         }
     }
-
     public virtual void Down(EntityModel model)
     {
         if (model.foot_col_src.type == COLTYPE.COLLISION)   //중복 하강 방지 코드
@@ -206,7 +198,6 @@ public class IsMove : DefaultMoveable
     public override void Jump(EntityModel m, ref float j) { }
     public override void Down(EntityModel model) { }
 }
-
 public class IsFollowPlayer : DefaultMoveable
 {
     //플레이어의 현재 방향 체킹.
@@ -235,20 +226,17 @@ public class IsFollowPlayer : DefaultMoveable
     public override void Jump(EntityModel m, ref float j) { }
     public override void Down(EntityModel model) { }
 }
-
 public class IsJump : DefaultMoveable
 {
     public override void Move(EntityModel m, int l) { }
     public override void Down(EntityModel model) { }
 }
-
 public class IsDown : DefaultMoveable
 {
     public override void Move(EntityModel m, int l) { }
     public override void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j) { }
     public override void Jump(EntityModel m, ref float j) { }
 }
-
 public class IsInputPlayer : DefaultMoveable
 {
     public override void Move(EntityModel model, int _layerMask)

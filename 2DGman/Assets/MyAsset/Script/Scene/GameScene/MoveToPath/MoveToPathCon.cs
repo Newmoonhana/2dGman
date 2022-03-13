@@ -72,7 +72,7 @@ public class MoveToPathCon : MonoBehaviour
                     }
                     else
                     {
-                            waypointsIndex = 0;
+                        waypointsIndex = 0;
                     }
                     if (loopcount > 0)
                         loopcount--;

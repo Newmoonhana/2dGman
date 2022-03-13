@@ -6,8 +6,7 @@ using System.Linq;
 [CanEditMultipleObjects]
 public class MoveToPathConEditor : Editor
 {
-    //tmp
-    Vector2 vec2;
+    Vector2 vec2;   //tmp
 
     MoveToPathCon script;
     SerializedProperty tns, currpoint, waypoints, loopcount, isReverse;

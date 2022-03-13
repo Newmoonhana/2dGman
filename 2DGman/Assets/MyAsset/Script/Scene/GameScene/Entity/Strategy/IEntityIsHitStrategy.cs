@@ -88,7 +88,6 @@ public class IsLandHit : IsHitStrategy
         }
     }
 }
-
 public class IsEnemyHit : IsHitStrategy //플레이어가 Enemy에 충돌
 {
     public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
@@ -107,7 +106,6 @@ public class IsEnemyHit : IsHitStrategy //플레이어가 Enemy에 충돌
                 con.SetHp(1, model.hp_max, DAMAGETYPE.DAMAGE);
     }
 }
-
 public class IsTokenHit : IsHitStrategy //플레이어가 Token에 충돌
 {
     public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
@@ -129,7 +127,6 @@ public class IsTokenHit : IsHitStrategy //플레이어가 Token에 충돌
         }
     }
 }
-
 public class IsJumpPoleHit : IsHitStrategy //플레이어를 점프시키는 엔티티가 플레이어 발에 충돌
 {
     public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)

@@ -37,8 +37,8 @@ public class LandFactory : EntityMovableStrategyFactory
         {
             strategy = new InputPlayer();
         }
-        else
-            Debug.LogWarning("동작 전략 패턴이 할당되지 않았습니다.");
+        //else
+            //Debug.LogWarning("동작 전략 패턴이 할당되지 않았습니다.");
 
         return strategy;
     }

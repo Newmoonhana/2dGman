@@ -17,7 +17,7 @@ public abstract class PlayerModel
     public Transform player_tns;
     public PlayerController playerCon_src;
     public float hp = 3;
-    public int lifePoint = 3;
+    public int lifePoint = 1;
 
     public SPEEDTYPE speed;
     public SPEEDTYPE speed_dash;

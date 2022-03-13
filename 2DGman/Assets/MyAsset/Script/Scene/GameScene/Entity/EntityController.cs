@@ -78,7 +78,7 @@ public class EntityModel
     {
         if (_obj == null)
         {
-            Debug.LogWarning("Entity Model에 _obj가 대입되지 못했습니다.");
+            //Debug.LogWarning("Entity Model에 _obj가 대입되지 못했습니다.");
             return;
         }
             

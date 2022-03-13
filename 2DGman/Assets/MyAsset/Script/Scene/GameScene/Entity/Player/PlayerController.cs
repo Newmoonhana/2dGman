@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 // [Controller]
 public class PlayerController : EntityController
 {
-    public static PlayerModel player_model = new DefaultPC();
+    public static PlayerModel player_model;
     public PlayerView player_view;
     //tmp
     Color color_tmp;
@@ -82,7 +83,7 @@ public class PlayerController : EntityController
                 if (model.entity_ani != null)
                     model.entity_ani.SetTrigger("_victory");
                 GameSceneData.clearCanvas_obj.SetActive(true);
-                GameSceneData.clearCanvas_obj.transform.GetChild(0).GetComponent<TextMesh>().text = "\nClear!";
+                GameSceneData.clearCanvas_obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "\nClear!";
                 break;
         }
     }
@@ -117,6 +118,7 @@ public class PlayerController : EntityController
 
     protected override void Start()
     {
+        player_model = new DefaultPC();
         player_view.onInit(Life, model.hp, player_model.hp);
         player_model.player_tns = GameObject.Find("Player").transform;
         player_model.playerCon_src = GameSceneData.player_controller;

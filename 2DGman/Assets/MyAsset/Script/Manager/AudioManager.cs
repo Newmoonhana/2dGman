@@ -59,8 +59,8 @@ public class AudioManager : MonoBehaviour
             if (model.audioFile_lst[i].name == _name)
                 return model.audioFile_lst[i];
         }
-        if (_name != null)
-            Debug.LogWarning("존재하지 않는 오디오 파일입니다.");
+        //if (_name != null)
+       //     Debug.LogWarning("존재하지 않는 오디오 파일입니다.");
         return null;
     }
 
@@ -112,7 +112,7 @@ public class AudioManager : MonoBehaviour
                 tmp_volume = model.se_volume;
                 break;
             default:
-                Debug.LogWarning("AUDIOTYPE이 없는 종류입니다.");
+                //Debug.LogWarning("AUDIOTYPE이 없는 종류입니다.");
                 return;
         }
 
@@ -148,7 +148,7 @@ public class AudioManager : MonoBehaviour
                 tmp_source = model.se_source;
                 break;
             default:
-                Debug.LogWarning("AUDIOTYPE이 없는 종류입니다.");
+                //Debug.LogWarning("AUDIOTYPE이 없는 종류입니다.");
                 return;
         }
 

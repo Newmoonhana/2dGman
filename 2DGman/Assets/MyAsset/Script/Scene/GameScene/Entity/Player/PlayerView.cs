@@ -7,9 +7,6 @@ using UnityEngine.UI;
 [System.Serializable]
 public class PlayerView : MonoBehaviour
 {
-    //tmp
-    int i;
-
     public PlayerController player_con;
     public Text lifeText;   //라이프 표시
     public Text coinText;   //먹은 코인 개수 표시
