@@ -175,6 +175,20 @@ public class IsDeadZoneHit : IsHitStrategy  //엔티티가 낙사
             con.SetHp(model.hp, model.hp_max, DAMAGETYPE.DAMAGE);
     }
 }
+public class IsGoalHit : IsHitStrategy  //골에 충돌
+{
+    public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
+    {
+        if (model.entity_col_src != _col_src)
+            return;
+
+        if (!IsHit(model, _col_src, COLTYPE.TRIGGER, ColHitState.Enter, LayerMask.NameToLayer("Goal")))
+            return;
+
+        if (model.state != EntityModel.EntityState.HURT || model.state != EntityModel.EntityState.DIE)
+            Debug.Log("골!");
+    }
+}
 
 public class EntityIsHitStrategyList : StrategyList<IEntityIsHitStrategy>  //옵저버 패턴으로 움직임 관리
 {
@@ -190,6 +204,7 @@ public class PlayerIsHit : EntityIsHitStrategyList
 {
     public PlayerIsHit()
     {
+        strategy.Add(new IsGoalHit());
         strategy.Add(new IsTokenHit());
         strategy.Add(new IsLandHit());
         strategy.Add(new IsJumpPoleHit());

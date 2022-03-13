@@ -213,8 +213,12 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
                 break;
             case EntityModel.EntityState.HURT:
                 if (model.entity_ani != null)
+                {
                     model.entity_ani.SetTrigger("_hurt");
-                model.entity_col.enabled = false;
+                    model.entity_col.enabled = false;
+                }
+                else
+                    UpdateState(EntityModel.EntityState.DEFAULT);
                 break;
             case EntityModel.EntityState.DIE:
                 if (model.entity_ani != null)
