@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class GameManager : SingletonPattern_IsA_Mono<GameManager>
+public class GameManager : MonoBehaviour
 {
     //tmp
 
+    public static GameManager Instance;
     int _interval;
     public static WaitForSeconds waitforseconds_3f = new WaitForSeconds(3f);
 
     public void Awake()
     {
-        if (!DontDestroyInst(this))
-            return;
+        Instance = this;
+        //if (!DontDestroyInst(this))
+        //    return;
 
         Screen.SetResolution(1920, 1080, Screen.fullScreen);
     }

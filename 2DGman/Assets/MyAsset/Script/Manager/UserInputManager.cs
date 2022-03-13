@@ -58,9 +58,15 @@ public class UserInputModel
     }
 }
 
-public class UserInputManager : SingletonPattern_IsA_Mono<UserInputManager>
+public class UserInputManager : MonoBehaviour
 {
+    public static UserInputManager Instance;
     public UserInputModel model;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Update()
     {

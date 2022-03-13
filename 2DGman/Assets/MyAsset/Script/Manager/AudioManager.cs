@@ -40,8 +40,9 @@ public class AudioManagerModel
 }
 
 // [ Controller ]
-public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
+public class AudioManager : MonoBehaviour
 {
+    public static AudioManager Instance;
     public AudioManagerModel model;
     //tmp
     int i;
@@ -78,8 +79,9 @@ public class AudioManager : SingletonPattern_IsA_Mono<AudioManager>
 
     private void Awake()
     {
-        if (!DontDestroyInst(this))
-            return;
+        Instance = this;
+        //if (!DontDestroyInst(this))
+        //    return;
 
         RefreshAudioFileList();
         model.bg_source = transform.GetChild((int)AudioManagerModel.AUDIOTYPE.BG).GetComponent<AudioSource>();

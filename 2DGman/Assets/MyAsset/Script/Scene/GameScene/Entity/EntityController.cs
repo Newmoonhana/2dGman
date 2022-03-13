@@ -200,7 +200,7 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
         Hit(model, this, model.entity_col_src);
     }
 
-    protected virtual void UpdateState(EntityModel.EntityState _state)
+    public virtual void UpdateState(EntityModel.EntityState _state)
     {
         model.state = _state;
 
@@ -232,7 +232,7 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
     public void UpdateJumpState(EntityModel.EntityJumpState s, EntityModel m, ref float j)
     {
         if (s == EntityModel.EntityJumpState.PrepareToJump)
-            if (m.state == EntityModel.EntityState.HURT || m.state == EntityModel.EntityState.DIE)
+            if (m.state != EntityModel.EntityState.DEFAULT && m.state != EntityModel.EntityState.UNBEAT)
                 return;
 
         if (m.movableStrategy != null)
@@ -242,9 +242,8 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
 
     public virtual void Move(EntityModel m, int _layoutMask)
     {
-        if (m.state != EntityModel.EntityState.HURT)
-            if (m.state != EntityModel.EntityState.DIE)
-                m.movableStrategy.Move(m, _layoutMask);
+        if (m.state == EntityModel.EntityState.DEFAULT || m.state == EntityModel.EntityState.UNBEAT)
+            m.movableStrategy.Move(m, _layoutMask);
     }
 
     public void Jump(EntityModel m, ref float j)
@@ -252,7 +251,7 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
         if (m.movableStrategy != null)
         {
             if (m.jumpState == EntityModel.EntityJumpState.PrepareToJump)
-                if (m.state == EntityModel.EntityState.HURT || m.state == EntityModel.EntityState.DIE)
+                if (m.state != EntityModel.EntityState.DEFAULT && m.state != EntityModel.EntityState.UNBEAT)
                     return;
             m.movableStrategy.Jump(m, ref j);
         }
@@ -262,8 +261,8 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
     {
         if (m.movableStrategy != null)
         {
-            if (m.state == EntityModel.EntityState.HURT || m.state == EntityModel.EntityState.DIE)
-                    return;
+            if (m.state != EntityModel.EntityState.DEFAULT && m.state != EntityModel.EntityState.UNBEAT)
+                return;
             if (model.foot_col_src.type == COLTYPE.COLLISION)   //중복 하강 방지 코드
                 if (model.foot_col_src.state == ColHitState.Stay)
                     if (model.jumpState == EntityModel.EntityJumpState.Grounded)
@@ -273,9 +272,7 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
 
     public void Hit(EntityModel m, EntityController con, IsColliderHit _col_src)
     {
-        if (m.state != EntityModel.EntityState.HURT)
-            if (m.state != EntityModel.EntityState.DIE)
-                if (m.ishitStrategy != null)
-                    m.ishitStrategy.Hit(m, con, _col_src);
+        if (m.ishitStrategy != null)
+            m.ishitStrategy.Hit(m, con, _col_src);
     }
 }

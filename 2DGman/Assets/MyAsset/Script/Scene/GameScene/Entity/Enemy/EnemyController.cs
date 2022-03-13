@@ -33,7 +33,7 @@ public class EnemyController : EntityController
         base.FixedUpdate();
     }
 
-    protected override void UpdateState(EntityModel.EntityState _state)
+    public override void UpdateState(EntityModel.EntityState _state)
     {
         base.UpdateState(_state);
         

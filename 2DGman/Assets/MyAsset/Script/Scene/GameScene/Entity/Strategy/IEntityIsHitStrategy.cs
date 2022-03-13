@@ -96,6 +96,9 @@ public class IsEnemyHit : IsHitStrategy //플레이어가 Enemy에 충돌
         if (model.entity_col_src != _col_src)
             return;
 
+        if (model.state != EntityModel.EntityState.DEFAULT && model.state != EntityModel.EntityState.UNBEAT)
+            return;
+
         if (!IsHit(model, _col_src, COLTYPE.COLLISION, ColHitState.Stay, LayerMask.NameToLayer("Enemy")))
             return;
         
@@ -105,11 +108,14 @@ public class IsEnemyHit : IsHitStrategy //플레이어가 Enemy에 충돌
     }
 }
 
-public class IsTokenHit : IsHitStrategy //플레이어가 Enemy에 충돌
+public class IsTokenHit : IsHitStrategy //플레이어가 Token에 충돌
 {
     public override void Hit(EntityModel model, EntityController con, IsColliderHit _col_src)
     {
         if (model.entity_col_src != _col_src)
+            return;
+
+        if (model.state == EntityModel.EntityState.DIE)
             return;
 
         if (!IsHit(model, _col_src, COLTYPE.TRIGGER, ColHitState.Enter, LayerMask.NameToLayer("Token")))
@@ -168,11 +174,13 @@ public class IsDeadZoneHit : IsHitStrategy  //엔티티가 낙사
         if (model.entity_col_src != _col_src)
             return;
 
+        if (model.state != EntityModel.EntityState.DEFAULT && model.state != EntityModel.EntityState.UNBEAT)
+            return;
+
         if (!IsHit(model, _col_src, COLTYPE.TRIGGER, ColHitState.Enter, LayerMask.NameToLayer("Dead Zone")))
             return;
 
-        if (model.state != EntityModel.EntityState.HURT || model.state != EntityModel.EntityState.DIE)
-            con.SetHp(model.hp, model.hp_max, DAMAGETYPE.DAMAGE);
+        con.SetHp(model.hp, model.hp_max, DAMAGETYPE.DAMAGE);
     }
 }
 public class IsGoalHit : IsHitStrategy  //골에 충돌
@@ -182,11 +190,14 @@ public class IsGoalHit : IsHitStrategy  //골에 충돌
         if (model.entity_col_src != _col_src)
             return;
 
+        if (model.state != EntityModel.EntityState.DEFAULT && model.state != EntityModel.EntityState.UNBEAT)
+            return;
+
         if (!IsHit(model, _col_src, COLTYPE.TRIGGER, ColHitState.Enter, LayerMask.NameToLayer("Goal")))
             return;
 
         if (model.state != EntityModel.EntityState.HURT || model.state != EntityModel.EntityState.DIE)
-            Debug.Log("골!");
+            con.UpdateState(EntityModel.EntityState.VICTORY);
     }
 }
 

@@ -52,7 +52,7 @@ public class PlayerController : EntityController
         player_view.OnCoinChanged(PlayerModel.coinCount);
     }
 
-    protected override void UpdateState(EntityModel.EntityState _state)
+    public override void UpdateState(EntityModel.EntityState _state)
     {
         base.UpdateState(_state);
 
@@ -75,6 +75,14 @@ public class PlayerController : EntityController
                 break;
             case EntityModel.EntityState.DIE:
                 AudioManager.Instance.Play("Death");
+                if (Life <= 0)
+                    GameSceneData.clearCanvas_obj.SetActive(true);
+                break;
+            case EntityModel.EntityState.VICTORY:
+                if (model.entity_ani != null)
+                    model.entity_ani.SetTrigger("_victory");
+                GameSceneData.clearCanvas_obj.SetActive(true);
+                GameSceneData.clearCanvas_obj.transform.GetChild(0).GetComponent<TextMesh>().text = "\nClear!";
                 break;
         }
     }

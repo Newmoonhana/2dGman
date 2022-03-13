@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum SPEEDTYPE
 {
@@ -18,6 +19,7 @@ public class GameSceneData : MonoBehaviour
 
     public static PlayerController player_controller;
     public static Transform startpoint_tns;
+    public static GameObject clearCanvas_obj;
 
     public static float GetSpeed(SPEEDTYPE _type)
     {   
@@ -29,5 +31,11 @@ public class GameSceneData : MonoBehaviour
         AudioManager.Instance.Play("10. Track 10");
         player_controller = GameObject.Find("Player Controller").GetComponent<PlayerController>();
         startpoint_tns = GameObject.Find("Start Point").transform;
+        clearCanvas_obj = GameObject.Find("GameCanvas").transform.Find("Clear Panel").gameObject;
+    }
+
+    public void RetryButton()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 }
