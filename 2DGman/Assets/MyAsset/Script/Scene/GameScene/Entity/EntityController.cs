@@ -149,7 +149,13 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
     public virtual bool SetHp(float _hp, float _hpMax, DAMAGETYPE _type) //hp가 0 이하일 경우 false
     {
         model.hp_max = _hpMax;
-        if (_type == DAMAGETYPE.DAMAGE)
+        if (_type == DAMAGETYPE.EQUAL)
+        {
+            model.hp = _hp;
+            return true;
+        }
+
+        else if (_type == DAMAGETYPE.DAMAGE)
         {
             model.hp -= _hp;
             UpdateState(EntityModel.EntityState.HURT);
@@ -202,13 +208,19 @@ public class EntityController : MonoBehaviour, IEntityMovableStrategy
         {
             case EntityModel.EntityState.DEFAULT:
                 model.entity_col.enabled = true;
+                if (model.entity_ani != null)
+                    model.entity_ani.SetBool("_dead", false);
                 break;
             case EntityModel.EntityState.HURT:
-                model.entity_ani.SetTrigger("_hurt");
+                if (model.entity_ani != null)
+                    model.entity_ani.SetTrigger("_hurt");
                 model.entity_col.enabled = false;
                 break;
             case EntityModel.EntityState.DIE:
-                model.entity_ani.SetBool("_dead", true);
+                if (model.entity_ani != null)
+                    model.entity_ani.SetBool("_dead", true);
+                else
+                    model.entity_obj.SetActive(false);
                 break;
         }
     }

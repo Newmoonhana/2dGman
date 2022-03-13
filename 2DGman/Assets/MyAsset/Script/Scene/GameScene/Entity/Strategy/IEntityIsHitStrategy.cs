@@ -15,13 +15,6 @@ public class IsHitStrategy : IEntityIsHitStrategy
     {
         if (_col_src.state == hit_state)
         {
-            if (COLTYPE.TRIGGER == hit_type)
-                if (_col_src.other_col_TRIGGER != null)
-                    if (_layerMask == LayerMask.NameToLayer("Token"))
-                    {
-                        Debug.Log(_col_src.type + ", " + _col_src.other_col_TRIGGER.transform.parent.parent.name);
-                    }
-
             if (_col_src.type == COLTYPE.COLLISION)
             {
                 if (_col_src.other_col_COLLISION != null)

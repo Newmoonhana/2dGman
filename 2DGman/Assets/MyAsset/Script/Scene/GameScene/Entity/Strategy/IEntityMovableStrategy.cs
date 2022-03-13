@@ -105,7 +105,8 @@ public class DefaultMoveable : IEntityMovableStrategy
         movement.x = speed;
 
         model.entity_obj.transform.position += movement * GameSceneData.GetSpeed(model.speed) * Time.deltaTime;
-        model.entity_ani.SetFloat("_velocityX", Mathf.Abs((int)model.movedir - 1));
+        if (model.entity_ani != null)
+            model.entity_ani.SetFloat("_velocityX", Mathf.Abs((int)model.movedir - 1));
     }
 
     public virtual void Jump(EntityModel model, ref float jumpTime)
@@ -127,7 +128,8 @@ public class DefaultMoveable : IEntityMovableStrategy
                 addForce.y *= model.jumpPower * (jumpTime * 0.1f + 1f);
                 model.rigid.AddForce(addForce, ForceMode2D.Impulse);
                 jumpTime += Time.fixedDeltaTime;
-                model.entity_ani.SetFloat("_velocityY", Mathf.Abs(jumpTime));
+                if (model.entity_ani != null)
+                    model.entity_ani.SetFloat("_velocityY", Mathf.Abs(jumpTime));
                 return;
         }
     }
@@ -140,7 +142,8 @@ public class DefaultMoveable : IEntityMovableStrategy
         {
             case EntityModel.EntityJumpState.Grounded:
                 model.IsGrounded = true;
-                model.entity_ani.SetBool("_grounded", true);
+                if (model.entity_ani != null)
+                    model.entity_ani.SetBool("_grounded", true);
                 model.stopJump = false;
                 break;
             case EntityModel.EntityJumpState.PrepareToJump:
@@ -149,15 +152,20 @@ public class DefaultMoveable : IEntityMovableStrategy
                     model.jumpState = EntityModel.EntityJumpState.Grounded;
                     return;
                 }
-                model.entity_ani.SetBool("_grounded", false);
+                if (model.entity_ani != null)
+                    model.entity_ani.SetBool("_grounded", false);
                 jumpTime = 0;
                 model.stopJump = false;
                 //model.footcol.enabled = false;
                 break;
             case EntityModel.EntityJumpState.InFlight:
                 model.IsGrounded = false;
-                model.entity_ani.SetBool("_grounded", false);
-                model.entity_ani.SetFloat("_velocityY", -1);
+                if (model.entity_ani != null)
+                {
+                    model.entity_ani.SetBool("_grounded", false);
+                    model.entity_ani.SetFloat("_velocityY", -1);
+                }
+                    
                 //model.footcol.enabled = true;
                 break;
             case EntityModel.EntityJumpState.Landed:

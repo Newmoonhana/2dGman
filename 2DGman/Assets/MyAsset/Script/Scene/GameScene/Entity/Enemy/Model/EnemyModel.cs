@@ -7,7 +7,8 @@ public abstract class EnemyModel : MonoBehaviour
     public enum ENEMYTYPE
     {
         NONE,
-        SLIME
+        SLIME,
+        HUMAN
     }
 
     protected ENEMYTYPE type;
@@ -40,6 +41,21 @@ public abstract class EnemyModel_Slime : EnemyModel
     public EnemyModel_Slime()
     {
         type = ENEMYTYPE.SLIME;
+    }
+
+    protected virtual void Awake()
+    {
+        controller = GetComponent<EnemyController>();
+        EntityIsHitStrategyFactory ef_ih = new IsHitFactory();
+        controller.model.ishitStrategy = ef_ih.CreateIsHitStrategy("enemy");
+    }
+}
+
+public abstract class EnemyModel_Human : EnemyModel
+{
+    public EnemyModel_Human()
+    {
+        type = ENEMYTYPE.HUMAN;
     }
 
     protected virtual void Awake()

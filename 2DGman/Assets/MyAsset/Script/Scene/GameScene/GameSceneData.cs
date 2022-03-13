@@ -17,6 +17,7 @@ public class GameSceneData : MonoBehaviour
     //tmp
 
     public static PlayerController player_controller;
+    public static Transform startpoint_tns;
 
     public static float GetSpeed(SPEEDTYPE _type)
     {   
@@ -27,5 +28,6 @@ public class GameSceneData : MonoBehaviour
     {
         AudioManager.Instance.Play("10. Track 10");
         player_controller = GameObject.Find("Player Controller").GetComponent<PlayerController>();
+        startpoint_tns = GameObject.Find("Start Point").transform;
     }
 }

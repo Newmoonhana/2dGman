@@ -16,7 +16,11 @@ public class PlayerController : EntityController
     public override bool SetHp(float _hp, float _hpMax, DAMAGETYPE _type) //hp가 0 이하일 경우 false
     {
         float value = model.hp;
-        if (_type == DAMAGETYPE.DAMAGE)
+        if (_type == DAMAGETYPE.EQUAL)
+        {
+            value = _hp;
+        }
+        else if (_type == DAMAGETYPE.DAMAGE)
         {
             value -= _hp;
         }
@@ -84,11 +88,23 @@ public class PlayerController : EntityController
     }
     public void IsDeadEnd()
     {
-        
+        Invoke("Resurrect", 3f);
     }
     void IsUnBeatEnd()
     {
         UpdateState(EntityModel.EntityState.DEFAULT);
+    }
+
+    void Resurrect()
+    {
+        if (Life <= 0)
+            return;
+        Life -= 1;
+        SetHp(player_model.hp, player_model.hp, DAMAGETYPE.EQUAL);
+        model.entity_tns.SetParent(GameSceneData.startpoint_tns);
+        model.entity_tns.localPosition = Vector3.zero;
+        UpdateState(EntityModel.EntityState.DEFAULT);
+        UpdateJumpState(EntityModel.EntityJumpState.Grounded, model, ref jumpTime);
     }
 
     protected override void Start()

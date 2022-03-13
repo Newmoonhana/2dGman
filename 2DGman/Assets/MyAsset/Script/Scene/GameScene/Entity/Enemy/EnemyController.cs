@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum DAMAGETYPE
 {
+    EQUAL,
     DAMAGE,
     HEAL
 }
